@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# **AI Internship Pathway Agent**
 
-First, run the development server:
+## **About the Project**
+This project simplifies the internship application process by leveraging AI-powered tools to optimize resumes, automate applications, and centralize internship opportunities from multiple platforms. It includes a web application and a Chrome extension to provide seamless functionality for users.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## **Features**
+- **Resume Maker**: Generates tailored resumes based on user input.
+- **Bookmarking with Chrome Extension**: Save internship details directly from job boards; bookmarks sync with the web app.
+- **AI-Powered Resume Analysis & ATS Scoring**: Analyze resumes for improvement points and compatibility with job descriptions.
+- **Automated Internship Applications**: Apply to filtered internships based on user preferences (location, salary, etc.).
+- **Internship Aggregation**: Centralized portal for internships from platforms like Internshala, LinkedIn, Indeed, and Naukri.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## **Market Feasibility & Impact**
+### Social Impact
+- Expands career guidance access in underserved regions.
+- Provides personalized career development and skill gap analysis.
+- Enhances job opportunities for marginalized groups through optimized resumes.
 
-## Learn More
+### Economical Impact
+- Streamlines applications, reducing unemployment rates.
+- Boosts productivity by improving hiring processes.
+- Contributes to GDP growth through workforce efficiency.
 
-To learn more about Next.js, take a look at the following resources:
+### Environmental Impact
+- Reduces paper waste via digital resume creation.
+- Promotes energy efficiency by automating job searches.
+- Encourages careers in sustainable sectors.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## **Getting Started**
 
-## Deploy on Vercel
+### **Installation**
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your_username/AI-Internship-Agent.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd AI-Internship-Agent
+   ```
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   npm install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### **Running the Application**
+1. Start the backend server:
+   ```bash
+   python app.py
+   ```
+2. Start the frontend server:
+   ```bash
+   npm run dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## **Usage**
+1. Upload your master resume via the web application.
+2. Use the Chrome extension to bookmark internships directly from job boards.
+3. View aggregated internship opportunities on the web app.
+4. Optimize your resume using AI-powered analysis and ATS scoring.
+5. Automate applications for selected internships based on preferences.
+
+---
+
+## **Future Scope**
+- Expand integration with emerging internship platforms.
+- Add multilingual support for global users.
+- Enhance AI capabilities for deeper resume analysis and predictive career insights.
+
+---
+
+## **Contributing**
+Contributions are welcome!  
+1. Fork the repository.  
+2. Create a feature branch:  
+   ```bash
+   git checkout -b feature/AmazingFeature
+   ```
+3. Commit your changes:  
+   ```bash
+   git commit -m 'Add some AmazingFeature'
+   ```
+4. Push to the branch:  
+   ```bash
+   git push origin feature/AmazingFeature
+   ```
+5. Open a pull request.
+
+---
+
+## **License**
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+## **Acknowledgments**
+Special thanks to contributors and supporters who helped shape this project!
+
+--- 
+
