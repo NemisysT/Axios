@@ -20,7 +20,7 @@ const plans = [
       'Personalized job recommendations'
     ],
     cta: 'Get Started for free',
-    href: 'https://app.proism.in/',
+    href: 'https://app.Axios.in/',
   },
   {
     name: 'Pro',
@@ -39,7 +39,7 @@ const plans = [
       'Browser extension for seamless applications'
     ],
     cta: 'Start with Pro',
-    href: 'https://app.proism.in/?subscriptionPlan=pro',
+    href: 'https://app.Axios.in/?subscriptionPlan=pro',
     popular: true,
   }
 ]
@@ -54,7 +54,7 @@ const Pricing = () => {
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Supercharge your job search and be a pro</h2>
           <p className="text-gray-400 max-w-lg mx-auto">
-            Upgrade to unlock Proism's unlimited access and make your job search effortless.
+            Upgrade to unlock Axios's unlimited access and make your job search effortless.
           </p>
         </div>
 
