@@ -47,9 +47,9 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
             <span className="text-gray-400 mb-2 block">Shaping the Future of Job Search</span>
-            <h1 className="text-4xl md:text-5xl font-bold mb-8">Our Journey with Proism</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-8">Our Journey with Axios</h1>
             <p className="text-gray-400 max-w-3xl mx-auto">
-              At Proism, we're passionate about making job hunting faster and smarter. Our story is rooted in the
+              At Axios, we're passionate about making job hunting faster and smarter. Our story is rooted in the
               idea that your time is valuable. We aim to streamline the job application process, so you can focus
               on what truly matters—your growth.
             </p>
@@ -63,7 +63,7 @@ export default function AboutPage() {
             <div>
               <h2 className="text-3xl font-bold mb-6">Why are we doing this?</h2>
               <p className="text-gray-400 mb-6">
-                Maximizing your potential is key, and with Proism—streamlining your job search and
+                Maximizing your potential is key, and with Axios—streamlining your job search and
                 application process buys you time, so you can focus on what truly matters.
               </p>
             </div>
@@ -73,7 +73,7 @@ export default function AboutPage() {
                 <h3 className="text-2xl font-bold mb-4">The Mission We Believe In</h3>
                 <p className="text-gray-400">
                   Our mission is simple: to automate the job search and application process so you can focus on what's important.
-                  Proism uses AI to help you find, apply, and track jobs effortlessly, freeing you to upskill or explore other priorities in life.
+                  Axios uses AI to help you find, apply, and track jobs effortlessly, freeing you to upskill or explore other priorities in life.
                 </p>
               </div>
             </div>
@@ -90,15 +90,15 @@ export default function AboutPage() {
                 <h3 className="text-2xl font-bold mb-4">Our Vision For The World</h3>
                 <p className="text-gray-400">
                   We envision a world where job seekers spend less time applying and more time thriving in their careers.
-                  Proism aims to automate not just your job search, but your life's tedious tasks—ensuring you get it right, fast, and efficiently.
+                  Axios aims to automate not just your job search, but your life's tedious tasks—ensuring you get it right, fast, and efficiently.
                 </p>
               </div>
             </div>
             <div className="order-1 md:order-2">
-              <h2 className="text-3xl font-bold mb-6">The Team behind Proism</h2>
+              <h2 className="text-3xl font-bold mb-6">The Team behind Axios</h2>
               <p className="text-gray-400 mb-6">
-                Proism is the brainchild of a passionate team of innovators who believe in the power of AI.
-                Proism is here to make your job search seamless.
+                Axios is the brainchild of a passionate team of innovators who believe in the power of AI.
+                Axios is here to make your job search seamless.
               </p>
             </div>
           </div>

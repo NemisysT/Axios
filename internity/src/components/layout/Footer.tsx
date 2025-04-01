@@ -6,10 +6,10 @@ import Image from 'next/image'
 import { cn } from '@/lib/utils'
 
 const socialLinks = [
-  { name: 'Instagram', href: 'https://www.instagram.com/proism.in/', icon: 'instagram' },
+  { name: 'Instagram', href: 'https://www.instagram.com/Axios.in/', icon: 'instagram' },
   { name: 'Discord', href: 'https://discord.gg/DWTHc7xW2Y', icon: 'discord' },
-  { name: 'LinkedIn', href: 'https://www.linkedin.com/company/proism', icon: 'linkedin' },
-  { name: 'Email', href: 'mailto:info@proism.in', icon: 'mail' },
+  { name: 'LinkedIn', href: 'https://www.linkedin.com/company/Axios', icon: 'linkedin' },
+  { name: 'Email', href: 'mailto:info@Axios.in', icon: 'mail' },
 ]
 
 const Footer = () => {
@@ -36,7 +36,7 @@ const Footer = () => {
                 </svg>
               </div>
               <div className="flex flex-col">
-                <span className="text-white text-xl font-semibold">proism</span>
+                <span className="text-white text-xl font-semibold">Axios</span>
                 <span className="text-gray-400 text-xs mt-1">Enabling tomorrow's<br />on-demand workforce</span>
               </div>
             </Link>
@@ -92,7 +92,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 text-gray-500 text-xs text-center">
-          All rights reserved with DarkOnyx LLP & proism.
+          All rights reserved with DarkOnyx LLP & Axios.
         </div>
       </div>
     </footer>

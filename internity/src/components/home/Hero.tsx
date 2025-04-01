@@ -5,24 +5,24 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
 const Hero = () => {
-  const proismTextRef = useRef<HTMLDivElement>(null);
+  const AxiosTextRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Simple animation for the logo (this is a placeholder, ideally we'd use the video from the original site)
-    const animateProism = () => {
-      if (proismTextRef.current) {
-        proismTextRef.current.classList.add('animate-pulse');
+    const animateAxios = () => {
+      if (AxiosTextRef.current) {
+        AxiosTextRef.current.classList.add('animate-pulse');
         setTimeout(() => {
-          if (proismTextRef.current) {
-            proismTextRef.current.classList.remove('animate-pulse');
+          if (AxiosTextRef.current) {
+            AxiosTextRef.current.classList.remove('animate-pulse');
           }
         }, 2000);
       }
     };
 
-    const interval = setInterval(animateProism, 5000);
+    const interval = setInterval(animateAxios, 5000);
     // Run once on load
-    animateProism();
+    animateAxios();
 
     return () => clearInterval(interval);
   }, []);
@@ -43,29 +43,29 @@ const Hero = () => {
           </h1>
 
           <p className="text-gray-400 mb-8 max-w-2xl">
-            Discover the future of job hunting with Proism. Simplify your job search, create professional resumes, and find your best job opportunities—all with one click.
+            Discover the future of job hunting with Axios. Simplify your job search, create professional resumes, and find your best job opportunities—all with one click.
           </p>
 
-          <Link href="https://app.proism.in/">
+          <Link href="https://app.Axios.in/">
             <Button className="rounded-full px-8 py-6 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium neon-glow">
               Get Started for Free
             </Button>
           </Link>
         </div>
 
-        {/* Proism big text */}
+        {/* Axios big text */}
         <div
-          ref={proismTextRef}
+          ref={AxiosTextRef}
           className="mt-32 flex justify-center items-center"
         >
           <div className="text-8xl md:text-9xl font-bold text-white opacity-80">
-            proism
+            Axios
           </div>
         </div>
 
-        {/* "Let proism find your best fit jobs" */}
+        {/* "Let Axios find your best fit jobs" */}
         <div className="mt-8 text-center">
-          <h2 className="text-xl md:text-2xl font-medium">Let proism find your best fit jobs</h2>
+          <h2 className="text-xl md:text-2xl font-medium">Let Axios find your best fit jobs</h2>
         </div>
 
         {/* Company logos */}

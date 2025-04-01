@@ -12,7 +12,7 @@ const Features = () => {
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">AI-Powered Tools for Effortless Job Search</h2>
             <p className="text-gray-400 max-w-3xl mx-auto">
-              Leverage Proism to streamline your job search. Our AI-driven tools customize resumes based on your profile and job description, while filtering and ranking job postings, ensuring only the best-fit opportunities.
+              Leverage Axios to streamline your job search. Our AI-driven tools customize resumes based on your profile and job description, while filtering and ranking job postings, ensuring only the best-fit opportunities.
             </p>
           </div>
 

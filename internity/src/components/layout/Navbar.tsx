@@ -35,7 +35,7 @@ const Navbar = () => {
             </defs>
           </svg>
         </div>
-        <span className="text-white text-xl font-semibold ml-1">proism</span>
+        <span className="text-white text-xl font-semibold ml-1">Axios</span>
       </Link>
 
       <div className="hidden md:flex items-center space-x-6">
@@ -52,7 +52,7 @@ const Navbar = () => {
           </Link>
         ))}
 
-        <Link href="https://app.proism.in/" target="_blank">
+        <Link href="https://app.Axios.in/" target="_blank">
           <Button variant="outline" className="border border-purple-light bg-transparent hover:bg-purple-dark text-white rounded-full px-6 neon-glow">
             Get Started
           </Button>
