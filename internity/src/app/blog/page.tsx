@@ -1,8 +1,10 @@
-import React from 'react'
-import MainLayout from '@/components/layout/MainLayout'
-import GetStartedCTA from '@/components/ui/GetStartedCTA'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+"use client";
+
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import MainLayout from '@/components/layout/MainLayout';
+import GetStartedCTA from '@/components/ui/GetStartedCTA';
+import Aurora from '@/components/Aurora/Aurora';
 
 const blogPosts = [
   {
@@ -38,42 +40,53 @@ const blogPosts = [
 export default function BlogPage() {
   return (
     <MainLayout>
-      <section className="pt-32 pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-noise opacity-30 z-0"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Proism Blog</h1>
-            <p className="text-gray-400 max-w-2xl mx-auto">
+      <section className="relative pt-32 pb-20 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Aurora
+            colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
+            blend={0.5}
+            amplitude={1.0}
+            speed={0.5}
+          />
+        </div>
+        
+        <div className="container relative z-10 px-4 mx-auto">
+          <div className="mb-16 text-center">
+            <h1 className="mb-6 text-4xl font-bold md:text-5xl">Proism Blog</h1>
+            <p className="max-w-2xl mx-auto text-gray-400">
               Insights, tips, and updates on job searching, resume building, and career development.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
             {blogPosts.map((post, index) => (
-              <div
+              <article
                 key={index}
-                className="bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-xl overflow-hidden hover:border-purple-900/30 transition-all duration-300 hover:-translate-y-1"
+                className="overflow-hidden transition-all duration-300 border rounded-xl bg-gradient-to-br from-gray-900 to-black border-gray-800 hover:border-purple-900/30 hover:-translate-y-1"
               >
-                <div className="h-48 bg-purple-900/20"></div>
+                <div className="h-48 bg-purple-900/20" aria-hidden="true"></div>
                 <div className="p-6">
-                  <div className="flex items-center justify-between text-sm text-gray-400 mb-4">
+                  <div className="flex items-center justify-between mb-4 text-sm text-gray-400">
                     <span>{post.category}</span>
-                    <span>{post.date}</span>
+                    <time dateTime={post.date}>{post.date}</time>
                   </div>
-                  <h3 className="text-xl font-bold mb-3">{post.title}</h3>
-                  <p className="text-gray-400 text-sm mb-6">{post.excerpt}</p>
+                  <h3 className="mb-3 text-xl font-bold">{post.title}</h3>
+                  <p className="mb-6 text-sm text-gray-400">{post.excerpt}</p>
                   <Link href={post.slug}>
-                    <Button variant="link" className="text-purple-400 p-0 hover:text-purple-300">
+                    <Button variant="link" className="p-0 text-purple-400 hover:text-purple-300">
                       Read More
                     </Button>
                   </Link>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
 
           <div className="flex justify-center mt-12">
-            <Button className="rounded-full px-6 py-2 bg-transparent border border-gray-700 hover:bg-gray-800 text-white">
+            <Button 
+              variant="outline" 
+              className="px-6 py-2 text-white rounded-full border-gray-700 hover:bg-gray-800"
+            >
               Load More Articles
             </Button>
           </div>
@@ -82,5 +95,5 @@ export default function BlogPage() {
 
       <GetStartedCTA />
     </MainLayout>
-  )
+  );
 }
