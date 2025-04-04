@@ -27,6 +27,7 @@
   }
 
   .dark {
+      transition: background-color 0.3s ease, color 0.3s ease;
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
@@ -56,6 +57,7 @@
   body {
     @apply bg-black text-white;
     font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: "Poppins", sans-serif;
   }
 }
 
