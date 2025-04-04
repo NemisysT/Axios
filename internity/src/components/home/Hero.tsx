@@ -4,7 +4,8 @@ import { useRef } from "react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import RotatingText from "../RotatingText/RotatingText"
-import Waves from "../Waves/Waves"
+// import Waves from "../Hyperspeed/Hyperspeed"
+import Hyperspeed from "../Hyperspeed/Hyperspeed"
 import { ArrowRight } from "lucide-react"
 
 const Hero = () => {
@@ -14,18 +15,44 @@ const Hero = () => {
     <section className="relative w-full h-screen flex items-center justify-center mt-0 pt-0 pb-0 overflow-hidden">
   {/* Aurora Background */}
   <div className="absolute inset-0 z-0">
-    <Waves
-      lineColor="rgba(255, 255, 255, 0.3)"
-      backgroundColor="rgba(255, 255, 255, 0.05)"
-      waveSpeedX={0.015}
-      waveSpeedY={0.01}
-      waveAmpX={40}
-      waveAmpY={20}
-      friction={0.9}
-      tension={0.01}
-      maxCursorMove={120}
-      xGap={12}
-      yGap={36}
+  <Hyperspeed
+  effectOptions={{
+    onSpeedUp: () => {},
+    onSlowDown: () => {},
+    distortion: "LongRaceDistortion",
+    length: 400,
+    roadWidth: 10,
+    islandWidth: 5,
+    lanesPerRoad: 2,
+    fov: 90,
+    fovSpeedUp: 150,
+    speedUp: 2,
+    carLightsFade: 0.4,
+    totalSideLightSticks: 50,
+    lightPairsPerRoadWay: 70,
+    shoulderLinesWidthPercentage: 0.05,
+    brokenLinesWidthPercentage: 0.1,
+    brokenLinesLengthPercentage: 0.5,
+    lightStickWidth: [0.12, 0.5],
+    lightStickHeight: [1.3, 1.7],
+    movingAwaySpeed: [60, 80],
+    movingCloserSpeed: [-120, -160],
+    carLightsLength: [400 * 0.05, 400 * 0.15],
+    carLightsRadius: [0.05, 0.14],
+    carWidthPercentage: [0.3, 0.5],
+    carShiftX: [-0.2, 0.2],
+    carFloorSeparation: [0.05, 1],
+    colors: {
+      roadColor: 0x080808,
+      islandColor: 0x0a0a0a,
+      background: 0x000000,
+      shoulderLines: 0x131318,
+      brokenLines: 0x131318,
+      leftCars: [0xff5f73, 0xe74d60, 0xff102a],
+      rightCars: [0xa4e3e6, 0x80d1d4, 0x53c2c6],
+      sticks: 0xa4e3e6,
+    }
+  }}
     />
   </div>
 
@@ -37,7 +64,7 @@ const Hero = () => {
           Effortless
           <RotatingText
             texts={["Job Search", "Automation", "Resume"]}
-            mainClassName="px-3 sm:px-4 md:px-5 bg-cyan-300 text-black overflow-hidden py-1.5 sm:py-2 md:py-2.5 justify-center rounded-lg ml-3"
+            mainClassName="px-3 sm:px-4 md:px-5 bg-red-700 text-black overflow-hidden py-1.5 sm:py-2 md:py-2.5 justify-center rounded-lg ml-3"
             staggerFrom={"last"}
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
