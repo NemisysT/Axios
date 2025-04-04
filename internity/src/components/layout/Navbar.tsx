@@ -20,7 +20,7 @@ const Navbar = () => {
     <nav className="w-full flex items-center justify-between py-4 px-6 md:px-12 z-50 bg-transparent absolute top-0 left-0 right-0">
       <Link href="/" className="flex items-center">
         <div className="relative w-8 h-8 mr-2">
-          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+          {/* <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
             <path d="M16 0C7.163 0 0 7.163 0 16C0 24.837 7.163 32 16 32C24.837 32 32 24.837 32 16C32 7.163 24.837 0 16 0ZM16 4C22.627 4 28 9.373 28 16C28 22.627 22.627 28 16 28C9.373 28 4 22.627 4 16C4 9.373 9.373 4 16 4Z" fill="url(#paint0_linear)" />
             <path d="M16 8C11.582 8 8 11.582 8 16C8 20.418 11.582 24 16 24C20.418 24 24 20.418 24 16C24 11.582 20.418 8 16 8ZM16 12C18.209 12 20 13.791 20 16C20 18.209 18.209 20 16 20C13.791 20 12 18.209 12 16C12 13.791 13.791 12 16 12Z" fill="url(#paint1_linear)" />
             <defs>
@@ -33,7 +33,7 @@ const Navbar = () => {
                 <stop offset="1" stopColor="#4A0E95" />
               </linearGradient>
             </defs>
-          </svg>
+          </svg> */}
         </div>
         <span className="text-white text-xl font-semibold ml-1">Axios</span>
       </Link>
