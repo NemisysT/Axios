@@ -23,7 +23,7 @@ export default function LoginPage() {
     return re.test(email)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     const newErrors: { email?: string; password?: string } = {}
@@ -43,9 +43,20 @@ export default function LoginPage() {
     setErrors(newErrors)
 
     if (Object.keys(newErrors).length === 0) {
-      // In a real app, you would handle authentication here
-      console.log("Login successful")
-      router.push("/resume-builder")
+      const response= await fetch(' http://127.0.0.1:5000/user/login',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email:email,
+          password:password
+        }),
+      })
+      if(response.ok){
+        console.log("Login successful")
+        router.push("/resume-builder")
+      }
     }
   }
 
