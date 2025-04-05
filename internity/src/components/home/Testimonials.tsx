@@ -6,7 +6,7 @@ const testimonials = [
   {
     name: "Siddharth Verma",
     role: "Front-end Developer",
-    quote: "I think Axios has allowed me to market myself better in front of so many companies, and I now realize how much time I was wasting filling so many applications everyday."
+    quote: "I think InternGeanie has allowed me to market myself better in front of so many companies, and I now realize how much time I was wasting filling so many applications everyday."
   },
   {
     name: "Samay Rathi",
@@ -21,12 +21,12 @@ const testimonials = [
   {
     name: "Chahal Jain",
     role: "SDE 1",
-    quote: "It's hard to find and filter jobs, but with Axios i was able to apply to multiple jobs in practically no time, that too were matching my domain."
+    quote: "It's hard to find and filter jobs, but with InternGeanie i was able to apply to multiple jobs in practically no time, that too were matching my domain."
   },
   {
     name: "Rahul Gupta",
     role: "Front-end Developer",
-    quote: "Axios has really simplified my job search. I used to spend hours just finding the right jobs to apply for, now its all done for me!"
+    quote: "InternGeanie has really simplified my job search. I used to spend hours just finding the right jobs to apply for, now its all done for me!"
   },
   {
     name: "Parth Agarwal",
@@ -36,22 +36,22 @@ const testimonials = [
   {
     name: "Pankaja Karale",
     role: "Full-stack Developer",
-    quote: "I think Axios helped me by saving hours of my time by filling applications and making resumes for me, and I was able to use that time to prepare for interviews."
+    quote: "I think InternGeanie helped me by saving hours of my time by filling applications and making resumes for me, and I was able to use that time to prepare for interviews."
   },
   {
     name: "Nisha Patel",
     role: "Marketing Specialist",
-    quote: "I was skeptical at first, but Axios proved to be a game changer. The auto-apply feature is amazing, saved me so much hassle."
+    quote: "I was skeptical at first, but InternGeanie proved to be a game changer. The auto-apply feature is amazing, saved me so much hassle."
   },
   {
     name: "Rohit Khandelwal",
     role: "UI/UX Designer",
-    quote: "The job recommendations are spot on! I don't have to sift through irrelevant jobs anymore. Axios does it all for me."
+    quote: "The job recommendations are spot on! I don't have to sift through irrelevant jobs anymore. InternGeanie does it all for me."
   },
   {
     name: "Vikram Singh",
     role: "Business Analyst",
-    quote: "I used to miss out on job opportunities because of late applications. With Axios, I am always on top of the game."
+    quote: "I used to miss out on job opportunities because of late applications. With InternGeanie, I am always on top of the game."
   }
 ];
 
@@ -62,7 +62,7 @@ const Testimonials = () => {
         <div className="text-center mb-14">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">This is What We Have Heard</h2>
           <p className="text-gray-400 max-w-lg mx-auto">
-            We would like you to try Axios and share what you think.
+            We would like you to try InternGeanie and share what you think.
           </p>
         </div>
 

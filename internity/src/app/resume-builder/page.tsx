@@ -1,5 +1,5 @@
 "use client"
-import { Upload, FileText, ArrowRight } from 'lucide-react'
+import { Upload, FileText, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { motion } from "framer-motion"
@@ -27,9 +27,7 @@ export default function ResumeBuilderLanding() {
 
       <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8 px-4">
         <motion.div whileHover="hover" variants={cardVariants}>
-          <Card
-            className="h-full backdrop-blur-md bg-white/70 border border-white/20 shadow-lg rounded-2xl overflow-hidden"
-          >
+          <Card className="h-full backdrop-blur-md bg-white/70 border border-white/20 shadow-lg rounded-2xl overflow-hidden">
             <CardContent className="p-8 flex flex-col items-center justify-center h-full">
               <div className="w-20 h-20 rounded-full bg-purple-100 flex items-center justify-center mb-6">
                 <Upload size={32} className="text-purple-600" />
@@ -50,9 +48,7 @@ export default function ResumeBuilderLanding() {
         </motion.div>
 
         <motion.div whileHover="hover" variants={cardVariants}>
-          <Card
-            className="h-full backdrop-blur-md bg-white/70 border border-white/20 shadow-lg rounded-2xl overflow-hidden"
-          >
+          <Card className="h-full backdrop-blur-md bg-white/70 border border-white/20 shadow-lg rounded-2xl overflow-hidden">
             <CardContent className="p-8 flex flex-col items-center justify-center h-full">
               <div className="w-20 h-20 rounded-full bg-indigo-100 flex items-center justify-center mb-6">
                 <FileText size={32} className="text-indigo-600" />
@@ -63,7 +59,7 @@ export default function ResumeBuilderLanding() {
               </p>
               <Button
                 className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-2 px-6 rounded-lg transition-all duration-300"
-                onClick={() => router.push("/resume-builder/build")}
+                onClick={() => router.push("/resume-builder/steps/step1")}
               >
                 Get Started
                 <ArrowRight size={16} className="ml-2" />
@@ -75,3 +71,4 @@ export default function ResumeBuilderLanding() {
     </div>
   )
 }
+

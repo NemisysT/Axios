@@ -6,8 +6,8 @@ import { ClientBody } from "./ClientBody";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Axios Career | Enabling Tomorrow's On-Demand Workforce",
-  description: "Discover Axios, an AI-driven tool designed to streamline your job search. Put your job search and resume curation on auto-pilot.",
+  title: "InternGeanie Career | Enabling Tomorrow's On-Demand Workforce",
+  description: "Discover InternGeanie, an AI-driven tool designed to streamline your job search. Put your job search and resume curation on auto-pilot.",
 };
 
 export default function RootLayout({

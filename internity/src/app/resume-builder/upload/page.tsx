@@ -62,7 +62,18 @@ export default function UploadResume() {
 
   const handleNext = () => {
     // In a real app, you would process the file here
-    router.push("/resume-builder/steps/1")
+    // Save file information to localStorage or your state management solution
+    localStorage.setItem(
+      "uploadedResume",
+      JSON.stringify({
+        name: file?.name,
+        size: file?.size,
+        type: file?.type,
+        lastModified: file?.lastModified,
+      }),
+    )
+
+    router.push("/resume-builder/steps/step1")
   }
 
   return (

@@ -131,7 +131,8 @@ export default function ResumeBuilderStep({ params }: { params: { step: string }
     if (!isNaN(stepNumber) && stepNumber >= 1 && stepNumber <= 5) {
       setStep(stepNumber)
     } else {
-      router.push("/resume-builder/steps")
+      // If the step is invalid, redirect to step 1
+      router.replace("/resume-builder/steps/1")
     }
   }, [params.step, router])
 
@@ -306,14 +307,22 @@ export default function ResumeBuilderStep({ params }: { params: { step: string }
   // Navigate to next step
   const nextStep = () => {
     if (step < 5) {
-      router.push(`/resume-builder/steps/${step + 1}`)
+      const nextStepNumber = step + 1
+      // Save current state before navigating
+      localStorage.setItem("resumeFormData", JSON.stringify(formData))
+      router.push(`/resume-builder/steps/${nextStepNumber}`)
     }
   }
 
   // Navigate to previous step
   const prevStep = () => {
     if (step > 1) {
-      router.push(`/resume-builder/steps/${step - 1}`)
+      const prevStepNumber = step - 1
+      // Save current state before navigating
+      localStorage.setItem("resumeFormData", JSON.stringify(formData))
+      router.push(`/resume-builder/steps/${prevStepNumber}`)
+    } else {
+      router.push("/resume-builder")
     }
   }
 
@@ -498,18 +507,18 @@ export default function ResumeBuilderStep({ params }: { params: { step: string }
                             </Label>
                             <Select
                               value={edu.degree}
-                              onValueChange={(value: string) => handleEducationChange(index, "degree", value)}
+                              onValueChange={(value) => handleEducationChange(index, "degree", value)}
                             >
                               <SelectTrigger>
-                              <SelectValue placeholder="Select degree" />
+                                <SelectValue placeholder="Select degree" />
                               </SelectTrigger>
                               <SelectContent>
-                              <SelectItem value="High School">High School</SelectItem>
-                              <SelectItem value="Associate's">Associate's Degree</SelectItem>
-                              <SelectItem value="Bachelor's">Bachelor's Degree</SelectItem>
-                              <SelectItem value="Master's">Master's Degree</SelectItem>
-                              <SelectItem value="PhD">PhD</SelectItem>
-                              <SelectItem value="Other">Other</SelectItem>
+                                <SelectItem value="High School">High School</SelectItem>
+                                <SelectItem value="Associate's">Associate's Degree</SelectItem>
+                                <SelectItem value="Bachelor's">Bachelor's Degree</SelectItem>
+                                <SelectItem value="Master's">Master's Degree</SelectItem>
+                                <SelectItem value="PhD">PhD</SelectItem>
+                                <SelectItem value="Other">Other</SelectItem>
                               </SelectContent>
                             </Select>
                           </div>
