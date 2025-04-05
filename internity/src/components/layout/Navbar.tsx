@@ -5,12 +5,12 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import {useAuth} from '@/app/context/context'
 
 const Navbar = () => {
   const pathname = usePathname()
 
-  // 🔁 Replace this with your real auth logic (e.g., useSession() from NextAuth)
-  const isLoggedIn = false // set true to test the "Dashboard" button
+   const { isLoggedIn, token, AuthorizationToken, logoutUser } = useAuth()
 
   const navLinks = [
     { name: 'Blog', href: '/blog' },
