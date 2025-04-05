@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
+import { useAuth } from "../context/context"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -17,6 +18,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
   const router = useRouter()
+  const {storeTokenInLS} = useAuth()
 
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -53,7 +55,9 @@ export default function LoginPage() {
           password:password
         }),
       })
+      const res_data=await response.json()
       if(response.ok){
+        storeTokenInLS(res_data.token)
         console.log("Login successful")
         router.push("/resume-builder")
       }

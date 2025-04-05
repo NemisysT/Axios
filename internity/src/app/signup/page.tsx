@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
+import {useAuth} from '@/app/context/context'
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -27,6 +28,7 @@ export default function SignupPage() {
     confirmPassword?: string
   }>({})
   const router = useRouter()
+  const { storeTokenInLS } = useAuth()
 
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -85,7 +87,9 @@ export default function SignupPage() {
           password: formData.password,
         }),
       })
+      const res_data=await response.json()
       if(response.ok){
+        storeTokenInLS(res_data.token)
         console.log("Signup successful")
         router.push("/login")
       }
