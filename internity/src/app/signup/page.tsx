@@ -38,7 +38,7 @@ export default function SignupPage() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     const newErrors: {
@@ -74,8 +74,21 @@ export default function SignupPage() {
 
     if (Object.keys(newErrors).length === 0) {
       // In a real app, you would handle registration here
-      console.log("Signup successful")
-      router.push("/resume-builder")
+      const response= await fetch(' http://127.0.0.1:5000/user/signup',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }),
+      })
+      if(response.ok){
+        console.log("Signup successful")
+        router.push("/login")
+      }
     }
   }
 
