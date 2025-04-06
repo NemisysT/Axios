@@ -95,3 +95,29 @@ def login():
             'email': user['email']
         }
     }), 200
+
+@auth_blueprint.route('/contactus', methods=['POST'])
+def contact_us():
+    data = request.get_json()
+    name = data.get('name')
+    email = data.get('email')
+    message = data.get('message')
+    phone=data.get('phone')
+
+    if not name or not email or not message:
+        return jsonify({'message': 'All fields are required'}), 400
+
+    db = get_db_connection()
+    contact_collection = db.contact
+
+    contact_data = {
+        'name': name,
+        'email': email,
+        'message': message,
+        'phone':phone,
+        'created_at': datetime.datetime.utcnow()
+    }
+
+    contact_collection.insert_one(contact_data)
+
+    return jsonify({'message': 'Message sent successfully'}), 201
