@@ -7,9 +7,11 @@ import RotatingText from "../RotatingText/RotatingText"
 // import Waves from "../Hyperspeed/Hyperspeed"
 import Hyperspeed from "../Hyperspeed/Hyperspeed"
 import { ArrowRight } from "lucide-react"
+import { useAuth } from "@/app/context/context"
 
 const Hero = () => {
   const InternGeanieTextRef = useRef<HTMLDivElement>(null)
+  const { isLoggedIn } = useAuth()
 
   return (
     <section className="relative w-full h-screen flex items-center justify-center mt-0 pt-0 pb-0 overflow-hidden">
@@ -79,23 +81,39 @@ const Hero = () => {
 
           {/* Subheading - INCREASED TEXT SIZE */}
           <p className="text-gray-300 text-xl md:text-2xl mb-12 max-w-2xl">
-          Land your dream job faster with InternGeanie.
-          One-click resumes, smarter job matches, and a job hunt that works for you.
+            Land your dream job faster with InternGeanie.
+            One-click resumes, smarter job matches, and a job hunt that works for you.
           </p>
 
           {/* CTA Button - THIS IS THE HIGHLIGHTED BUTTON CODE */}
-          <Link href="/signup">
-            <Button
-              className="rounded-full px-10 py-7 bg-gradient-to-r from-[rgba(8,8,8,0.7)] to-[rgba(10,10,10,0.7)] 
+          {isLoggedIn ? (
+            <Link href="/dashboard">
+              <Button
+                className="rounded-full px-10 py-7 bg-gradient-to-r from-[rgba(8,8,8,0.7)] to-[rgba(10,10,10,0.7)] 
+                 hover:from-[rgba(19,19,24,0.85)] hover:to-[rgba(19,19,24,0.85)] 
+                 text-[#f1eece] text-lg font-medium shadow-lg backdrop-blur-sm 
+                 border border-transparent hover:border-[#f1eece] hover:shadow-[0_0_15px_#f1eece] 
+                 transition duration-300"
+              >
+                Go to Dashboard
+                <ArrowRight className="ml-2 h-6 w-6 text-[#f1eece]" />
+              </Button>
+            </Link>
+          ) : (
+            <Link href="/signup">
+              <Button
+                className="rounded-full px-10 py-7 bg-gradient-to-r from-[rgba(8,8,8,0.7)] to-[rgba(10,10,10,0.7)] 
                hover:from-[rgba(19,19,24,0.85)] hover:to-[rgba(19,19,24,0.85)] 
                text-[#f1eece] text-lg font-medium shadow-lg backdrop-blur-sm 
                border border-transparent hover:border-[#f1eece] hover:shadow-[0_0_15px_#f1eece] 
                transition duration-300"
-            >
-              Get Started for Free
-              <ArrowRight className="ml-2 h-6 w-6 text-[#f1eece]" />
-            </Button>
-          </Link>
+              >
+                Get Started for Free
+                <ArrowRight className="ml-2 h-6 w-6 text-[#f1eece]" />
+              </Button>
+            </Link>
+          )}
+
 
 
         </div>
