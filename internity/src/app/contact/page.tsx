@@ -38,33 +38,27 @@ export default function ContactPage() {
   // Handle form submission
   interface SubmitEvent extends React.FormEvent<HTMLFormElement> {}
 
-  const handleSubmit = (e: SubmitEvent): void => {
+  const handleSubmit = async (e: SubmitEvent): Promise<void> => {
     e.preventDefault()
 
-    // Form submission logic commented out - to be implemented later
-    /*
     // Example implementation:
-    fetch('/api/contact', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle success, clear form, show confirmation message, etc.
-        setFormData({ name: '', email: '', message: '', phone: '' });
+    try {
+      const response= await fetch(' http://127.0.0.1:5000/user/contactus', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       })
-      .catch((error) => {
-        // Handle error
-        console.error('Error:', error);
-      });
-    */
-
-    // For now, just log the form data
-    console.log("Form submitted:", formData)
-    alert("Thanks for your message! This form is not yet connected to a backend.")
+      const data=await response.json()
+      if(response.ok){
+        setFormData({ name: '', email: '', message: '', phone: '' });
+        console.log("Form submitted:", formData)
+        alert("Thanks for your message! This form is not yet connected to a backend.")
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
 
   return (
