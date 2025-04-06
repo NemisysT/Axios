@@ -52,7 +52,7 @@ export default function BlogPage() {
         
         <div className="container relative z-10 px-4 mx-auto">
           <div className="mb-16 text-center">
-            <h1 className="mb-6 text-4xl font-bold md:text-5xl">Proism Blog</h1>
+            <h1 className="mb-6 text-4xl font-bold md:text-5xl">InternGeanie Blogs</h1>
             <p className="max-w-2xl mx-auto text-gray-400">
               Insights, tips, and updates on job searching, resume building, and career development.
             </p>

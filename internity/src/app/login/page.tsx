@@ -65,22 +65,22 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-purple-50 to-blue-50">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-r from-[rgba(8,8,8,0.7)] to-[rgba(10,10,10,0.7)] text-[#f1eece]">
       <div className="w-full max-w-md">
-        <Card className="backdrop-blur-md bg-white/70 border border-white/20 shadow-xl rounded-2xl overflow-hidden">
+        <Card className="backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece] shadow-lg rounded-2xl overflow-hidden">
           <div className="p-6 sm:p-8">
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-gray-800 mb-2">Welcome Back! 👋</h1>
-              <p className="text-gray-600">Sign in to continue building your career</p>
+              <h1 className="text-3xl font-bold text-[#f1eece] mb-2">Welcome Back! 👋</h1>
+              <p className="text-[#e6e2b1]">Sign in to continue building your career</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-gray-700">
+                <Label htmlFor="email" className="text-[#f1eece]">
                   Email
                 </Label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-[#e6e2b1]">
                     <Mail size={18} />
                   </div>
                   <Input
@@ -97,10 +97,10 @@ export default function LoginPage() {
 
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <Label htmlFor="password" className="text-gray-700">
+                  <Label htmlFor="password" className="text-[#f1eece]">
                     Password
                   </Label>
-                  <Link href="#" className="text-sm text-purple-600 hover:text-purple-800 transition-colors">
+                  <Link href="#" className="text-sm text-[#e6e2b1] hover:text-[#f1eece] transition-colors">
                     Forgot Password?
                   </Link>
                 </div>
@@ -115,7 +115,7 @@ export default function LoginPage() {
                   />
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#e6e2b1] hover:text-[#f1eece]"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -126,7 +126,7 @@ export default function LoginPage() {
 
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-2 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg"
+                className="w-full bg-gradient-to-r from-[#7d0d1b] to-[#a90519] hover:from-[#a90519] hover:to-[#ff102a] text-[#f1eece] py-2 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg"
               >
                 Login
                 <ArrowRight size={16} className="ml-2" />
@@ -134,9 +134,9 @@ export default function LoginPage() {
             </form>
 
             <div className="mt-6 text-center">
-              <p className="text-gray-600">
+              <p className="text-[#e6e2b1]">
                 Don&apos;t have an account?{" "}
-                <Link href="/signup" className="text-purple-600 hover:text-purple-800 font-medium transition-colors">
+                <Link href="/signup" className="text-[#f1eece] hover:text-[#e6e2b1] font-medium transition-colors">
                   Sign Up
                 </Link>
               </p>

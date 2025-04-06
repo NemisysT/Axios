@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import MainLayout from "@/components/layout/MainLayout"
-import GetStartedCTA from "@/components/ui/GetStartedCTA"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import ExpandableFAQ from "@/components/ui/ExpandableCard"
@@ -135,7 +135,7 @@ export default function ContactPage() {
 
             <div className="flex justify-center mt-12 space-x-6">
               <Link
-                href="https://discord.gg/DWTHc7xW2Y"
+                href="https://discord.gg/interngeanie"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:opacity-80"
