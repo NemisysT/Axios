@@ -1,8 +1,10 @@
+'use client'
 import React from 'react'
 import MainLayout from '@/components/layout/MainLayout'
 import GetStartedCTA from '@/components/ui/GetStartedCTA'
 import Link from 'next/link'
 import Image from 'next/image'
+import { LampContainer } from '@/components/ui/lamp'
 
 export default function AboutPage() {
   const teamMembers = [
@@ -11,7 +13,7 @@ export default function AboutPage() {
       role: 'Founder',
       title: 'Psychologist & Free-loader',
       traits: ['+ Goofy', '+ Demanding', '+ Dedicated'],
-      image: 'https://ext.same-assets.com/1016765841/849522504.jpeg', // Replace with actual image
+      image: 'https://ext.same-assets.com/1016765841/849522504.jpeg',
       linkedIn: 'https://www.linkedin.com/in/mervin-mandanna/',
     },
     {
@@ -19,7 +21,7 @@ export default function AboutPage() {
       role: 'Co-Founder',
       title: 'Technology & Development',
       traits: ['+ Curious', '+ Open Minded', '+ Assertive'],
-      image: 'https://ext.same-assets.com/1016765841/849522504.jpeg', // Replace with actual image
+      image: 'https://ext.same-assets.com/1016765841/849522504.jpeg',
       linkedIn: 'https://www.linkedin.com/in/dilip-s-chakravarthi-5656ab209/',
     },
     {
@@ -27,7 +29,7 @@ export default function AboutPage() {
       role: 'Co-Founder',
       title: 'Development & ML Engineer',
       traits: ['+ Unconventional', '+ Self-reliant', '+ Versatile'],
-      image: 'https://ext.same-assets.com/1016765841/849522504.jpeg', // Replace with actual image
+      image: 'https://ext.same-assets.com/1016765841/849522504.jpeg',
       linkedIn: 'https://www.linkedin.com/in/vaibhav-garg-0b778a2a2/',
     },
     {
@@ -35,25 +37,25 @@ export default function AboutPage() {
       role: 'Co-Founder',
       title: 'Brand Building & Customer Relations',
       traits: ['+ Resilience', '+ Efficiency', '+ Simplicity'],
-      image: 'https://www.linkedin.com/in/vaibhav-srivastava-56141b30a/', // Replace with actual image
+      image: 'https://www.linkedin.com/in/vaibhav-srivastava-56141b30a/',
       linkedIn: 'https://www.linkedin.com/in/jolly-satodiya-bv/',
     },
   ]
 
   return (
     <MainLayout>
-      <section className="pt-32 pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-noise opacity-30 z-0"></div>
+      {/* FIRST SECTION WITH LAMP CONTAINER */}
+      <section className="pt-40 pb-24 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-16">
-            <span className="text-gray-400 mb-2 block">Shaping the Future of Job Search</span>
-            <h1 className="text-4xl md:text-5xl font-bold mb-8">Our Journey with InternGeanie</h1>
-            <p className="text-gray-400 max-w-3xl mx-auto">
+          <LampContainer className="text-center max-w-4xl mx-auto">
+            <span className="text-gray-400 mb-4 block text-lg">Shaping the Future of Job Search</span>
+            <h1 className="text-5xl md:text-6xl font-bold mb-8">Our Journey with InternGeanie</h1>
+            <p className="text-gray-400 max-w-3xl mx-auto text-lg leading-relaxed">
               At InternGeanie, we're passionate about making job hunting faster and smarter. Our story is rooted in the
               idea that your time is valuable. We aim to streamline the job application process, so you can focus
               on what truly matters—your growth.
             </p>
-          </div>
+          </LampContainer>
         </div>
       </section>
 
@@ -145,8 +147,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      <GetStartedCTA />
     </MainLayout>
   )
 }
