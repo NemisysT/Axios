@@ -92,7 +92,7 @@ const Footer = () => {
             <Link href="/blog" className="text-gray-400 hover:text-white text-sm">Blog</Link>
             <Link href="/our-story" className="text-gray-400 hover:text-white text-sm">About</Link>
             <Link href="/contact" className="text-gray-400 hover:text-white text-sm">Contact</Link>
-            <Link href="/privacy-policy" className="text-gray-400 hover:text-white text-sm">Privacy</Link>
+            
           </div>
 
           {/* Social Icons */}
@@ -114,7 +114,7 @@ const Footer = () => {
       </div>
 
       <div className="mt-10 text-center text-gray-500 text-xs">
-        All rights reserved with DarkOnyx LLP & InternGeanie.
+        All rights reserved with Axios & InternGeanie.
       </div>
     </footer>
   )

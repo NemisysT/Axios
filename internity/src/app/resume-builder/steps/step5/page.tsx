@@ -1,15 +1,20 @@
 "use client"
 
 import { Card } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { Download, Mail, Phone } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Plus, Trash2, Code } from "lucide-react"
 import { motion } from "framer-motion"
 import ProgressBar from "../../components/progress-bar"
 import NavigationButtons from "../../components/navigation-buttons"
-import { useResumeForm } from "../../components/resume-form-context"
+import { useResumeForm, availableTechnologies } from "../../components/resume-form-context"
 
-export default function ReviewStep() {
-  const { formData, previewUrl, saveFormData } = useResumeForm()
+export default function ProjectsStep() {
+  const { formData, handleProjectChange, toggleProjectTechnology, addProject, removeProject, saveFormData } =
+    useResumeForm()
 
   const pageVariants = {
     initial: { opacity: 0, x: 100 },
@@ -17,18 +22,12 @@ export default function ReviewStep() {
     exit: { opacity: 0, x: -100 },
   }
 
-  // Generate PDF (mock function)
-  const generatePDF = () => {
-    alert("In a real application, this would generate a PDF of your resume.")
-    // This would typically call a PDF generation library or API
-  }
-
   return (
     <>
       <ProgressBar
         currentStep={5}
-        totalSteps={5}
-        stepLabels={["Basic Info", "Education", "Experience", "Skills", "Review"]}
+        totalSteps={6}
+        stepLabels={["Basic Info", "Education", "Experience", "Skills", "Projects", "Review"]}
       />
 
       <Card className="backdrop-blur-md bg-white/70 border border-white/20 shadow-xl rounded-2xl overflow-hidden">
@@ -40,100 +39,98 @@ export default function ReviewStep() {
           className="p-6 sm:p-8"
         >
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Review Your Resume</h1>
-            <p className="text-gray-600">Here's a preview of your resume</p>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">Projects</h1>
+            <p className="text-gray-600">Add your notable projects and the technologies you used</p>
           </div>
 
-          <div className="space-y-8 p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
-            {/* Basic Info Preview */}
-            <div className="space-y-4">
-              <div className="flex items-center space-x-4">
-                {previewUrl && (
-                  <div className="w-16 h-16 rounded-full overflow-hidden">
-                    <img src={previewUrl || "/placeholder.svg"} alt="Profile" className="w-full h-full object-cover" />
-                  </div>
-                )}
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-800">{formData.basicInfo.name || "Your Name"}</h2>
-                  <div className="flex flex-wrap gap-3 text-gray-600 text-sm">
-                    {formData.basicInfo.email && (
-                      <div className="flex items-center">
-                        <Mail size={14} className="mr-1" />
-                        {formData.basicInfo.email}
-                      </div>
-                    )}
-                    {formData.basicInfo.phone && (
-                      <div className="flex items-center">
-                        <Phone size={14} className="mr-1" />
-                        {formData.basicInfo.phone}
-                      </div>
-                    )}
-                  </div>
+          <div className="space-y-6">
+            {formData.projects.map((project, index) => (
+              <div key={project.id} className="p-6 border border-gray-200 rounded-lg bg-white/80 shadow-sm">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Project #{index + 1}</h3>
+                  {formData.projects.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeProject(index)}
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                    >
+                      <Trash2 size={16} />
+                    </Button>
+                  )}
                 </div>
-              </div>
-            </div>
 
-            {/* Education Preview */}
-            {formData.education.length > 0 && (
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Education</h3>
-                {formData.education.map((edu) => (
-                  <div key={edu.id} className="space-y-1">
-                    <div className="font-medium">{edu.degree || "Degree"}</div>
-                    <div className="text-gray-600">{edu.institution || "Institution"}</div>
-                    <div className="text-gray-500 text-sm">{edu.year || "Year"}</div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Experience Preview */}
-            {formData.experience.length > 0 && (
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Experience</h3>
-                {formData.experience.map((exp) => (
-                  <div key={exp.id} className="space-y-2">
-                    <div className="font-medium">{exp.title || "Job Title"}</div>
-                    <div className="text-gray-600">{exp.company || "Company"}</div>
-                    <div className="text-gray-500 text-sm">
-                      {exp.startDate || "Start Date"} - {exp.endDate || "End Date"}
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor={`project-title-${index}`} className="text-gray-700">
+                      Project Title
+                    </Label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
+                        <Code size={18} />
+                      </div>
+                      <Input
+                        id={`project-title-${index}`}
+                        placeholder="E-commerce Website"
+                        className="pl-10"
+                        value={project.title}
+                        onChange={(e) => handleProjectChange(index, "title", e.target.value)}
+                      />
                     </div>
-                    <p className="text-gray-700 text-sm">{exp.description || "Job description..."}</p>
                   </div>
-                ))}
-              </div>
-            )}
 
-            {/* Skills Preview */}
-            {formData.skills.length > 0 && (
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Skills</h3>
-                <div className="flex flex-wrap gap-2">
-                  {formData.skills.map((skill) => (
-                    <span key={skill} className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">
-                      {skill}
-                    </span>
-                  ))}
+                  <div className="space-y-2">
+                    <Label htmlFor={`project-description-${index}`} className="text-gray-700">
+                      Project Description
+                    </Label>
+                    <Textarea
+                      id={`project-description-${index}`}
+                      placeholder="Describe your project, its purpose, and your role..."
+                      className="min-h-[100px]"
+                      value={project.description}
+                      onChange={(e) => handleProjectChange(index, "description", e.target.value)}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-gray-700">Technologies Used</Label>
+                    <div className="max-h-[200px] overflow-y-auto border border-gray-200 rounded-md p-3">
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                        {availableTechnologies.map((tech) => (
+                          <div key={tech} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`tech-${index}-${tech}`}
+                              checked={project.technologies.includes(tech)}
+                              onCheckedChange={() => toggleProjectTechnology(index, tech)}
+                            />
+                            <Label
+                              htmlFor={`tech-${index}-${tech}`}
+                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                              {tech}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            )}
-          </div>
+            ))}
 
-          <div className="mt-8 flex justify-center">
-            <Button
-              onClick={generatePDF}
-              className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-2 px-6 rounded-lg transition-all duration-300"
-            >
-              <Download size={16} className="mr-2" />
-              Export as PDF
+            <Button type="button" variant="outline" onClick={addProject} className="w-full py-2 border-dashed">
+              <Plus size={16} className="mr-2" />
+              Add Another Project
             </Button>
           </div>
 
           <NavigationButtons
             currentStep={5}
-            totalSteps={5}
+            totalSteps={6}
             onSaveData={saveFormData}
             backUrl="/resume-builder/steps/step4"
+            nextUrl="/resume-builder/steps/step6"
           />
         </motion.div>
       </Card>

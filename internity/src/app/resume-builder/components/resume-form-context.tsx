@@ -28,11 +28,19 @@ export interface Experience {
   id: string
 }
 
+export interface Project {
+  id: string
+  title: string
+  description: string
+  technologies: string[]
+}
+
 export interface FormData {
   basicInfo: BasicInfo
   education: Education[]
   experience: Experience[]
   skills: string[]
+  projects: Project[]
 }
 
 // Initial form data
@@ -62,6 +70,14 @@ export const initialFormData: FormData = {
     },
   ],
   skills: [],
+  projects: [
+    {
+      id: "proj-1",
+      title: "",
+      description: "",
+      technologies: [],
+    },
+  ],
 }
 
 // Available skills for selection
@@ -97,6 +113,63 @@ export const availableSkills = [
   "Teamwork",
 ]
 
+// Available technologies for projects
+export const availableTechnologies = [
+  "React",
+  "Next.js",
+  "Vue.js",
+  "Angular",
+  "Node.js",
+  "Express",
+  "Django",
+  "Flask",
+  "Spring Boot",
+  "Laravel",
+  "Ruby on Rails",
+  "MongoDB",
+  "PostgreSQL",
+  "MySQL",
+  "Redis",
+  "GraphQL",
+  "REST API",
+  "Docker",
+  "Kubernetes",
+  "AWS",
+  "Azure",
+  "Google Cloud",
+  "Firebase",
+  "Vercel",
+  "Netlify",
+  "Heroku",
+  "GitHub Actions",
+  "Jenkins",
+  "CircleCI",
+  "Webpack",
+  "Vite",
+  "Tailwind CSS",
+  "Material UI",
+  "Bootstrap",
+  "SASS/SCSS",
+  "Redux",
+  "MobX",
+  "Zustand",
+  "React Query",
+  "SWR",
+  "Jest",
+  "Cypress",
+  "Playwright",
+  "TypeScript",
+  "JavaScript",
+  "Python",
+  "Java",
+  "C#",
+  "Go",
+  "Rust",
+  "PHP",
+  "Swift",
+  "Kotlin",
+]
+
 interface ResumeFormContextType {
   formData: FormData
   setFormData: React.Dispatch<React.SetStateAction<FormData>>
@@ -112,6 +185,16 @@ interface ResumeFormContextType {
   addExperience: () => void
   removeExperience: (index: number) => void
   toggleSkill: (skill: string) => void
+  handleProjectChange: (index: number, field: keyof Omit<Project, "technologies">, value: string) => void
+  toggleProjectTechnology: (index: number, technology: string) => void
+  addProject: () => void
+  removeProject: (index: number) => void
+  isLoading: boolean
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+  isEditing: boolean
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>
+  fetchResumeFromBackend: () => Promise<void>
+  saveResumeToBackend: () => Promise<void>
 }
 
 const ResumeFormContext = createContext<ResumeFormContextType | undefined>(undefined)
@@ -119,8 +202,10 @@ const ResumeFormContext = createContext<ResumeFormContextType | undefined>(undef
 export function ResumeFormProvider({ children }: { children: ReactNode }) {
   const [formData, setFormData] = useState<FormData>(initialFormData)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
 
-  // Load form data from localStorage if available
+  // Load form data from localStorage if available (only on initial load)
   useEffect(() => {
     const savedData = localStorage.getItem("resumeFormData")
     if (savedData) {
@@ -133,6 +218,8 @@ export function ResumeFormProvider({ children }: { children: ReactNode }) {
             ...parsedData.basicInfo,
             profilePicture: null,
           },
+          // Ensure projects array exists (for backward compatibility)
+          projects: parsedData.projects || initialFormData.projects,
         })
 
         // Restore preview URL if it exists
@@ -285,6 +372,93 @@ export function ResumeFormProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  // Handle project changes
+  const handleProjectChange = (index: number, field: keyof Omit<Project, "technologies">, value: string) => {
+    const updatedProjects = [...formData.projects]
+    updatedProjects[index] = {
+      ...updatedProjects[index],
+      [field]: value,
+    }
+    setFormData({
+      ...formData,
+      projects: updatedProjects,
+    })
+  }
+
+  // Toggle project technology
+  const toggleProjectTechnology = (index: number, technology: string) => {
+    const updatedProjects = [...formData.projects]
+    const project = updatedProjects[index]
+
+    if (project.technologies.includes(technology)) {
+      project.technologies = project.technologies.filter((tech) => tech !== technology)
+    } else {
+      project.technologies = [...project.technologies, technology]
+    }
+
+    setFormData({
+      ...formData,
+      projects: updatedProjects,
+    })
+  }
+
+  // Add new project
+  const addProject = () => {
+    setFormData({
+      ...formData,
+      projects: [
+        ...formData.projects,
+        {
+          id: `proj-${Date.now()}`,
+          title: "",
+          description: "",
+          technologies: [],
+        },
+      ],
+    })
+  }
+
+  // Remove project
+  const removeProject = (index: number) => {
+    if (formData.projects.length > 1) {
+      const updatedProjects = [...formData.projects]
+      updatedProjects.splice(index, 1)
+      setFormData({
+        ...formData,
+        projects: updatedProjects,
+      })
+    }
+  }
+
+  // Simulate fetching resume from backend
+  const fetchResumeFromBackend = async () => {
+    setIsLoading(true)
+
+    // Simulate API call delay
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+
+    // In a real app, you would fetch data from an API
+    // For now, we'll just use the current formData
+    setIsLoading(false)
+
+    // Return the current data (in a real app, this would be the response from the API)
+    return
+  }
+
+  // Simulate saving resume to backend
+  const saveResumeToBackend = async () => {
+    setIsLoading(true)
+
+    // Simulate API call delay
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+
+    // In a real app, you would send data to an API
+    console.log("Saving resume data to backend:", formData)
+
+    setIsLoading(false)
+    return
+  }
+
   return (
     <ResumeFormContext.Provider
       value={{
@@ -302,6 +476,16 @@ export function ResumeFormProvider({ children }: { children: ReactNode }) {
         addExperience,
         removeExperience,
         toggleSkill,
+        handleProjectChange,
+        toggleProjectTechnology,
+        addProject,
+        removeProject,
+        isLoading,
+        setIsLoading,
+        isEditing,
+        setIsEditing,
+        fetchResumeFromBackend,
+        saveResumeToBackend,
       }}
     >
       {children}

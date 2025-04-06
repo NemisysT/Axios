@@ -21,8 +21,8 @@ export default function SkillsStep() {
     <>
       <ProgressBar
         currentStep={4}
-        totalSteps={5}
-        stepLabels={["Basic Info", "Education", "Experience", "Skills", "Review"]}
+        totalSteps={6}
+        stepLabels={["Basic Info", "Education", "Experience", "Skills", "Projects", "Review"]}
       />
 
       <Card className="backdrop-blur-md bg-white/70 border border-white/20 shadow-xl rounded-2xl overflow-hidden">
@@ -58,7 +58,7 @@ export default function SkillsStep() {
 
           <NavigationButtons
             currentStep={4}
-            totalSteps={5}
+            totalSteps={6}
             onSaveData={saveFormData}
             backUrl="/resume-builder/steps/step3"
             nextUrl="/resume-builder/steps/step5"

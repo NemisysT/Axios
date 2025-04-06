@@ -7,35 +7,35 @@ import Image from 'next/image'
 export default function AboutPage() {
   const teamMembers = [
     {
-      name: 'Cherry',
+      name: 'Mervin',
       role: 'Founder',
       title: 'Psychologist & Free-loader',
-      traits: ['+ Cute', '+ Demanding', '+ Goofball'],
+      traits: ['+ Goofy', '+ Demanding', '+ Dedicated'],
       image: 'https://ext.same-assets.com/1016765841/849522504.jpeg', // Replace with actual image
-      linkedIn: '',
+      linkedIn: 'https://www.linkedin.com/in/mervin-mandanna/',
     },
     {
-      name: 'Aryan Mishra',
+      name: 'Dilip',
       role: 'Co-Founder',
       title: 'Technology & Development',
       traits: ['+ Curious', '+ Open Minded', '+ Assertive'],
       image: 'https://ext.same-assets.com/1016765841/849522504.jpeg', // Replace with actual image
-      linkedIn: 'https://www.linkedin.com/in/aryan47/',
+      linkedIn: 'https://www.linkedin.com/in/dilip-s-chakravarthi-5656ab209/',
     },
     {
-      name: 'Sahil Sharma',
+      name: 'Vaibhav G',
       role: 'Co-Founder',
       title: 'Development & ML Engineer',
       traits: ['+ Unconventional', '+ Self-reliant', '+ Versatile'],
       image: 'https://ext.same-assets.com/1016765841/849522504.jpeg', // Replace with actual image
-      linkedIn: 'https://www.linkedin.com/in/sahil-sharma25/',
+      linkedIn: 'https://www.linkedin.com/in/vaibhav-garg-0b778a2a2/',
     },
     {
-      name: 'Jolly Satodiya',
+      name: 'Vaibhav S',
       role: 'Co-Founder',
       title: 'Brand Building & Customer Relations',
       traits: ['+ Resilience', '+ Efficiency', '+ Simplicity'],
-      image: 'https://ext.same-assets.com/1016765841/849522504.jpeg', // Replace with actual image
+      image: 'https://www.linkedin.com/in/vaibhav-srivastava-56141b30a/', // Replace with actual image
       linkedIn: 'https://www.linkedin.com/in/jolly-satodiya-bv/',
     },
   ]
