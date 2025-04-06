@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CardSpotlight } from "@/components/ui/card-spotlight";
+import PixelCard from "../PixelCard/PixelCard";
 import { Search, Target, FileText, Send } from "lucide-react";
 
 const Features = () => {
@@ -15,7 +15,7 @@ const Features = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               AI-Powered Tools for Effortless Job Search
             </h2>
-            <p className="text-gray-400 max-w-3xl mx-auto">
+            <p className="text-gray-400 max-w-3xl mx-auto text-justify">
               Leverage InternGeanie to streamline your job search. Our AI-driven tools customize resumes based on your profile and job description, while filtering and ranking job postings, ensuring only the best-fit opportunities.
             </p>
           </div>
@@ -37,69 +37,66 @@ const Features = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Works like Magic, but How?
           </h2>
-          <p className="text-gray-400 max-w-3xl mx-auto">
+          <p className="text-gray-400 max-w-3xl mx-auto text-justify">
             Choose the jobs you like. We take care of the rest. Our goal is to help you find the best job offers quickly and with the least possible effort.
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <CardSpotlight className="p-6 h-full">
-            <Search className="text-blue-500 w-6 h-6 mb-3" />
-            <h3 className="text-lg font-semibold text-white mb-1">Search</h3>
-            <p className="text-neutral-300 text-sm mb-2">
-              We crawl job boards and listings to surface roles that suit you.
-            </p>
-            <ul className="text-xs text-neutral-400 list-disc ml-4 space-y-1">
-              <li>Real-time job sourcing</li>
-              <li>Filtered by domain & location</li>
-              <li>No duplicate listings</li>
-            </ul>
-          </CardSpotlight>
-
-          <CardSpotlight className="p-6 h-full">
-            <Target className="text-green-500 w-6 h-6 mb-3" />
-            <h3 className="text-lg font-semibold text-white mb-1">Match</h3>
-            <p className="text-neutral-300 text-sm mb-2">
-              AI compares your skills & experience with job descriptions.
-            </p>
-            <ul className="text-xs text-neutral-400 list-disc ml-4 space-y-1">
-              <li>Compatibility scores</li>
-              <li>Highlights skill gaps</li>
-              <li>Tailored suggestions</li>
-            </ul>
-          </CardSpotlight>
-
-          <CardSpotlight className="p-6 h-full">
-            <FileText className="text-yellow-400 w-6 h-6 mb-3" />
-            <h3 className="text-lg font-semibold text-white mb-1">Generate</h3>
-            <p className="text-neutral-300 text-sm mb-2">
-              We craft ATS-optimized resumes for each selected job.
-            </p>
-            <ul className="text-xs text-neutral-400 list-disc ml-4 space-y-1">
-              <li>Dynamic resume builder</li>
-              <li>Highlights key skills</li>
-              <li>Multiple formats supported</li>
-            </ul>
-          </CardSpotlight>
-
-          <CardSpotlight className="p-6 h-full">
-            <Send className="text-purple-500 w-6 h-6 mb-3" />
-            <h3 className="text-lg font-semibold text-white mb-1">Apply</h3>
-            <p className="text-neutral-300 text-sm mb-2">
-              We apply automatically with your customized documents.
-            </p>
-            <ul className="text-xs text-neutral-400 list-disc ml-4 space-y-1">
-              <li>One-click apply</li>
-              <li>Status tracking built-in</li>
-              <li>Email confirmations</li>
-            </ul>
-          </CardSpotlight>
+          {steps.map(({ icon: Icon, title, desc, points, color }, idx) => (
+            <PixelCard key={idx} variant="pink">
+              <div className="absolute p-4 flex flex-col items-center text-center">
+                <Icon className={`w-5 h-5 mb-2 ${color}`} />
+                <h3 className="text-base font-semibold text-white mb-1">{title}</h3>
+                <p className="text-neutral-300 text-xs mb-2">{desc}</p>
+                <ul className="text-xs text-neutral-400 list-disc text-left space-y-0.5 ml-4">
+                  {points.map((point, i) => (
+                    <li key={i}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            </PixelCard>
+          ))}
         </div>
+
       </div>
     </section>
   );
 };
 
+// Centralized config for the 4-step features
+const steps = [
+  {
+    icon: Search,
+    color: "text-blue-500",
+    title: "Search",
+    desc: "We surface roles that match your skills and preferences.",
+    points: ["Live job sourcing", "Domain/location filter", "No duplicates"],
+  },
+  {
+    icon: Target,
+    color: "text-green-500",
+    title: "Match",
+    desc: "AI matches your experience with jobs.",
+    points: ["Skill matching", "Gap detection", "Ranked listings"],
+  },
+  {
+    icon: FileText,
+    color: "text-yellow-400",
+    title: "Generate",
+    desc: "Create ATS-friendly resumes instantly.",
+    points: ["Skill-focused output", "Formats supported", "Easy customization"],
+  },
+  {
+    icon: Send,
+    color: "text-purple-500",
+    title: "Apply",
+    desc: "Auto-apply with personalized docs.",
+    points: ["1-click apply", "Track application", "Email updates"],
+  },
+];
+
+// Centered Feature Cards
 const FeatureCard = ({
   title,
   description,
@@ -108,11 +105,12 @@ const FeatureCard = ({
   description: string;
 }) => {
   return (
-    <div className="bg-gradient-to-br from-purple-900/10 to-transparent rounded-2xl p-8 backdrop-blur-sm border border-purple-900/20">
-      <h3 className="text-xl font-semibold mb-4">{title}</h3>
-      <p className="text-gray-400">{description}</p>
+    <div className="bg-gradient-to-br from-purple-900/10 to-transparent rounded-2xl p-8 backdrop-blur-sm border border-purple-900/20 h-48 flex flex-col justify-center items-center text-center">
+      <h3 className="text-xl font-semibold text-white mb-2">{title}</h3>
+      <p className="text-gray-400 text-sm max-w-xs">{description}</p>
     </div>
   );
 };
+
 
 export default Features;
