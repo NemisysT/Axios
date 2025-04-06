@@ -1,10 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PixelCard from "../PixelCard/PixelCard";
 import { Search, Target, FileText, Send } from "lucide-react";
 
 const Features = () => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true); // Ensures this runs only on the client side
+  }, []);
+
   return (
     <section className="py-20 relative">
       <div className="container mx-auto px-4">
@@ -43,20 +49,21 @@ const Features = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {steps.map(({ icon: Icon, title, desc, points, color }, idx) => (
-            <PixelCard key={idx} variant="pink">
-              <div className="absolute p-4 flex flex-col items-center text-center">
-                <Icon className={`w-5 h-5 mb-2 ${color}`} />
-                <h3 className="text-base font-semibold text-white mb-1">{title}</h3>
-                <p className="text-neutral-300 text-xs mb-2">{desc}</p>
-                <ul className="text-xs text-neutral-400 list-disc text-left space-y-0.5 ml-4">
-                  {points.map((point, i) => (
-                    <li key={i}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-            </PixelCard>
-          ))}
+          {isClient &&
+            steps.map(({ icon: Icon, title, desc, points, color }, idx) => (
+              <PixelCard key={idx} variant="blue">
+                <div className="absolute p-4 flex flex-col items-center text-center">
+                  <Icon className={`w-5 h-5 mb-2 ${color}`} />
+                  <h3 className="text-base font-semibold text-white mb-1">{title}</h3>
+                  <p className="text-neutral-300 text-xs mb-2">{desc}</p>
+                  <ul className="text-xs text-neutral-400 list-disc text-left space-y-0.5 ml-4">
+                    {points.map((point, i) => (
+                      <li key={i}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              </PixelCard>
+            ))}
         </div>
 
       </div>
@@ -64,7 +71,6 @@ const Features = () => {
   );
 };
 
-// Centralized config for the 4-step features
 const steps = [
   {
     icon: Search,
@@ -111,6 +117,5 @@ const FeatureCard = ({
     </div>
   );
 };
-
 
 export default Features;

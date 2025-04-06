@@ -48,7 +48,7 @@ export default function AboutPage() {
       <section className="pt-40 pb-24 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <LampContainer className="text-center max-w-4xl mx-auto">
-            <span className="text-gray-400 mb-4 block text-lg">Shaping the Future of Job Search</span>
+            <span className="text-gray-800 mb-4 block text-lg">Shaping the Future of Job Search</span>
             <h1 className="text-5xl md:text-6xl font-bold mb-8">Our Journey with InternGeanie</h1>
             <p className="text-gray-400 max-w-3xl mx-auto text-lg leading-relaxed">
               At InternGeanie, we're passionate about making job hunting faster and smarter. Our story is rooted in the

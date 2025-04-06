@@ -41,8 +41,8 @@ export default function ExpandableFAQ() {
 
   const faqCategories = [
     { id: "all", name: "All" },
-    { id: "prosearch", name: "internSearch" },
-    { id: "proresume", name: "internResume" },
+    { id: "prosearch", name: "Search" },
+    { id: "proresume", name: "Resume" },
   ]
 
   const filteredFaqs = activeCategory === "all" ? faqs : faqs.filter((faq) => faq.category === activeCategory)
@@ -127,9 +127,9 @@ export default function ExpandableFAQ() {
                           className="text-gray-500 dark:text-gray-400 text-sm"
                         >
                           {active.category === "prosearch"
-                            ? "internSearch"
+                            ? "Search"
                             : active.category === "proresume"
-                              ? "internResume"
+                              ? "Resume"
                               : "General"}
                         </motion.p>
                       </div>
@@ -171,15 +171,15 @@ export default function ExpandableFAQ() {
                     </motion.h3>
                     <motion.p layoutId={`category-${faq.category}-${id}`} className="text-gray-400 text-sm">
                       {faq.category === "prosearch"
-                        ? "internSearch"
+                        ? "Search"
                         : faq.category === "proresume"
-                          ? "internResume"
+                          ? "Resume"
                           : "General"}
                     </motion.p>
                   </div>
                 </div>
                 <motion.button className="px-4 py-2 text-sm rounded-full font-medium bg-gray-700 hover:bg-purple-600 text-white">
-                  View
+                  Peep
                 </motion.button>
               </motion.div>
             ))}
