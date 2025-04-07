@@ -185,6 +185,7 @@ interface ResumeFormContextType {
   addExperience: () => void
   removeExperience: (index: number) => void
   toggleSkill: (skill: string) => void
+  addCustomSkill: (skill: string) => void
   handleProjectChange: (index: number, field: keyof Omit<Project, "technologies">, value: string) => void
   toggleProjectTechnology: (index: number, technology: string) => void
   addProject: () => void
@@ -195,6 +196,8 @@ interface ResumeFormContextType {
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>
   fetchResumeFromBackend: () => Promise<void>
   saveResumeToBackend: () => Promise<void>
+  generateAIResume: () => Promise<void>
+  isGenerating: boolean
 }
 
 const ResumeFormContext = createContext<ResumeFormContextType | undefined>(undefined)
@@ -204,6 +207,7 @@ export function ResumeFormProvider({ children }: { children: ReactNode }) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
+  const [isGenerating, setIsGenerating] = useState(false)
 
   // Load form data from localStorage if available (only on initial load)
   useEffect(() => {
@@ -372,6 +376,16 @@ export function ResumeFormProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  // Add custom skill
+  const addCustomSkill = (skill: string) => {
+    if (skill && !formData.skills.includes(skill)) {
+      setFormData({
+        ...formData,
+        skills: [...formData.skills, skill],
+      })
+    }
+  }
+
   // Handle project changes
   const handleProjectChange = (index: number, field: keyof Omit<Project, "technologies">, value: string) => {
     const updatedProjects = [...formData.projects]
@@ -459,6 +473,43 @@ export function ResumeFormProvider({ children }: { children: ReactNode }) {
     return
   }
 
+  // Simulate AI resume generation
+  const generateAIResume = async () => {
+    setIsGenerating(true)
+
+    // Simulate AI processing delay
+    await new Promise((resolve) => setTimeout(resolve, 2500))
+
+    // In a real app, you would call an AI service
+    // For now, we'll just enhance the current data with some placeholder improvements
+
+    // Example: Enhance job descriptions if they're empty
+    const enhancedExperience = formData.experience.map((exp) => {
+      if (!exp.description || exp.description.trim() === "") {
+        return {
+          ...exp,
+          description: `As a ${exp.title} at ${exp.company}, I contributed to key projects, improved processes, and collaborated with cross-functional teams to deliver high-quality results.`,
+        }
+      }
+      return exp
+    })
+
+    // Example: Add some common skills if skills array is empty
+    let enhancedSkills = [...formData.skills]
+    if (enhancedSkills.length === 0) {
+      enhancedSkills = ["Communication", "Teamwork", "Problem Solving", "Time Management"]
+    }
+
+    setFormData({
+      ...formData,
+      experience: enhancedExperience,
+      skills: enhancedSkills,
+    })
+
+    setIsGenerating(false)
+    return
+  }
+
   return (
     <ResumeFormContext.Provider
       value={{
@@ -476,6 +527,7 @@ export function ResumeFormProvider({ children }: { children: ReactNode }) {
         addExperience,
         removeExperience,
         toggleSkill,
+        addCustomSkill,
         handleProjectChange,
         toggleProjectTechnology,
         addProject,
@@ -486,6 +538,8 @@ export function ResumeFormProvider({ children }: { children: ReactNode }) {
         setIsEditing,
         fetchResumeFromBackend,
         saveResumeToBackend,
+        generateAIResume,
+        isGenerating,
       }}
     >
       {children}

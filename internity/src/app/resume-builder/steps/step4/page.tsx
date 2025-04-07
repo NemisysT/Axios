@@ -1,15 +1,14 @@
 "use client"
 
 import { Card } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
 import { motion } from "framer-motion"
 import ProgressBar from "../../components/progress-bar"
 import NavigationButtons from "../../components/navigation-buttons"
-import { useResumeForm, availableSkills } from "../../components/resume-form-context"
+import { useResumeForm } from "../../components/resume-form-context"
+import SkillsStepContent from "../../components/step-components/skills-step"
 
 export default function SkillsStep() {
-  const { formData, toggleSkill, saveFormData } = useResumeForm()
+  const { saveFormData } = useResumeForm()
 
   const pageVariants = {
     initial: { opacity: 0, x: 100 },
@@ -18,54 +17,29 @@ export default function SkillsStep() {
   }
 
   return (
-    <>
-      <ProgressBar
-        currentStep={4}
-        totalSteps={6}
-        stepLabels={["Basic Info", "Education", "Experience", "Skills", "Projects", "Review"]}
-      />
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-r from-[rgba(8,8,8,0.7)] to-[rgba(10,10,10,0.7)] text-[#f1eece]">
+      <div className="w-full max-w-2xl">
+        <ProgressBar
+          currentStep={4}
+          totalSteps={6}
+          stepLabels={["Basic Info", "Education", "Experience", "Skills", "Projects", "Review"]}
+        />
 
-      <Card className="backdrop-blur-md bg-white/70 border border-white/20 shadow-xl rounded-2xl overflow-hidden">
-        <motion.div
-          initial="initial"
-          animate="animate"
-          variants={pageVariants}
-          transition={{ duration: 0.3 }}
-          className="p-6 sm:p-8"
-        >
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Skills</h1>
-            <p className="text-gray-600">Select the skills that best represent you</p>
-          </div>
+        <Card className="backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece] shadow-lg rounded-2xl overflow-hidden p-8">
+          <motion.div initial="initial" animate="animate" variants={pageVariants} transition={{ duration: 0.3 }}>
+            <SkillsStepContent />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {availableSkills.map((skill) => (
-              <div key={skill} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`skill-${skill}`}
-                  checked={formData.skills.includes(skill)}
-                  onCheckedChange={() => toggleSkill(skill)}
-                />
-                <Label
-                  htmlFor={`skill-${skill}`}
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {skill}
-                </Label>
-              </div>
-            ))}
-          </div>
-
-          <NavigationButtons
-            currentStep={4}
-            totalSteps={6}
-            onSaveData={saveFormData}
-            backUrl="/resume-builder/steps/step3"
-            nextUrl="/resume-builder/steps/step5"
-          />
-        </motion.div>
-      </Card>
-    </>
+            <NavigationButtons
+              currentStep={4}
+              totalSteps={6}
+              onSaveData={saveFormData}
+              backUrl="/resume-builder/steps/step3"
+              nextUrl="/resume-builder/steps/step5"
+            />
+          </motion.div>
+        </Card>
+      </div>
+    </div>
   )
 }
 

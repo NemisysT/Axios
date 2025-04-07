@@ -73,7 +73,7 @@ export default function UploadResume() {
       }),
     )
 
-    router.push("/resume-builder/steps/step1")
+    router.push("/resume-builder/steps/1")
   }
 
   return (

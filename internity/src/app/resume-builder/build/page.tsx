@@ -1,55 +1,69 @@
 "use client"
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
+import React from "react"
+import { useRef } from "react"
+import { useReactToPrint } from "react-to-print"
+import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Download, Sparkles, Loader2 } from "lucide-react"
+import { useResumeForm, ResumeFormProvider } from "../components/resume-form-context"
+import ResumePreview from "../components/resume-preview"
 
-export default function BuildResume() {
-  const router = useRouter()
+function BuildResume() {
+  const { formData, generateAIResume, isGenerating } = useResumeForm()
+  const resumeRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    // Initialize form data in localStorage if it doesn't exist
-    if (!localStorage.getItem("resumeFormData")) {
-      const initialData = {
-        basicInfo: {
-          name: "",
-          email: "",
-          phone: "",
-          profilePicture: null,
-        },
-        education: [
-          {
-            degree: "",
-            institution: "",
-            year: "",
-            id: "edu-1",
-          },
-        ],
-        experience: [
-          {
-            title: "",
-            company: "",
-            startDate: "",
-            endDate: "",
-            description: "",
-            id: "exp-1",
-          },
-        ],
-        skills: [],
-      }
-      localStorage.setItem("resumeFormData", JSON.stringify(initialData))
-    }
-
-    // Navigate to the first step
-    router.push("/resume-builder/steps/step1")
-  }, [router])
+  const handlePrint = useReactToPrint({
+    contentRef: resumeRef,
+    documentTitle: `${formData.basicInfo.name || "Resume"}_${new Date().toLocaleDateString()}`,
+  })
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-purple-50 to-blue-50">
-      <div className="text-center">
-        <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-lg text-gray-600">Preparing your resume builder...</p>
-      </div>
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-r from-[rgba(8,8,8,0.7)] to-[rgba(10,10,10,0.7)] text-[#f1eece]">
+      <Card className="w-full max-w-4xl backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece] shadow-lg rounded-2xl overflow-hidden p-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-[#f1eece]">Your Resume</h1>
+          <div className="flex gap-3">
+            <Button
+              onClick={generateAIResume}
+              variant="outline"
+              className="flex items-center gap-2 border-[#f1eece]/30 text-[#f1eece] hover:bg-[#f1eece]/10"
+              disabled={isGenerating}
+            >
+              {isGenerating ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  <span>Enhancing...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles size={16} />
+                  <span>AI Enhance</span>
+                </>
+              )}
+            </Button>
+            <Button onClick={() => handlePrint()} className="bg-[#f1eece] text-[#131318] hover:bg-[#f1eece]/80">
+              <Download size={16} className="mr-2" />
+              Download PDF
+            </Button>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div ref={resumeRef}>
+            <ResumePreview formData={formData} />
+          </div>
+        </div>
+      </Card>
     </div>
+  )
+}
+
+export default function BuildResumePage() {
+  return (
+    <ResumeFormProvider>
+      <BuildResume />
+    </ResumeFormProvider>
   )
 }
 

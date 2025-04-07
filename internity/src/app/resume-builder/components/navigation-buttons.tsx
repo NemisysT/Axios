@@ -35,17 +35,18 @@ export default function NavigationButtons({
 
   return (
     <div className="mt-8 flex justify-between">
-      <Button type="button" variant="outline" onClick={handleBack} className={currentStep === 1 ? "opacity-50" : ""}>
+      <Button
+        type="button"
+        variant="outline"
+        onClick={handleBack}
+        className={`border-[#f1eece]/30 text-[#f1eece] hover:bg-[#f1eece]/10 ${currentStep === 1 ? "opacity-50" : ""}`}
+      >
         <ArrowLeft size={16} className="mr-2" />
         Previous
       </Button>
 
       {nextUrl && (
-        <Button
-          type="button"
-          onClick={handleNext}
-          className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white"
-        >
+        <Button type="button" onClick={handleNext} className="bg-[#f1eece] text-[#131318] hover:bg-[#f1eece]/80">
           Next
           <ArrowRight size={16} className="ml-2" />
         </Button>

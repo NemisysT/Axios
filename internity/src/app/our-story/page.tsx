@@ -3,7 +3,6 @@ import React from 'react'
 import MainLayout from '@/components/layout/MainLayout'
 import GetStartedCTA from '@/components/ui/GetStartedCTA'
 import Link from 'next/link'
-import Image from 'next/image'
 import { LampContainer } from '@/components/ui/lamp'
 
 export default function AboutPage() {
@@ -44,10 +43,11 @@ export default function AboutPage() {
 
   return (
     <MainLayout>
+      
       {/* FIRST SECTION WITH LAMP CONTAINER */}
-      <section className="pt-40 pb-24 relative overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
-          <LampContainer className="text-center max-w-4xl mx-auto">
+      <section className="h-full w-full bg-black flex items-center justify-center relative pt-">
+        <div className="container mx-auto px-4 relative z-10 w-full">
+          <LampContainer className="text-center max-w-4xl mx-auto pt-8 w-full">
             <span className="text-gray-800 mb-4 block text-lg">Shaping the Future of Job Search</span>
             <h1 className="text-5xl md:text-6xl font-bold mb-8">Our Journey with InternGeanie</h1>
             <p className="text-gray-400 max-w-3xl mx-auto text-lg leading-relaxed">
