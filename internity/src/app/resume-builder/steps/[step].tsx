@@ -31,7 +31,6 @@ interface BasicInfo {
   name: string
   email: string
   phone: string
-  profilePicture: File | null
 }
 
 interface Education {
@@ -63,7 +62,6 @@ const initialFormData: FormData = {
     name: "",
     email: "",
     phone: "",
-    profilePicture: null,
   },
   education: [
     {
@@ -123,7 +121,6 @@ export default function ResumeBuilderStep({ params }: { params: { step: string }
   const router = useRouter()
   const [formData, setFormData] = useState<FormData>(initialFormData)
   const [step, setStep] = useState(1)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
   // Parse the step from the URL
   useEffect(() => {
@@ -142,20 +139,7 @@ export default function ResumeBuilderStep({ params }: { params: { step: string }
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData)
-        // We need to handle the File object separately since it can't be serialized
-        setFormData({
-          ...parsedData,
-          basicInfo: {
-            ...parsedData.basicInfo,
-            profilePicture: null,
-          },
-        })
-
-        // Restore preview URL if it exists
-        const savedPreviewUrl = localStorage.getItem("profilePicturePreview")
-        if (savedPreviewUrl) {
-          setPreviewUrl(savedPreviewUrl)
-        }
+        setFormData(parsedData)
       } catch (error) {
         console.error("Error parsing saved form data:", error)
       }
@@ -165,33 +149,7 @@ export default function ResumeBuilderStep({ params }: { params: { step: string }
   // Save form data to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("resumeFormData", JSON.stringify(formData))
-
-    // Save preview URL separately
-    if (previewUrl) {
-      localStorage.setItem("profilePicturePreview", previewUrl)
-    }
-  }, [formData, previewUrl])
-
-  // Handle file upload for profile picture
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0]
-      setFormData({
-        ...formData,
-        basicInfo: {
-          ...formData.basicInfo,
-          profilePicture: file,
-        },
-      })
-
-      // Create a preview URL
-      const objectUrl = URL.createObjectURL(file)
-      setPreviewUrl(objectUrl)
-
-      // Clean up the preview URL when component unmounts
-      return () => URL.revokeObjectURL(objectUrl)
-    }
-  }
+  }, [formData])
 
   // Handle basic info changes
   const handleBasicInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -382,35 +340,6 @@ export default function ResumeBuilderStep({ params }: { params: { step: string }
                   </div>
 
                   <div className="space-y-6">
-                    <div className="flex flex-col items-center mb-6">
-                      <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden mb-4 border-4 border-white shadow-lg">
-                        {previewUrl ? (
-                          <img
-                            src={previewUrl || "/placeholder.svg"}
-                            alt="Profile"
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <User size={48} className="text-gray-400" />
-                        )}
-                      </div>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => document.getElementById("profile-upload")?.click()}
-                        className="mt-2"
-                      >
-                        Upload Photo
-                      </Button>
-                      <input
-                        id="profile-upload"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        className="hidden"
-                      />
-                    </div>
-
                     <div className="space-y-4">
                       <div className="space-y-2">
                         <Label htmlFor="name" className="text-gray-700">
@@ -744,32 +673,21 @@ export default function ResumeBuilderStep({ params }: { params: { step: string }
                   <div className="space-y-8 p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
                     {/* Basic Info Preview */}
                     <div className="space-y-4">
-                      <div className="flex items-center space-x-4">
-                        {previewUrl && (
-                          <div className="w-16 h-16 rounded-full overflow-hidden">
-                            <img
-                              src={previewUrl || "/placeholder.svg"}
-                              alt="Profile"
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                        )}
-                        <div>
-                          <h2 className="text-2xl font-bold text-gray-800">{formData.basicInfo.name || "Your Name"}</h2>
-                          <div className="flex flex-wrap gap-3 text-gray-600 text-sm">
-                            {formData.basicInfo.email && (
-                              <div className="flex items-center">
-                                <Mail size={14} className="mr-1" />
-                                {formData.basicInfo.email}
-                              </div>
-                            )}
-                            {formData.basicInfo.phone && (
-                              <div className="flex items-center">
-                                <Phone size={14} className="mr-1" />
-                                {formData.basicInfo.phone}
-                              </div>
-                            )}
-                          </div>
+                      <div>
+                        <h2 className="text-2xl font-bold text-gray-800">{formData.basicInfo.name || "Your Name"}</h2>
+                        <div className="flex flex-wrap gap-3 text-gray-600 text-sm">
+                          {formData.basicInfo.email && (
+                            <div className="flex items-center">
+                              <Mail size={14} className="mr-1" />
+                              {formData.basicInfo.email}
+                            </div>
+                          )}
+                          {formData.basicInfo.phone && (
+                            <div className="flex items-center">
+                              <Phone size={14} className="mr-1" />
+                              {formData.basicInfo.phone}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

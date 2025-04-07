@@ -198,6 +198,7 @@ interface ResumeFormContextType {
   saveResumeToBackend: () => Promise<void>
   generateAIResume: () => Promise<void>
   isGenerating: boolean
+  generateResumeWithTemplate: () => string
 }
 
 const ResumeFormContext = createContext<ResumeFormContextType | undefined>(undefined)
@@ -510,6 +511,82 @@ export function ResumeFormProvider({ children }: { children: ReactNode }) {
     return
   }
 
+  const generateResumeWithTemplate = () => {
+    const { basicInfo, education, experience, skills, projects } = formData;
+
+    return `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              line-height: 1.6;
+              padding: 1rem;
+            }
+            h1, h2 {
+              color: #333;
+            }
+            ul {
+              padding-left: 1.5rem;
+            }
+            li {
+              margin-bottom: 0.5rem;
+            }
+            a {
+              color: #007BFF;
+              text-decoration: none;
+            }
+            a:hover {
+              text-decoration: underline;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>${basicInfo.name}</h1>
+          <p>Email: <a href="mailto:${basicInfo.email}">${basicInfo.email}</a></p>
+          <p>Phone: ${basicInfo.phone}</p>
+          <hr />
+
+          <h2>Education</h2>
+          <ul>
+            ${education
+              .map(
+                (edu) =>
+                  `<li><strong>${edu.degree}</strong> at ${edu.institution} (${edu.year})</li>`
+              )
+              .join("")}
+          </ul>
+
+          <h2>Experience</h2>
+          <ul>
+            ${experience
+              .map(
+                (exp) =>
+                  `<li><strong>${exp.title}</strong> at ${exp.company} (${exp.startDate} - ${exp.endDate})<br />${exp.description}</li>`
+              )
+              .join("")}
+          </ul>
+
+          <h2>Skills</h2>
+          <p>${skills.join(", ")}</p>
+
+          <h2>Projects</h2>
+          <ul>
+            ${projects
+              .map(
+                (proj) =>
+                  `<li><strong>${proj.title}</strong><br />${proj.description}<br /><em>Technologies:</em> ${proj.technologies.join(
+                    ", "
+                  )}</li>`
+              )
+              .join("")}
+          </ul>
+        </body>
+      </html>
+    `;
+  }
+
   return (
     <ResumeFormContext.Provider
       value={{
@@ -540,6 +617,7 @@ export function ResumeFormProvider({ children }: { children: ReactNode }) {
         saveResumeToBackend,
         generateAIResume,
         isGenerating,
+        generateResumeWithTemplate,
       }}
     >
       {children}
