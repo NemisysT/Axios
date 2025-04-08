@@ -5,9 +5,9 @@ import { motion } from "framer-motion"
 import ProgressBar from "../../components/progress-bar"
 import NavigationButtons from "../../components/navigation-buttons"
 import { useResumeForm } from "../../components/resume-form-context"
-import BasicInfoStepContent from "../../components/step-components/basic-info-step"
+import ProjectsStepContent from "../../components/step-components/projects-step"
 
-export default function BasicInfoStep() {
+export default function ProjectsStep() {
   const { saveFormData } = useResumeForm()
 
   const pageVariants = {
@@ -20,21 +20,21 @@ export default function BasicInfoStep() {
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-r from-[rgba(8,8,8,0.7)] to-[rgba(10,10,10,0.7)] text-[#f1eece]">
       <div className="w-full max-w-2xl">
         <ProgressBar
-          currentStep={1}
+          currentStep={5}
           totalSteps={6}
           stepLabels={["Basic Info", "Education", "Experience", "Skills", "Projects", "Review"]}
         />
 
         <Card className="backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece] shadow-lg rounded-2xl overflow-hidden p-8">
           <motion.div initial="initial" animate="animate" variants={pageVariants} transition={{ duration: 0.3 }}>
-            <BasicInfoStepContent />
+            <ProjectsStepContent />
 
             <NavigationButtons
-              currentStep={1}
+              currentStep={5}
               totalSteps={6}
               onSaveData={saveFormData}
-              backUrl="/resume-builder"
-              nextUrl="/resume-builder/steps/step2"
+              backUrl="/resume-builder/steps/step4"
+              nextUrl="/resume-builder/steps/step6"
             />
           </motion.div>
         </Card>

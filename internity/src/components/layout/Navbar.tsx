@@ -1,27 +1,33 @@
-"use client"
+"use client";
 
-import React from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/app/context/context";
 
 const Navbar = () => {
-  const pathname = usePathname()
+  const pathname = usePathname();
+  const { isLoggedIn, logoutUser } = useAuth();
 
-  // 🔁 Replace this with your real auth logic (e.g., useSession() from NextAuth)
-  const isLoggedIn = false // set true to test the "Dashboard" button
+  const [isClient, setIsClient] = useState(false);
+
+  // Set isClient to true only after client-side hydration
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const navLinks = [
-    { name: 'Blog', href: '/blog' },
-    { name: 'About', href: '/our-story' },
-    { name: 'Contact', href: '/contact' },
-  ]
+    { name: "Blog", href: "/blog" },
+    { name: "About", href: "/our-story" },
+    { name: "Contact", href: "/contact" },
+  ];
 
   return (
     <nav className="w-full flex items-center justify-between py-4 px-6 md:px-12 z-50 bg-transparent absolute top-0 left-0 right-0">
       <Link href="/" className="flex items-center">
-        <div className="relative w-8 h-8 mr-2"></div>
+        <div className="relative w-8 h-8 mr-2" />
         <span className="text-white text-xl font-semibold ml-1">InternGeanie</span>
       </Link>
 
@@ -39,14 +45,36 @@ const Navbar = () => {
           </Link>
         ))}
 
-        <Link href={isLoggedIn ? "/dashboard" : "/signup"} target="_blank">
-          <Button
-            variant="outline"
-            className="border border-purple-light bg-transparent hover:bg-purple-dark text-white rounded-full px-6 neon-glow"
-          >
-            {isLoggedIn ? "Dashboard" : "Login / Signup"}
-          </Button>
-        </Link>
+        {isClient ? (
+          isLoggedIn ? (
+            <>
+              <Link href="/dashboard">
+                <Button
+                  variant="outline"
+                  className="border border-purple-light bg-transparent hover:bg-purple-dark text-white rounded-full px-6 neon-glow"
+                >
+                  Dashboard
+                </Button>
+              </Link>
+              <Button
+                onClick={logoutUser}
+                variant="outline"
+                className="ml-2 border border-red-400 text-white hover:bg-red-500 rounded-full px-6"
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Link href="/signup">
+              <Button
+                variant="outline"
+                className="border border-purple-light bg-transparent hover:bg-purple-dark text-white rounded-full px-6 neon-glow"
+              >
+                Login / Signup
+              </Button>
+            </Link>
+          )
+        ) : null}
       </div>
 
       <button className="md:hidden text-white">
@@ -55,7 +83,7 @@ const Navbar = () => {
         </svg>
       </button>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import MainLayout from '@/components/layout/MainLayout';
-import GetStartedCTA from '@/components/ui/GetStartedCTA';
+
 import Aurora from '@/components/Aurora/Aurora';
 
 const blogPosts = [
@@ -12,28 +12,28 @@ const blogPosts = [
     excerpt: 'Artificial Intelligence is transforming how job seekers find and apply for jobs. Learn how Proism is leading this revolution.',
     date: 'March 10, 2025',
     category: 'Technology',
-    slug: '/blog/ai-job-search'
+    slug: 'https://blog.theinterviewguys.com/how-ai-is-revolutionizing-the-job-search-process/'
   },
   {
     title: 'The Future of Resume Building: Automation and Personalization',
     excerpt: 'Discover how automated resume building tools are helping job seekers create personalized resumes that stand out to employers.',
     date: 'February 28, 2025',
     category: 'Career Tips',
-    slug: '/blog/future-resume-building'
+    slug: 'https://www.linkedin.com/pulse/future-resume-writing-services-ai-automation-free-resume-builder-zf0oc/'
   },
   {
     title: '5 Ways to Make Your Job Application Stand Out in 2025',
     excerpt: 'With increasing competition in the job market, here are 5 expert tips to ensure your application catches the recruiter\'s attention.',
     date: 'February 15, 2025',
     category: 'Career Tips',
-    slug: '/blog/job-application-tips'
+    slug: 'https://resumod.co/blog/10-ai-driven-job-search-trends-to-watch-in-2025/'
   },
   {
     title: 'Why Personalized Resumes Get More Interviews',
     excerpt: 'Research shows that personalized resumes tailored to specific job descriptions are more likely to result in interview invitations.',
     date: 'January 25, 2025',
     category: 'Research',
-    slug: '/blog/personalized-resumes'
+    slug: 'https://resume.io/blog/customize-resume-for-each-application'
   },
 ];
 
@@ -52,7 +52,7 @@ export default function BlogPage() {
         
         <div className="container relative z-10 px-4 mx-auto">
           <div className="mb-16 text-center">
-            <h1 className="mb-6 text-4xl font-bold md:text-5xl">Proism Blog</h1>
+            <h1 className="mb-6 text-4xl font-bold md:text-5xl">InternGeanie Blogs</h1>
             <p className="max-w-2xl mx-auto text-gray-400">
               Insights, tips, and updates on job searching, resume building, and career development.
             </p>
@@ -82,18 +82,12 @@ export default function BlogPage() {
             ))}
           </div>
 
-          <div className="flex justify-center mt-12">
-            <Button 
-              variant="outline" 
-              className="px-6 py-2 text-white rounded-full border-gray-700 hover:bg-gray-800"
-            >
-              Load More Articles
-            </Button>
-          </div>
+          
+          
         </div>
       </section>
 
-      <GetStartedCTA />
+      
     </MainLayout>
   );
 }

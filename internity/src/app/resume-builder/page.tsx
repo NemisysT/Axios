@@ -1,4 +1,5 @@
 "use client"
+
 import { Upload, FileText, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -17,27 +18,27 @@ export default function ResumeBuilderLanding() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-purple-50 to-blue-50">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-r from-[rgba(8,8,8,0.7)] to-[rgba(10,10,10,0.7)] text-[#f1eece]">
       <div className="w-full max-w-4xl text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Start Your Resume 🚀</h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+        <h1 className="text-4xl md:text-5xl font-bold text-[#f1eece] mb-4">Start Your Resume 🚀</h1>
+        <p className="text-xl text-[#f1eece]/80 max-w-2xl mx-auto">
           Create a professional resume in minutes. Choose how you want to get started.
         </p>
       </div>
 
       <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8 px-4">
         <motion.div whileHover="hover" variants={cardVariants}>
-          <Card className="h-full backdrop-blur-md bg-white/70 border border-white/20 shadow-lg rounded-2xl overflow-hidden">
+          <Card className="h-full backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece] shadow-lg rounded-2xl overflow-hidden">
             <CardContent className="p-8 flex flex-col items-center justify-center h-full">
-              <div className="w-20 h-20 rounded-full bg-purple-100 flex items-center justify-center mb-6">
-                <Upload size={32} className="text-purple-600" />
+              <div className="w-20 h-20 rounded-full bg-[rgba(30,30,35,0.5)] flex items-center justify-center mb-6">
+                <Upload size={32} className="text-[#f1eece]" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Upload Resume</h2>
-              <p className="text-gray-600 text-center mb-6">
+              <h2 className="text-2xl font-bold text-[#f1eece] mb-4">Upload Resume</h2>
+              <p className="text-[#f1eece]/80 text-center mb-6">
                 Already have a resume? Upload it and we'll help you enhance it.
               </p>
               <Button
-                className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-2 px-6 rounded-lg transition-all duration-300"
+                className="bg-[#f1eece] text-[#131318] hover:bg-[#f1eece]/80"
                 onClick={() => router.push("/resume-builder/upload")}
               >
                 Upload File
@@ -48,17 +49,17 @@ export default function ResumeBuilderLanding() {
         </motion.div>
 
         <motion.div whileHover="hover" variants={cardVariants}>
-          <Card className="h-full backdrop-blur-md bg-white/70 border border-white/20 shadow-lg rounded-2xl overflow-hidden">
+          <Card className="h-full backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece] shadow-lg rounded-2xl overflow-hidden">
             <CardContent className="p-8 flex flex-col items-center justify-center h-full">
-              <div className="w-20 h-20 rounded-full bg-indigo-100 flex items-center justify-center mb-6">
-                <FileText size={32} className="text-indigo-600" />
+              <div className="w-20 h-20 rounded-full bg-[rgba(30,30,35,0.5)] flex items-center justify-center mb-6">
+                <FileText size={32} className="text-[#f1eece]" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Build From Scratch</h2>
-              <p className="text-gray-600 text-center mb-6">
+              <h2 className="text-2xl font-bold text-[#f1eece] mb-4">Build From Scratch</h2>
+              <p className="text-[#f1eece]/80 text-center mb-6">
                 Create a new resume with our step-by-step guided process.
               </p>
               <Button
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-2 px-6 rounded-lg transition-all duration-300"
+                className="bg-[#f1eece] text-[#131318] hover:bg-[#f1eece]/80"
                 onClick={() => router.push("/resume-builder/steps/step1")}
               >
                 Get Started

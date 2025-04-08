@@ -1,6 +1,6 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 
 import { useState } from "react"
 import Link from "next/link"
@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
+import { useAuth } from '@/app/context/context'
+import Navbar from "@/components/layout/Navbar"
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -27,6 +29,7 @@ export default function SignupPage() {
     confirmPassword?: string
   }>({})
   const router = useRouter()
+  const { storeTokenInLS } = useAuth()
 
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -73,8 +76,7 @@ export default function SignupPage() {
     setErrors(newErrors)
 
     if (Object.keys(newErrors).length === 0) {
-      // In a real app, you would handle registration here
-      const response= await fetch(' http://127.0.0.1:5000/user/signup',{
+      const response = await fetch(' http://127.0.0.1:5000/user/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +87,9 @@ export default function SignupPage() {
           password: formData.password,
         }),
       })
-      if(response.ok){
+      const res_data = await response.json()
+      if (response.ok) {
+        storeTokenInLS(res_data.token)
         console.log("Signup successful")
         router.push("/login")
       }
@@ -93,128 +97,120 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-purple-50 to-blue-50">
+    <>
+    <Navbar />
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-r from-[rgba(8,8,8,0.7)] to-[rgba(10,10,10,0.7)] text-[#f1eece]">
       <div className="w-full max-w-md">
-        <Card className="backdrop-blur-md bg-white/70 border border-white/20 shadow-xl rounded-2xl overflow-hidden">
-          <div className="p-6 sm:p-8">
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-gray-800 mb-2">Create an Account 🚀</h1>
-              <p className="text-gray-600">Join us and start building your professional resume</p>
+        <Card className="backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece] shadow-lg rounded-2xl overflow-hidden p-8">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-[#f1eece] mb-2">Create an Account 🚀</h1>
+            <p className="text-[#e6e2b1]">Join us and start building your professional resume</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-[#f1eece]">Full Name</Label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 text-[#f1eece]">
+                  <User size={18} />
+                </div>
+                <Input
+                  id="name"
+                  name="name"
+                  placeholder="John Doe"
+                  className={`pl-10 bg-transparent text-[#f1eece] border-[#f1eece]/50 ${errors.name ? "border-red-500" : ""}`}
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+              </div>
+              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-gray-700">
-                  Full Name
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
-                    <User size={18} />
-                  </div>
-                  <Input
-                    id="name"
-                    name="name"
-                    placeholder="John Doe"
-                    className={`pl-10 ${errors.name ? "border-red-500" : ""}`}
-                    value={formData.name}
-                    onChange={handleChange}
-                  />
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-[#f1eece]">Email</Label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 text-[#f1eece]">
+                  <Mail size={18} />
                 </div>
-                {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  className={`pl-10 bg-transparent text-[#f1eece] border-[#f1eece]/50 ${errors.email ? "border-red-500" : ""}`}
+                  value={formData.email}
+                  onChange={handleChange}
+                />
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-gray-700">
-                  Email
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
-                    <Mail size={18} />
-                  </div>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    className={`pl-10 ${errors.email ? "border-red-500" : ""}`}
-                    value={formData.email}
-                    onChange={handleChange}
-                  />
-                </div>
-                {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-gray-700">
-                  Password
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    className={`${errors.password ? "border-red-500" : ""}`}
-                    value={formData.password}
-                    onChange={handleChange}
-                  />
-                  <button
-                    type="button"
-                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-                {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-gray-700">
-                  Confirm Password
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    className={`${errors.confirmPassword ? "border-red-500" : ""}`}
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                  />
-                  <button
-                    type="button"
-                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  >
-                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-                {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full mt-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-2 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg"
-              >
-                Sign Up
-                <ArrowRight size={16} className="ml-2" />
-              </Button>
-            </form>
-
-            <div className="mt-6 text-center">
-              <p className="text-gray-600">
-                Already have an account?{" "}
-                <Link href="/login" className="text-purple-600 hover:text-purple-800 font-medium transition-colors">
-                  Login
-                </Link>
-              </p>
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-[#f1eece]">Password</Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  className={`bg-transparent text-[#f1eece] border-[#f1eece]/50 pr-10 ${errors.password ? "border-red-500" : ""}`}
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#f1eece]/80 hover:text-white"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword" className="text-[#f1eece]">Confirm Password</Label>
+              <div className="relative">
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  className={`bg-transparent text-[#f1eece] border-[#f1eece]/50 pr-10 ${errors.confirmPassword ? "border-red-500" : ""}`}
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#f1eece]/80 hover:text-white"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full mt-2 bg-gradient-to-r from-[#7d0d1b] to-[#a90519] hover:from-[#a90519] hover:to-[#ff102a] text-[#f1eece] py-2 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg"
+            >
+              Sign Up
+              <ArrowRight size={16} className="ml-2" />
+            </Button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-[#e6e2b1]">
+              Already have an account?{" "}
+              <Link href="/login" className="text-[#ff667c] hover:text-white font-medium transition-colors">
+                Login
+              </Link>
+            </p>
           </div>
         </Card>
       </div>
     </div>
+    </>
   )
 }
-
