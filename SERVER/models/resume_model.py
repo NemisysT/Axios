@@ -7,7 +7,7 @@ class ResumeModel:
         self.db = get_db_connection()
         self.collection = self.db.resumes
     
-    def save_resume_data(self, filepath, filename, extracted_data):
+    def save_resume_data(self, filepath, filename, extracted_data,ats_score):
         """
         Save the extracted resume data to MongoDB
         Returns the document ID on success
@@ -18,7 +18,9 @@ class ResumeModel:
                 "filename": filename,
                 "filepath": filepath,
                 "upload_date": datetime.datetime.now(),
-                "raw_data": extracted_data  # Save raw data without enforcing a model
+                "raw_data": extracted_data,
+                "ats_score": ats_score
+                      # Save raw data without enforcing a model
             }
             
             # Insert into MongoDB
@@ -50,3 +52,4 @@ class ResumeModel:
             return resume
         except Exception as e:
             raise Exception(f"Retrieval error: {str(e)}")
+  
