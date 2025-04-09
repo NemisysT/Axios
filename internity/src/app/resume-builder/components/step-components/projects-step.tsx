@@ -12,7 +12,7 @@ export default function ProjectsStepContent() {
   const { formData, handleProjectChange, toggleProjectTechnology, addProject, removeProject } = useResumeForm()
 
   return (
-    <>
+    <div className="bg-[#131318] rounded-lg p-8 w-full h-full">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-[#f1eece] mb-2">Projects</h1>
         <p className="text-[#f1eece]/80">Add your notable projects and the technologies you used</p>
@@ -48,7 +48,7 @@ export default function ProjectsStepContent() {
                   <Input
                     id={`project-title-${index}`}
                     placeholder="E-commerce Website"
-                    className="pl-10 bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
+                    className="pl-10 bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50 h-12"
                     value={project.title}
                     onChange={(e) => handleProjectChange(index, "title", e.target.value)}
                   />
@@ -62,7 +62,7 @@ export default function ProjectsStepContent() {
                 <Textarea
                   id={`project-description-${index}`}
                   placeholder="Describe your project, its purpose, and your role..."
-                  className="min-h-[100px] bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
+                  className="min-h-[120px] bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
                   value={project.description}
                   onChange={(e) => handleProjectChange(index, "description", e.target.value)}
                 />
@@ -70,17 +70,20 @@ export default function ProjectsStepContent() {
 
               <div className="space-y-2">
                 <Label className="text-[#f1eece]">Technologies Used</Label>
-                <div className="max-h-[200px] overflow-y-auto border border-[#f1eece]/20 rounded-md p-3 bg-[rgba(25,25,30,0.7)]">
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                <div className="border border-[#f1eece]/20 rounded-md p-4 bg-[rgba(25,25,30,0.7)]">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {availableTechnologies.map((tech) => (
-                      <div key={tech} className="flex items-center space-x-2">
+                      <div 
+                        key={tech} 
+                        className="flex items-center space-x-2 p-2 rounded-md hover:bg-[rgba(40,40,45,0.5)] transition-colors cursor-pointer"
+                        onClick={() => toggleProjectTechnology(index, tech)}
+                      >
                         <Checkbox
                           id={`tech-${index}-${tech}`}
                           checked={project.technologies.includes(tech)}
-                          onCheckedChange={() => toggleProjectTechnology(index, tech)}
                           className="border-[#f1eece]/30 data-[state=checked]:bg-[#f1eece] data-[state=checked]:text-[#131318]"
                         />
-                        <Label htmlFor={`tech-${index}-${tech}`} className="text-sm font-medium text-[#f1eece]/80">
+                        <Label htmlFor={`tech-${index}-${tech}`} className="text-sm font-medium text-[#f1eece]/80 cursor-pointer">
                           {tech}
                         </Label>
                       </div>
@@ -96,13 +99,14 @@ export default function ProjectsStepContent() {
           type="button"
           variant="outline"
           onClick={addProject}
-          className="w-full py-2 border-dashed border-[#f1eece]/30 text-[#f1eece] hover:bg-[#f1eece]/10"
+          className="w-full py-3 border-dashed border-[#f1eece]/30 text-[#f1eece] hover:bg-[#f1eece]/10 transition-colors"
         >
           <Plus size={16} className="mr-2" />
           Add Another Project
         </Button>
       </div>
-    </>
+
+      
+    </div>
   )
 }
-

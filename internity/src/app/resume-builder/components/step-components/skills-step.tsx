@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -28,10 +27,12 @@ export default function SkillsStepContent() {
   }
 
   // Filter skills based on search query
-  const filteredSkills = availableSkills.filter((skill) => skill.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredSkills = availableSkills.filter((skill) => 
+    skill.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   return (
-    <>
+    <div className="bg-[#131318] rounded-lg p-8 w-full h-full">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-[#f1eece] mb-2">Skills</h1>
         <p className="text-[#f1eece]/80">Select the skills that best represent you</p>
@@ -46,10 +47,10 @@ export default function SkillsStepContent() {
               onChange={(e) => setCustomSkill(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Add a custom skill..."
-              className="bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
+              className="bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50 h-12"
             />
           </div>
-          <Button onClick={handleAddCustomSkill} className="bg-[#f1eece] text-[#131318] hover:bg-[#f1eece]/80">
+          <Button onClick={handleAddCustomSkill} className="bg-[#f1eece] text-[#131318] hover:bg-[#f1eece]/80 h-12">
             <Plus size={16} className="mr-1" />
             Add
           </Button>
@@ -62,7 +63,7 @@ export default function SkillsStepContent() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search skills..."
-            className="pl-10 bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
+            className="pl-10 bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50 h-12"
           />
           {searchQuery && (
             <button
@@ -98,26 +99,26 @@ export default function SkillsStepContent() {
         {/* Available skills */}
         <div>
           <h3 className="text-sm font-medium text-[#f1eece]/80 mb-3">Available Skills</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             {filteredSkills.length > 0 ? (
               filteredSkills.map((skill) => (
                 <div
                   key={skill}
                   onClick={() => toggleSkill(skill)}
-                  className={`px-3 py-2 rounded-md text-sm cursor-pointer transition-colors flex items-center ${
+                  className={`px-4 py-3 rounded-md text-sm cursor-pointer transition-all flex items-center ${
                     formData.skills.includes(skill)
-                      ? "bg-[#f1eece]/20 text-[#f1eece] border border-[#f1eece]/30"
-                      : "bg-[rgba(30,30,35,0.5)] text-[#f1eece]/70 border border-transparent hover:border-[#f1eece]/20"
+                      ? "bg-[#f1eece] text-[#131318] shadow-md"
+                      : "bg-[rgba(30,30,35,0.5)] text-[#f1eece]/70 border border-transparent hover:border-[#f1eece]/20 hover:bg-[rgba(40,40,45,0.5)]"
                   }`}
                 >
                   <div
-                    className={`w-4 h-4 rounded-sm mr-2 flex items-center justify-center ${
-                      formData.skills.includes(skill) ? "bg-[#f1eece] text-[#131318]" : "border border-[#f1eece]/30"
+                    className={`w-5 h-5 rounded-md mr-2 flex items-center justify-center ${
+                      formData.skills.includes(skill) ? "bg-[#131318] text-[#f1eece]" : "border border-[#f1eece]/30"
                     }`}
                   >
                     {formData.skills.includes(skill) && <Check size={12} />}
                   </div>
-                  {skill}
+                  <span className="font-medium">{skill}</span>
                 </div>
               ))
             ) : (
@@ -126,11 +127,19 @@ export default function SkillsStepContent() {
           </div>
         </div>
       </div>
-    </>
+
+      {/* <div className="mt-10 flex justify-between">
+        <Button variant="outline" className="border-[#f1eece]/30 text-[#f1eece] hover:bg-[rgba(30,30,35,0.5)]">
+          <span className="mr-2">←</span> Previous
+        </Button>
+        <Button className="bg-[#f1eece] text-[#131318] hover:bg-[#f1eece]/80">
+          Next <span className="ml-2">→</span>
+        </Button>
+      </div> */}
+    </div>
   )
 }
 
-// Simple check icon component
 function Check({ size = 24 }: { size?: number }) {
   return (
     <svg
@@ -148,4 +157,3 @@ function Check({ size = 24 }: { size?: number }) {
     </svg>
   )
 }
-

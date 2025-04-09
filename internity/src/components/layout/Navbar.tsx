@@ -10,10 +10,9 @@ import { useAuth } from "@/app/context/context";
 const Navbar = () => {
   const pathname = usePathname();
   const { isLoggedIn, logoutUser } = useAuth();
-
   const [isClient, setIsClient] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  // Set isClient to true only after client-side hydration
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -24,64 +23,136 @@ const Navbar = () => {
     { name: "Contact", href: "/contact" },
   ];
 
-  return (
-    <nav className="w-full flex items-center justify-between py-4 px-6 md:px-12 z-50 bg-transparent absolute top-0 left-0 right-0">
-      <Link href="/" className="flex items-center">
-        <div className="relative w-8 h-8 mr-2" />
-        <span className="text-white text-xl font-semibold ml-1">InternGeanie</span>
-      </Link>
+  const toggleMenu = () => {
+    setMenuOpen((prev) => !prev);
+  };
 
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-transparent flex flex-col md:flex-row items-center justify-between px-6 md:px-12 py-4">
+      {/* Logo & Burger */}
+      <div className="flex w-full justify-between md:w-auto items-center">
+        <Link href="/" className="flex items-center gap-2">
+          <span className="text-white text-lg font-semibold tracking-tight">
+            InternGeanie
+          </span>
+        </Link>
+
+        {/* Burger Icon */}
+        <button
+          className="md:hidden text-white focus:outline-none hover:scale-105 transition-transform"
+          onClick={toggleMenu}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+            />
+          </svg>
+        </button>
+      </div>
+
+      {/* Desktop Menu */}
       <div className="hidden md:flex items-center space-x-6">
         {navLinks.map((link) => (
           <Link
             key={link.href}
             href={link.href}
             className={cn(
-              "text-sm font-medium transition-colors hover:text-primary",
-              pathname === link.href ? "text-white" : "text-muted-foreground"
+              "text-sm font-medium transition-colors hover:text-white",
+              pathname === link.href ? "text-white" : "text-gray-400"
             )}
           >
             {link.name}
           </Link>
         ))}
 
-        {isClient ? (
-          isLoggedIn ? (
-            <>
-              <Link href="/dashboard">
+        {isClient && (
+          <>
+            {isLoggedIn ? (
+              <>
+                <Link href="/dashboard">
+                  <Button
+                    variant="outline"
+                    className="rounded-full border border-white/30 text-white hover:bg-white/10 px-5 text-sm"
+                  >
+                    Dashboard
+                  </Button>
+                </Link>
+                <Button
+                  onClick={logoutUser}
+                  variant="outline"
+                  className="ml-2 rounded-full border border-red-400 text-white hover:bg-red-500/20 px-5 text-sm"
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <Link href="/signup">
                 <Button
                   variant="outline"
-                  className="border border-purple-light bg-transparent hover:bg-purple-dark text-white rounded-full px-6 neon-glow"
+                  className="rounded-full border border-white/30 text-white hover:bg-white/10 px-5 text-sm"
                 >
-                  Dashboard
+                  Login / Signup
                 </Button>
               </Link>
-              <Button
-                onClick={logoutUser}
-                variant="outline"
-                className="ml-2 border border-red-400 text-white hover:bg-red-500 rounded-full px-6"
-              >
-                Logout
-              </Button>
-            </>
-          ) : (
-            <Link href="/signup">
-              <Button
-                variant="outline"
-                className="border border-purple-light bg-transparent hover:bg-purple-dark text-white rounded-full px-6 neon-glow"
-              >
-                Login / Signup
-              </Button>
-            </Link>
-          )
-        ) : null}
+            )}
+          </>
+        )}
       </div>
 
-      <button className="md:hidden text-white">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
+      {/* Mobile Dropdown */}
+      {menuOpen && (
+        <div className="md:hidden mt-4 flex flex-col items-start gap-4 w-full bg-black/80 rounded-xl p-4 backdrop-blur-md shadow-lg transition-all">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setMenuOpen(false)}
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-white",
+                pathname === link.href ? "text-white" : "text-gray-400"
+              )}
+            >
+              {link.name}
+            </Link>
+          ))}
+
+          {isClient && (
+            <>
+              {isLoggedIn ? (
+                <>
+                  <Link href="/dashboard" onClick={() => setMenuOpen(false)}>
+                    <Button
+                      variant="outline"
+                      className="w-full border border-white/30 text-white hover:bg-white/10 text-sm"
+                    >
+                      Dashboard
+                    </Button>
+                  </Link>
+                  
+                </>
+              ) : (
+                <Link href="/signup" onClick={() => setMenuOpen(false)}>
+                  <Button
+                    variant="outline"
+                    className="w-full border border-white/30 text-white hover:bg-white/10 text-sm"
+                  >
+                    Login / Signup
+                  </Button>
+                </Link>
+              )}
+            </>
+          )}
+        </div>
+      )}
     </nav>
   );
 };
