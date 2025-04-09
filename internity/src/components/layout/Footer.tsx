@@ -55,48 +55,27 @@ const socialLinks = [
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-black border-t border-gray-800 pt-12 pb-6 px-6 md:px-12">
-      <div className="container mx-auto flex flex-col gap-10 md:flex-row justify-between">
+    <footer className="w-full bg-black border-t border-gray-800 pt-10 pb-6 px-6 md:px-12 text-sm text-gray-400">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-10">
         {/* Logo + Tagline */}
-        <Link href="/" className="flex items-start gap-3">
-          {/* <div className="w-8 h-8">
-            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-              <path d="M16 0C7.163 0 0 7.163 0 16C0 24.837 7.163 32 16 32C24.837 32 32 24.837 32 16C32 7.163 24.837 0 16 0ZM16 4C22.627 4 28 9.373 28 16C28 22.627 22.627 28 16 28C9.373 28 4 22.627 4 16C4 9.373 9.373 4 16 4Z"
-                fill="url(#paint0_linear)" />
-              <path d="M16 8C11.582 8 8 11.582 8 16C8 20.418 11.582 24 16 24C20.418 24 24 20.418 24 16C24 11.582 20.418 8 16 8ZM16 12C18.209 12 20 13.791 20 16C20 18.209 18.209 20 16 20C13.791 20 12 18.209 12 16C12 13.791 13.791 12 16 12Z"
-                fill="url(#paint1_linear)" />
-              <defs>
-                <linearGradient id="paint0_linear" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#8A2BE2" />
-                  <stop offset="1" stopColor="#4A0E95" />
-                </linearGradient>
-                <linearGradient id="paint1_linear" x1="8" y1="8" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#8A2BE2" />
-                  <stop offset="1" stopColor="#4A0E95" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div> */}
-          <div className="flex flex-col">
-            <span className="text-white text-xl font-semibold">InternGeanie</span>
-            <span className="text-gray-400 text-xs mt-1 leading-tight">
-              Enabling tomorrow's<br />on-demand workforce
-            </span>
-          </div>
+        <Link href="/" className="flex flex-col space-y-1 text-white">
+          <span className="text-xl font-semibold tracking-wide">InternGeanie</span>
+          <span className="text-xs text-gray-400 leading-tight">
+            Enabling tomorrow’s<br />on-demand workforce
+          </span>
         </Link>
 
-        {/* Navigation + Socials */}
-        <div className="flex flex-col gap-8 md:items-end">
+        {/* Navigation and Socials */}
+        <div className="flex flex-col md:items-end gap-6">
           {/* Navigation Links */}
-          <div className="flex gap-6 flex-wrap justify-center md:justify-end">
-            <Link href="/blog" className="text-gray-400 hover:text-white text-sm">Blog</Link>
-            <Link href="/our-story" className="text-gray-400 hover:text-white text-sm">About</Link>
-            <Link href="/contact" className="text-gray-400 hover:text-white text-sm">Contact</Link>
-            
+          <div className="flex flex-wrap justify-center md:justify-end gap-4">
+            <Link href="/blog" className="transition hover:text-white">Blog</Link>
+            <Link href="/our-story" className="transition hover:text-white">About</Link>
+            <Link href="/contact" className="transition hover:text-white">Contact</Link>
           </div>
 
-          {/* Social Icons */}
-          <div className="flex gap-4">
+          {/* Social Links */}
+          <div className="flex gap-3">
             {socialLinks.map(({ name, href, icon }) => (
               <Link
                 key={name}
@@ -104,7 +83,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={name}
-                className="text-gray-400 hover:text-white border border-gray-800 p-2 rounded-full transition-colors duration-200"
+                className="p-2 border border-gray-800 rounded-full hover:text-white hover:border-white transition"
               >
                 {icon}
               </Link>
@@ -113,8 +92,8 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="mt-10 text-center text-gray-500 text-xs">
-        All rights reserved with Axios & InternGeanie.
+      <div className="mt-10 text-center text-xs text-gray-600">
+        © {new Date().getFullYear()} Axios & InternGeanie. All rights reserved.
       </div>
     </footer>
   )

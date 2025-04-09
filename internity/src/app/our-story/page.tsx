@@ -45,9 +45,9 @@ export default function AboutPage() {
     <MainLayout>
       
       {/* FIRST SECTION WITH LAMP CONTAINER */}
-      <section className="h-full w-full bg-black flex items-center justify-center relative pt-">
-        <div className="container mx-auto px-4 relative z-10 w-full">
-          <LampContainer className="text-center max-w-4xl mx-auto pt-8 w-full">
+      <section className="w-full bg-black flex items-center justify-center relative">
+        <div className="w-full">
+          <LampContainer className="text-center w-full mx-auto pt-8">
             <span className="text-gray-800 mb-4 block text-lg">Shaping the Future of Job Search</span>
             <h1 className="text-5xl md:text-6xl font-bold mb-8">Our Journey with InternGeanie</h1>
             <p className="text-gray-400 max-w-3xl mx-auto text-lg leading-relaxed">
