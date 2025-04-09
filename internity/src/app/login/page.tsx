@@ -62,7 +62,7 @@ export default function LoginPage() {
       if (response.ok) {
         storeTokenInLS(res_data.token)
         console.log("Login successful")
-        router.push("/resume-builder")
+        router.push("/dashboard")
       }
     }
   }
