@@ -10,13 +10,13 @@ export default function BasicInfoStepContent() {
   const { formData, previewUrl, handleBasicInfoChange, handleFileChange } = useResumeForm()
 
   return (
-    <>
+    <div className="w-full max-w-full px-0">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-[#f1eece] mb-2">Basic Information</h1>
         <p className="text-[#f1eece]/80">Let's start with your personal details</p>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-6 w-full">
         <div className="flex flex-col items-center mb-6">
           <div className="w-32 h-32 rounded-full bg-[rgba(30,30,35,0.5)] flex items-center justify-center overflow-hidden mb-4 border-4 border-[#131318] shadow-lg">
             {previewUrl ? (
@@ -36,7 +36,7 @@ export default function BasicInfoStepContent() {
           <input id="profile-upload" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 w-full">
           <div className="space-y-2">
             <Label htmlFor="name" className="text-[#f1eece]">
               Full Name
@@ -49,7 +49,7 @@ export default function BasicInfoStepContent() {
                 id="name"
                 name="name"
                 placeholder="John Doe"
-                className="pl-10 bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
+                className="pl-10 w-full bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
                 value={formData.basicInfo.name}
                 onChange={handleBasicInfoChange}
               />
@@ -69,7 +69,7 @@ export default function BasicInfoStepContent() {
                 name="email"
                 type="email"
                 placeholder="you@example.com"
-                className="pl-10 bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
+                className="pl-10 w-full bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
                 value={formData.basicInfo.email}
                 onChange={handleBasicInfoChange}
               />
@@ -88,7 +88,7 @@ export default function BasicInfoStepContent() {
                 id="phone"
                 name="phone"
                 placeholder="(123) 456-7890"
-                className="pl-10 bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
+                className="pl-10 w-full bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
                 value={formData.basicInfo.phone}
                 onChange={handleBasicInfoChange}
               />
@@ -96,7 +96,6 @@ export default function BasicInfoStepContent() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
-

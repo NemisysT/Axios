@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
@@ -13,16 +13,36 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { User, Briefcase, Settings, Bell, LogOut, Sparkles, Lock, ExternalLink } from "lucide-react"
 import Link from "next/link"
+import { useAuth } from "@/app/context/context";
+import { useRouter } from "next/navigation"
 
 export default function Dashboard() {
   const [agentActive, setAgentActive] = useState(false)
   const [credentialsOpen, setCredentialsOpen] = useState(false)
+  const [user, setuser] = useState<{ profileImage?: string; name?: string; email?: string }>({})
+  const {logoutUser} = useAuth()
+  const router = useRouter()
 
   // Mock user data - would come from authentication in a real app
-  const user = {
-    name: "Alex Johnson",
-    email: "alex.johnson@example.com",
-    profileImage: "/placeholder.svg?height=100&width=100",
+  useEffect(() => {
+   fetchuser()
+  }, [])
+  
+  const fetchuser = async () => {
+    const response = await fetch(' http://127.0.0.1:5000/user/details', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      }
+    })
+    const userData = await response.json()
+    console.log(userData)
+    setuser(userData)
+  }
+
+  const handleLogout = () => {
+    logoutUser()
+    router.push('/')
   }
 
   // Mock internship applications - would come from database in a real app
@@ -171,7 +191,7 @@ export default function Dashboard() {
                     <Bell size={18} />
                     <span>Notifications</span>
                   </button>
-                  <button className="w-full flex items-center gap-3 p-3 rounded-lg text-[#f1eece]/70 hover:bg-[rgba(30,30,35,0.5)] transition-colors">
+                  <button className="w-full flex items-center gap-3 p-3 rounded-lg text-[#f1eece]/70 hover:bg-[rgba(30,30,35,0.5)] transition-colors" onClick={() => {handleLogout()}}>
                     <LogOut size={18} />
                     <span>Logout</span>
                   </button>

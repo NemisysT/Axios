@@ -20,7 +20,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
   const router = useRouter()
-  const {storeTokenInLS} = useAuth()
+  const { storeTokenInLS } = useAuth()
 
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -47,36 +47,40 @@ export default function LoginPage() {
     setErrors(newErrors)
 
     if (Object.keys(newErrors).length === 0) {
-      const response= await fetch(' http://127.0.0.1:5000/user/login',{
-        method: 'POST',
+      const response = await fetch("http://127.0.0.1:5000/user/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email:email,
-          password:password
+          email: email,
+          password: password,
         }),
       })
-      const res_data=await response.json()
-      if(response.ok){
+
+      const res_data = await response.json()
+      if (response.ok) {
         storeTokenInLS(res_data.token)
         console.log("Login successful")
-        router.push("/resume-builder")
+        router.push("/dashboard")
       }
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-between p-4 bg-neutral-950 relative">
+    <div className="min-h-screen flex flex-col-reverse md:flex-row items-center justify-between p-4 md:p-8 bg-neutral-950 relative">
       {/* Left side with main heading and subtext */}
-      <div className="w-1/2 pl-16 z-10">
-      <h1 className="text-7xl font-bold text-[#f1eece] mb-4">Welcome Back, Trailblazer</h1>
-      <p className="text-2xl text-[#e6e2b1]">Sign in to unlock your next opportunity. Your journey to success continues here—smarter, faster, and bolder than ever.</p>
-
+      <div className="w-full md:w-1/2 text-center md:text-left mt-10 md:mt-0 z-10 px-4 md:px-16">
+        <h1 className="text-4xl md:text-7xl font-bold text-[#f1eece] mb-4 leading-tight">
+          Welcome Back, Trailblazer
+        </h1>
+        <p className="text-lg md:text-2xl text-[#e6e2b1]">
+          Sign in to unlock your next opportunity. Your journey to success continues here—smarter, faster, and bolder than ever.
+        </p>
       </div>
-      
+
       {/* Right side with login card */}
-      <div className="w-1/2 flex justify-center z-10">
+      <div className="w-full md:w-1/2 flex justify-center z-10 px-4 md:px-0 mb-8 md:mb-0">
         <div className="w-full max-w-md">
           <Card className="backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece] shadow-lg rounded-2xl overflow-hidden">
             <div className="p-6 sm:p-8">
@@ -147,7 +151,7 @@ export default function LoginPage() {
               <div className="mt-6 text-center">
                 <p className="text-[#e6e2b1]">
                   Don&apos;t have an account?{" "}
-                  <Link href="/signup" className="text-[#f1eece] hover:text-[#e6e2b1] font-medium transition-colors">
+                  <Link href="/signup" className="text-[#ff667c] hover:text-white font-medium transition-colors">
                     Sign Up
                   </Link>
                 </p>
@@ -156,8 +160,8 @@ export default function LoginPage() {
           </Card>
         </div>
       </div>
-      <Navbar /> {/* Navbar component */}
-      {/* Background Beams component */}
+
+      <Navbar />
       <BackgroundBeams />
     </div>
   )

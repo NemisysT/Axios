@@ -91,14 +91,14 @@ export default function SignupPage() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex items-center justify-between p-4 bg-neutral-950 relative">
-        {/* Left side with signup form */}
-        <div className="w-1/2 flex justify-center z-10">
-          <div className="w-full max-w-md">
-            <Card className="backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece] shadow-lg rounded-2xl overflow-hidden p-8">
-              <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-[#f1eece] mb-2">Create an Account </h1>
-                <p className="text-[#e6e2b1]">Join us and start building your professional resume</p>
+      <div className="min-h-screen flex flex-col md:flex-row items-center justify-between p-4 md:p-6 lg:p-8 bg-neutral-950 relative">
+        {/* Left side with signup form - Full width on mobile, half on desktop */}
+        <div className="w-full md:w-1/2 flex justify-center z-10 mb-8 md:mb-0">
+          <div className="w-full max-w-md px-4 sm:px-0">
+            <Card className="backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece] shadow-lg rounded-2xl overflow-hidden p-4 sm:p-6 md:p-8">
+              <div className="text-center mb-6 md:mb-8">
+                <h1 className="text-2xl md:text-3xl font-bold text-[#f1eece] mb-2">Create an Account</h1>
+                <p className="text-sm md:text-base text-[#e6e2b1]">Join us and start building your professional resume</p>
               </div>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
@@ -189,7 +189,7 @@ export default function SignupPage() {
                 </Button>
               </form>
               <div className="mt-6 text-center">
-                <p className="text-[#e6e2b1]">
+                <p className="text-sm md:text-base text-[#e6e2b1]">
                   Already have an account?{" "}
                   <Link href="/login" className="text-[#ff667c] hover:text-white font-medium transition-colors">
                     Login
@@ -200,13 +200,13 @@ export default function SignupPage() {
           </div>
         </div>
         
-        {/* Right side with main heading and subtext */}
-        <div className="w-1/2 pl-8 pr-16 z-10">
-          <h1 className="text-7xl font-bold text-[#f1eece] mb-6">Build Your Future</h1>
-          <p className="text-2xl text-[#e6e2b1] leading-relaxed">
+        {/* Right side with main heading and subtext - Hidden on mobile, shown on desktop */}
+        <div className="w-full md:w-1/2 px-4 md:pl-8 md:pr-16 z-10 text-center md:text-left">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#f1eece] mb-4 md:mb-6">Build Your Future</h1>
+          <p className="text-lg sm:text-xl md:text-2xl text-[#e6e2b1] leading-relaxed">
             Create professional resumes that stand out from the crowd. Our platform helps you showcase your skills and experience in a compelling way that catches employers' attention.
           </p>
-          </div>
+        </div>
         
         {/* Background Beams component */}
         <BackgroundBeams />
