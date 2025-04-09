@@ -10,7 +10,6 @@ def allowed_file(filename):
 
 @main_blueprint.route('/api/process-resume', methods=['POST'])
 def process_resume():
-    # Check if the post request has the file part
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
     
@@ -25,13 +24,13 @@ def process_resume():
         filepath = os.path.join(upload_folder, filename)
         file.save(filepath)
         
-        # Process the resume using controller
+        # Process the resume using controller (includes ATS score now)
         resume_controller = ResumeController()
         result = resume_controller.process_resume(filepath)
         
         if result.get('success'):
             return jsonify(result), 200
         else:
-            return jsonify(result), 500
+            return jsonify({'error': result.get('error', 'Unknown error')}), 500
     
     return jsonify({'error': 'File type not allowed'}), 400

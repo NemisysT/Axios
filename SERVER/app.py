@@ -20,7 +20,8 @@ cors_options = {
         "supports_credentials": True
     }
 
-CORS(app, resources={r"/*": cors_options})
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+
 
 # Register the blueprint
 app.register_blueprint(main_blueprint)
