@@ -1,10 +1,11 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify,g
 from werkzeug.security import check_password_hash
 from database.db_connection import get_db_connection
 import bcrypt
 import jwt
 import datetime
 import os
+from middlewares.auth_middleware import jwt_required
 
 auth_blueprint = Blueprint('auth', __name__)
 
@@ -44,6 +45,7 @@ def signup():
 
     # Generate JWT
     payload = {
+        'name': name,
         'email': email,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7)
     }
@@ -82,6 +84,7 @@ def login():
 
 
     payload = {
+        'name': user['name'],
         'email': email,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7)
     }
@@ -121,3 +124,12 @@ def contact_us():
     contact_collection.insert_one(contact_data)
 
     return jsonify({'message': 'Message sent successfully'}), 201
+
+@auth_blueprint.route('/details', methods=['GET'])
+@jwt_required
+def get_user():
+    try:
+        user_data = g.user  
+        return jsonify(user_data), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
