@@ -137,16 +137,7 @@ const Navbar = () => {
                       Dashboard
                     </Button>
                   </Link>
-                  <Button
-                    onClick={() => {
-                      logoutUser();
-                      setMenuOpen(false);
-                    }}
-                    variant="outline"
-                    className="w-full border border-red-400 text-white hover:bg-red-500/20 text-sm"
-                  >
-                    Logout
-                  </Button>
+                  
                 </>
               ) : (
                 <Link href="/signup" onClick={() => setMenuOpen(false)}>
