@@ -19,8 +19,9 @@ import { useRouter } from "next/navigation"
 export default function Dashboard() {
   const [agentActive, setAgentActive] = useState(false)
   const [credentialsOpen, setCredentialsOpen] = useState(false)
-  const [user, setuser] = useState([])
+  const [user, setuser] = useState<{ profileImage?: string; name?: string; email?: string }>({})
   const {logoutUser} = useAuth()
+  const router = useRouter()
 
   // Mock user data - would come from authentication in a real app
   useEffect(() => {
