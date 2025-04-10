@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { RefreshCw, Building } from "lucide-react"
 import { motion } from "framer-motion"
 import { LayoutWrapper } from "../components/layout-wrapper"
+import { CredentialsSection } from "../components/credentials-section"
 
 // Type definition for Internshala internship data
 interface InternshalaInternship {
@@ -157,6 +158,7 @@ export default function InternshalaInternshipsPage() {
           <p>No Internshala internships found. Click "Scrape Now" to fetch the latest listings.</p>
         </div>
       )}
+      <CredentialsSection />
     </LayoutWrapper>
   )
 }

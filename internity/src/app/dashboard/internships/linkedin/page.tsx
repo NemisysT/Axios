@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { RefreshCw, Building, MapPin, Clock, DollarSign } from "lucide-react"
 import { motion } from "framer-motion"
 import { LayoutWrapper } from "../components/layout-wrapper"
+import { CredentialsSection } from "../components/credentials-section"
 
 // Type definition for LinkedIn internship data
 interface LinkedInInternship {
@@ -144,6 +145,7 @@ export default function LinkedInInternshipsPage() {
           <p>No LinkedIn internships found. Click "Scrape Now" to fetch the latest listings.</p>
         </div>
       )}
+      <CredentialsSection />
     </LayoutWrapper>
   )
 }
