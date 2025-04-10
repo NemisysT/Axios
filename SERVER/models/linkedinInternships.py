@@ -18,23 +18,32 @@ class LinkedInInternshipModel:
         self.db = self.client[db_name]
         self.collection = self.db[collection_name]
 
-    def find_internships(self, filters, page=1, per_page=10):
-        """Find LinkedIn internships with optional filters and pagination"""
-        skip = (page - 1) * per_page
+    def find_internships(self, filters):
+        """Find all LinkedIn internships with optional filters (no pagination)"""
         total_count = self.collection.count_documents(filters)
 
         cursor = self.collection.find(
             filters,
-            {'_id': 1, 'title': 1, 'company': 1, 'location': 1,
-             'applicants': 1, 'days_left': 1, 'skills': 1, 'category': 1}
-        ).skip(skip).limit(per_page)
+            {
+                '_id': 1,
+                'title': 1,
+                'company': 1,
+                'location': 1,
+                'applicants': 1,
+                'days_left': 1,
+                'skills': 1,
+                'category': 1,
+                'apply_link': 1,
+            }
+        )
 
         internships = []
         for doc in cursor:
-            doc['_id'] = str(doc['_id'])
+            doc['_id'] = str(doc['_id'])  # Convert ObjectId to string
             internships.append(doc)
 
         return internships, total_count
+
 
     def find_by_id(self, internship_id):
         """Find a LinkedIn internship by its ID"""

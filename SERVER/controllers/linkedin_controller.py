@@ -6,20 +6,17 @@ class LinkedInController:
         self.model = LinkedInInternshipModel()
         self.scraper = LinkedInScraper()
     
-    def get_all_internships(self, filters=None, page=1, per_page=10):
-        """Get all LinkedIn internships with optional filtering and pagination"""
+    def get_all_internships(self, filters=None):
+        """Get all LinkedIn internships without pagination"""
         if filters is None:
             filters = {}
-        
+
         try:
-            internships, total_count = self.model.find_internships(filters, page, per_page)
-            
+            internships, total_count = self.model.find_internships(filters)  # No pagination passed
+
             return {
                 'success': True,
                 'count': total_count,
-                'page': page,
-                'per_page': per_page,
-                'total_pages': (total_count + per_page - 1) // per_page,
                 'data': internships
             }
         except Exception as e:
@@ -28,6 +25,7 @@ class LinkedInController:
                 'message': f"Error retrieving internships: {str(e)}",
                 'data': []
             }
+
     
     def get_internship_by_id(self, internship_id):
         """Get a specific LinkedIn internship by ID"""

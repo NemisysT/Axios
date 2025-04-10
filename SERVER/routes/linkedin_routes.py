@@ -28,7 +28,7 @@ def api_list_linkedin_internships():
     if days_left:
         filters['days_left'] = days_left
 
-    result = controller.get_all_internships(filters, page, per_page)
+    result = controller.get_all_internships(filters)
     return jsonify(result)
 
 @linkedin_bp.route('/<internship_id>', methods=['GET'])
