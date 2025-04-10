@@ -86,13 +86,7 @@ const Navbar = () => {
                     Dashboard
                   </Button>
                 </Link>
-                <Button
-                  onClick={logoutUser}
-                  variant="outline"
-                  className="ml-2 rounded-full border border-red-400 text-white hover:bg-red-500/20 px-5 text-sm"
-                >
-                  Logout
-                </Button>
+                
               </>
             ) : (
               <Link href="/signup">
