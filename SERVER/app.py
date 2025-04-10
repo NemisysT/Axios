@@ -10,6 +10,7 @@ from flask_cors import CORS
 from routes.resumeRoute import main_blueprint
 from routes.auth import auth_blueprint
 from routes.unstop_routes import internship_bp
+from routes.linkedin_routes import linkedin_bp
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads/'
@@ -30,6 +31,6 @@ app.register_blueprint(main_blueprint)
 app.register_blueprint(internship_blueprint, url_prefix='/api/internships')
 app .register_blueprint(auth_blueprint, url_prefix='/user')
 app.register_blueprint(internship_bp)
-
+app.register_blueprint(linkedin_bp)
 if __name__ == '__main__':
     app.run(debug=True)
