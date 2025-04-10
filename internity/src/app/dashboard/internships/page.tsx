@@ -1,222 +1,412 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Badge } from "@/components/ui/badge"
+import { Switch } from "@/components/ui/switch"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
 import {
-  Search,
-  Filter,
+  User,
+  Briefcase,
+  Settings,
+  LogOut,
+  Lock,
   MapPin,
   Clock,
   DollarSign,
-  Briefcase,
-  User,
-  Settings,
-  Bell,
-  LogOut,
-  Sparkles,
-  Calendar,
   Building,
-  ExternalLink,
+  RefreshCw,
+  ChevronDown,
+  ChevronUp,
+  Filter,
+  Save,
+  Shield,
 } from "lucide-react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 
-// Mock internship data - would come from database in a real app
-const mockInternships = [
-  {
-    id: "int1",
-    title: "Frontend Developer Intern",
-    company: "TechCorp",
-    location: "Remote",
-    duration: "3 months",
-    stipend: "₹15,000/month",
-    skills: ["React", "JavaScript", "HTML/CSS"],
-    description: "Join our team to build responsive web applications using React and modern JavaScript.",
-    postedDate: "2023-04-10",
-    deadline: "2023-05-10",
-    source: "LinkedIn",
-  },
-  {
-    id: "int2",
-    title: "UI/UX Design Intern",
-    company: "DesignHub",
-    location: "Bangalore, India",
-    duration: "6 months",
-    stipend: "₹20,000/month",
-    skills: ["Figma", "UI/UX", "Prototyping"],
-    description: "Work on designing user interfaces for our mobile and web applications.",
-    postedDate: "2023-04-08",
-    deadline: "2023-05-08",
-    source: "Unstop",
-  },
-  {
-    id: "int3",
-    title: "Data Science Intern",
-    company: "DataViz Inc",
-    location: "Hybrid - Delhi, India",
-    duration: "4 months",
-    stipend: "₹25,000/month",
-    skills: ["Python", "Machine Learning", "Data Analysis"],
-    description: "Analyze large datasets and build machine learning models to derive insights.",
-    postedDate: "2023-04-05",
-    deadline: "2023-05-05",
-    source: "LinkedIn",
-  },
-  {
-    id: "int4",
-    title: "Backend Developer Intern",
-    company: "ServerStack",
-    location: "Remote",
-    duration: "3 months",
-    stipend: "₹18,000/month",
-    skills: ["Node.js", "Express", "MongoDB"],
-    description: "Develop and maintain backend services for our web applications.",
-    postedDate: "2023-04-03",
-    deadline: "2023-05-03",
-    source: "Unstop",
-  },
-  {
-    id: "int5",
-    title: "Mobile App Developer Intern",
-    company: "AppWorks",
-    location: "Mumbai, India",
-    duration: "6 months",
-    stipend: "₹22,000/month",
-    skills: ["React Native", "JavaScript", "Mobile Development"],
-    description: "Build cross-platform mobile applications using React Native.",
-    postedDate: "2023-04-01",
-    deadline: "2023-05-01",
-    source: "LinkedIn",
-  },
-  {
-    id: "int6",
-    title: "DevOps Intern",
-    company: "CloudTech",
-    location: "Remote",
-    duration: "4 months",
-    stipend: "₹20,000/month",
-    skills: ["Docker", "Kubernetes", "CI/CD"],
-    description: "Work on automating deployment pipelines and managing cloud infrastructure.",
-    postedDate: "2023-03-28",
-    deadline: "2023-04-28",
-    source: "Unstop",
-  },
-]
+// Type definitions for the internship data structures
+interface LinkedInInternship {
+  id: string
+  title: string
+  company: string
+  location: string
+  duration: string
+  stipend: string
+  category: string
+}
+
+interface InternshalaInternship {
+  id: string
+  title: string
+  company: string
+  applicants: string
+  days_left: string
+  skills: string[]
+  category: string
+  scraped_at: string
+  url: string | null
+}
+
+interface UnstopInternship {
+  id: string
+  title: string
+  company: string
+  location: string
+  duration: string
+  stipend: string
+  category: string
+}
+
 
 export default function InternshipsPage() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [locationFilter, setLocationFilter] = useState<string[]>([])
-  const [skillsFilter, setSkillsFilter] = useState<string[]>([])
-  const [stipendRange, setStipendRange] = useState([0, 30000])
-  const [sourceFilter, setSourceFilter] = useState<string[]>([])
-  const [filteredInternships, setFilteredInternships] = useState(mockInternships)
-  const [showFilters, setShowFilters] = useState(false)
 
-  // User data - would come from authentication in a real app
+  useEffect(() => {
+      const clock = document.getElementById("system-clock")
+      const date = document.getElementById("system-date")
+  
+      if (!clock || !date) return
+  
+      function updateTime() {
+        const now = new Date()
+  
+        if (clock) {
+          clock.textContent = now.toLocaleTimeString("en-US", { hour12: false })
+        }
+        if (date) {
+          date.textContent = now.toLocaleDateString("en-US", {
+            month: "short",
+            day: "2-digit",
+            year: "numeric",
+          })
+        }
+      }
+  
+      const intervalId = setInterval(updateTime, 1000)
+      updateTime()
+  
+      return () => clearInterval(intervalId) // Cleanup interval on component unmount
+    }, [])
+
+  const [activeInternshipTab, setActiveInternshipTab] = useState("linkedin")
+  const [preferencesOpen, setPreferencesOpen] = useState(true)
+  const [credentialsOpen, setCredentialsOpen] = useState(false)
+
+  // Loading states for each platform
+  const [isLinkedInLoading, setIsLinkedInLoading] = useState(false)
+  const [isInternshalaLoading, setIsInternshalaLoading] = useState(false)
+  const [isUnstopLoading, setIsUnstopLoading] = useState(false)
+
+  // Internship data for each platform
+  const [linkedInInternships, setLinkedInInternships] = useState<LinkedInInternship[]>([])
+  const [internshalaInternships, setInternshalaInternships] = useState<InternshalaInternship[]>([])
+  const [unstopInternships, setUnstopInternships] = useState<UnstopInternship[]>([])
+
+  // Application preferences
+  const [category, setCategory] = useState("")
+  const [userType, setUserType] = useState("fresher")
+  const [passingYear, setPassingYear] = useState("2026")
+  const [quickApply, setQuickApply] = useState(true)
+
+  // Platform credentials
+  const [credentials, setCredentials] = useState({
+    linkedin: { email: "", password: "" },
+    unstop: { email: "", password: "" },
+    internshala: { email: "", password: "" },
+  })
+
+  // Mock user data - would come from authentication in a real app
   const user = {
     name: "Alex Johnson",
     email: "alex.johnson@example.com",
     profileImage: "/placeholder.svg?height=100&width=100",
   }
 
-  // Extract all unique locations, skills, and sources for filters
-  const allLocations = Array.from(
-    new Set(
-      mockInternships.map((internship) => {
-        if (internship.location.includes("Remote")) return "Remote"
-        if (internship.location.includes("Hybrid")) return "Hybrid"
-        return internship.location.split(",")[0].trim()
-      }),
-    ),
-  )
+  // Mock LinkedIn internships
+  const mockLinkedInInternships: LinkedInInternship[] = [
+    {
+      id: "li1",
+      title: "Web Development",
+      company: "Foodcow",
+      location: "Chennai",
+      duration: "3 Months",
+      stipend: "₹ 5,000 - 10,000 /month",
+      category: "web-development-internship",
+    },
+    {
+      id: "li2",
+      title: "Frontend Developer",
+      company: "TechSolutions",
+      location: "Remote",
+      duration: "6 Months",
+      stipend: "₹ 15,000 /month",
+      category: "frontend-development-internship",
+    },
+    {
+      id: "li3",
+      title: "Full Stack Developer",
+      company: "WebWizards",
+      location: "Bangalore",
+      duration: "4 Months",
+      stipend: "₹ 20,000 - 25,000 /month",
+      category: "full-stack-development-internship",
+    },
+  ]
 
-  const allSkills = Array.from(new Set(mockInternships.flatMap((internship) => internship.skills)))
+  // Mock Internshala internships
+  const mockInternshalaInternships: InternshalaInternship[] = [
+    {
+      id: "in1",
+      title: "WordPress Developer",
+      company: "Godwin Vox Dei",
+      applicants: "N/A",
+      days_left: "10",
+      skills: ["Fresher"],
+      category: "full-stack-development",
+      scraped_at: "2025-04-10T16:02:37.458Z",
+      url: null,
+    },
+    {
+      id: "in2",
+      title: "React Developer",
+      company: "CodeCraft",
+      applicants: "50+",
+      days_left: "5",
+      skills: ["React", "JavaScript", "CSS"],
+      category: "frontend-development",
+      scraped_at: "2025-04-10T16:02:37.458Z",
+      url: "https://example.com/job1",
+    },
+    {
+      id: "in3",
+      title: "UI/UX Designer",
+      company: "DesignHub",
+      applicants: "25+",
+      days_left: "15",
+      skills: ["Figma", "Adobe XD", "UI Design"],
+      category: "design",
+      scraped_at: "2025-04-10T16:02:37.458Z",
+      url: "https://example.com/job2",
+    },
+  ]
 
-  const allSources = Array.from(new Set(mockInternships.map((internship) => internship.source)))
+  // Mock Unstop internships
+  const mockUnstopInternships: UnstopInternship[] = [
+    {
+      id: "un1",
+      title: "Machine Learning Engineer",
+      company: "AI Solutions",
+      location: "Hyderabad",
+      duration: "6 Months",
+      stipend: "₹ 25,000 /month",
+      category: "machine-learning-internship",
+    },
+    {
+      id: "un2",
+      title: "Data Analyst",
+      company: "DataInsights",
+      location: "Remote",
+      duration: "3 Months",
+      stipend: "₹ 12,000 /month",
+      category: "data-analysis-internship",
+    },
+    {
+      id: "un3",
+      title: "Backend Developer",
+      company: "ServerStack",
+      location: "Delhi",
+      duration: "4 Months",
+      stipend: "₹ 18,000 /month",
+      category: "backend-development-internship",
+    },
+  ]
 
-  // Apply filters
-  const applyFilters = () => {
-    let filtered = [...mockInternships]
+  // Load initial data
+  useEffect(() => {
+    // In a real app, this would fetch data from the database
+    // For now, we'll use the mock data
+    setLinkedInInternships(mockLinkedInInternships)
+    setInternshalaInternships(mockInternshalaInternships)
+    setUnstopInternships(mockUnstopInternships)
 
-    // Search query filter
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase()
-      filtered = filtered.filter(
-        (internship) =>
-          internship.title.toLowerCase().includes(query) ||
-          internship.company.toLowerCase().includes(query) ||
-          internship.description.toLowerCase().includes(query) ||
-          internship.skills.some((skill) => skill.toLowerCase().includes(query)),
-      )
-    }
+    // MongoDB integration would look like this (commented out as requested)
+    /*
+    const fetchInternships = async () => {
+      try {
+        // Connect to MongoDB
+        // const client = await connectToMongoDB();
+        // const db = client.db("resume_platform");
+        
+        // Fetch internships for each platform
+        // const linkedInData = await db.collection("internships").find({ source: "linkedin" }).toArray();
+        // const internshalaData = await db.collection("internships").find({ source: "internshala" }).toArray();
+        // const unstopData = await db.collection("internships").find({ source: "unstop" }).toArray();
+        
+        // Update state with fetched data
+        // setLinkedInInternships(linkedInData);
+        // setInternshalaInternships(internshalaData);
+        // setUnstopInternships(unstopData);
+        
+        // Close MongoDB connection
+        // await client.close();
+      } catch (error) {
+        console.error("Error fetching internships:", error);
+      }
+    };
+    
+    fetchInternships();
+    */
+  }, [])
 
-    // Location filter
-    if (locationFilter.length > 0) {
-      filtered = filtered.filter((internship) => {
-        const internshipLocation = internship.location.toLowerCase()
-        return locationFilter.some((location) => {
-          if (location === "Remote") return internshipLocation.includes("remote")
-          if (location === "Hybrid") return internshipLocation.includes("hybrid")
-          return internshipLocation.includes(location.toLowerCase())
-        })
+  // Handle scraping for each platform
+  const handleScrapeLinkedIn = async () => {
+    setIsLinkedInLoading(true)
+
+    // In a real app, this would call the API to scrape LinkedIn
+    // For now, we'll simulate a delay and then update with mock data
+    setTimeout(() => {
+      // MongoDB integration would look like this (commented out as requested)
+      /*
+      fetch('/api/scrape/linkedin', {
+        method: 'POST',
       })
-    }
+        .then(response => response.json())
+        .then(data => {
+          setLinkedInInternships(data);
+        })
+        .catch(error => {
+          console.error('Error scraping LinkedIn:', error);
+        })
+        .finally(() => {
+          setIsLinkedInLoading(false);
+        });
+      */
 
-    // Skills filter
-    if (skillsFilter.length > 0) {
-      filtered = filtered.filter((internship) => skillsFilter.some((skill) => internship.skills.includes(skill)))
-    }
-
-    // Stipend range filter
-    filtered = filtered.filter((internship) => {
-      const stipendValue = Number.parseInt(internship.stipend.replace(/[^0-9]/g, ""))
-      return stipendValue >= stipendRange[0] && stipendValue <= stipendRange[1]
-    })
-
-    // Source filter
-    if (sourceFilter.length > 0) {
-      filtered = filtered.filter((internship) => sourceFilter.includes(internship.source))
-    }
-
-    setFilteredInternships(filtered)
+      // For demo purposes, just update with the mock data after a delay
+      setLinkedInInternships([...mockLinkedInInternships])
+      setIsLinkedInLoading(false)
+    }, 2000)
   }
 
-  // Handle applying for an internship
-  const handleApply = (internshipId: string) => {
-    // This would trigger the AI agent to apply for the internship in a real app
-    // Backend integration would go here (commented out as requested)
+  const handleScrapeInternshala = async () => {
+    setIsInternshalaLoading(true)
+
+    // In a real app, this would call the API to scrape Internshala
+    // For now, we'll simulate a delay and then update with mock data
+    setTimeout(() => {
+      // MongoDB integration would look like this (commented out as requested)
+      /*
+      fetch('/api/scrape/internshala', {
+        method: 'POST',
+      })
+        .then(response => response.json())
+        .then(data => {
+          setInternshalaInternships(data);
+        })
+        .catch(error => {
+          console.error('Error scraping Internshala:', error);
+        })
+        .finally(() => {
+          setIsInternshalaLoading(false);
+        });
+      */
+
+      // For demo purposes, just update with the mock data after a delay
+      setInternshalaInternships([...mockInternshalaInternships])
+      setIsInternshalaLoading(false)
+    }, 2000)
+  }
+
+  const handleScrapeUnstop = async () => {
+    setIsUnstopLoading(true)
+
+    // In a real app, this would call the API to scrape Unstop
+    // For now, we'll simulate a delay and then update with mock data
+    setTimeout(() => {
+      // MongoDB integration would look like this (commented out as requested)
+      /*
+      fetch('/api/scrape/unstop', {
+        method: 'POST',
+      })
+        .then(response => response.json())
+        .then(data => {
+          setUnstopInternships(data);
+        })
+        .catch(error => {
+          console.error('Error scraping Unstop:', error);
+        })
+        .finally(() => {
+          setIsUnstopLoading(false);
+        });
+      */
+
+      // For demo purposes, just update with the mock data after a delay
+      setUnstopInternships([...mockUnstopInternships])
+      setIsUnstopLoading(false)
+    }, 2000)
+  }
+
+  // Handle saving application preferences
+  const handleSavePreferences = () => {
+    // In a real app, this would save the preferences to the database
+    // For now, we'll just log them to the console
+    console.log("Saving preferences:", { category, userType, passingYear, quickApply })
+
+    // MongoDB integration would look like this (commented out as requested)
     /*
-    fetch('/api/agent/apply', {
+    fetch('/api/user/preferences', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ 
-        userId: user.id,
-        internshipId: internshipId 
+        category, 
+        userType, 
+        passingYear, 
+        quickApply 
       }),
     });
     */
 
-    alert(`AI agent will apply for internship ID: ${internshipId}`)
+    // Show a success message
+    alert("Application preferences saved successfully!")
   }
 
-  // Reset all filters
-  const resetFilters = () => {
-    setSearchQuery("")
-    setLocationFilter([])
-    setSkillsFilter([])
-    setStipendRange([0, 30000])
-    setSourceFilter([])
-    setFilteredInternships(mockInternships)
+  // Handle saving platform credentials
+  const handleSaveCredentials = () => {
+    // In a real app, this would save the credentials to the database
+    // For now, we'll just log them to the console
+    console.log("Saving credentials:", credentials)
+
+    // MongoDB integration would look like this (commented out as requested)
+    /*
+    fetch('/api/user/credentials', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials),
+    });
+    */
+
+    // Show a success message
+    alert("Platform credentials saved successfully!")
+  }
+
+  // Handle credential input changes
+  const handleCredentialChange = (platform: string, field: string, value: string) => {
+    setCredentials({
+      ...credentials,
+      [platform]: {
+        ...credentials[platform as keyof typeof credentials],
+        [field]: value,
+      },
+    })
   }
 
   return (
@@ -262,10 +452,6 @@ export default function InternshipsPage() {
                     <span>Resume Builder</span>
                   </Link>
                   <button className="w-full flex items-center gap-3 p-3 rounded-lg text-[#f1eece]/70 hover:bg-[rgba(30,30,35,0.5)] transition-colors">
-                    <Bell size={18} />
-                    <span>Notifications</span>
-                  </button>
-                  <button className="w-full flex items-center gap-3 p-3 rounded-lg text-[#f1eece]/70 hover:bg-[rgba(30,30,35,0.5)] transition-colors">
                     <LogOut size={18} />
                     <span>Logout</span>
                   </button>
@@ -273,127 +459,16 @@ export default function InternshipsPage() {
               </div>
             </Card>
 
-            {/* Filters Card - Desktop */}
-            <Card className="backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece]/20 shadow-lg rounded-2xl overflow-hidden mt-6 hidden md:block">
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-[#f1eece] flex items-center">
-                    <Filter size={18} className="mr-2" />
-                    Filters
-                  </h3>
-                  <Button
-                    variant="link"
-                    onClick={resetFilters}
-                    className="text-[#f1eece]/70 hover:text-[#f1eece] p-0 h-auto"
-                  >
-                    Reset
-                  </Button>
-                </div>
-
-                <div className="space-y-6">
-                  {/* Location Filter */}
-                  <div className="space-y-3">
-                    <h4 className="text-[#f1eece]/90 font-medium">Location</h4>
-                    <div className="space-y-2">
-                      {allLocations.map((location) => (
-                        <div key={location} className="flex items-center space-x-2">
-                          <Checkbox
-                            id={`location-${location}`}
-                            checked={locationFilter.includes(location)}
-                            onCheckedChange={(checked) => {
-                              if (checked) {
-                                setLocationFilter([...locationFilter, location])
-                              } else {
-                                setLocationFilter(locationFilter.filter((l) => l !== location))
-                              }
-                            }}
-                            className="border-[#f1eece]/30 data-[state=checked]:bg-[#f1eece] data-[state=checked]:text-[#131318]"
-                          />
-                          <Label htmlFor={`location-${location}`} className="text-[#f1eece]/80 text-sm cursor-pointer">
-                            {location}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Skills Filter */}
-                  <div className="space-y-3">
-                    <h4 className="text-[#f1eece]/90 font-medium">Skills</h4>
-                    <div className="space-y-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
-                      {allSkills.map((skill) => (
-                        <div key={skill} className="flex items-center space-x-2">
-                          <Checkbox
-                            id={`skill-${skill}`}
-                            checked={skillsFilter.includes(skill)}
-                            onCheckedChange={(checked) => {
-                              if (checked) {
-                                setSkillsFilter([...skillsFilter, skill])
-                              } else {
-                                setSkillsFilter(skillsFilter.filter((s) => s !== skill))
-                              }
-                            }}
-                            className="border-[#f1eece]/30 data-[state=checked]:bg-[#f1eece] data-[state=checked]:text-[#131318]"
-                          />
-                          <Label htmlFor={`skill-${skill}`} className="text-[#f1eece]/80 text-sm cursor-pointer">
-                            {skill}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Stipend Range */}
-                  <div className="space-y-3">
-                    <h4 className="text-[#f1eece]/90 font-medium">Stipend Range</h4>
-                    <div className="px-2">
-                      <Slider
-                        defaultValue={[0, 30000]}
-                        max={30000}
-                        step={1000}
-                        value={stipendRange}
-                        onValueChange={setStipendRange}
-                        className="[&_[role=slider]]:bg-[#f1eece]"
-                      />
-                      <div className="flex justify-between mt-2 text-[#f1eece]/70 text-sm">
-                        <span>₹{stipendRange[0].toLocaleString()}</span>
-                        <span>₹{stipendRange[1].toLocaleString()}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Source Filter */}
-                  <div className="space-y-3">
-                    <h4 className="text-[#f1eece]/90 font-medium">Source</h4>
-                    <div className="space-y-2">
-                      {allSources.map((source) => (
-                        <div key={source} className="flex items-center space-x-2">
-                          <Checkbox
-                            id={`source-${source}`}
-                            checked={sourceFilter.includes(source)}
-                            onCheckedChange={(checked) => {
-                              if (checked) {
-                                setSourceFilter([...sourceFilter, source])
-                              } else {
-                                setSourceFilter(sourceFilter.filter((s) => s !== source))
-                              }
-                            }}
-                            className="border-[#f1eece]/30 data-[state=checked]:bg-[#f1eece] data-[state=checked]:text-[#131318]"
-                          />
-                          <Label htmlFor={`source-${source}`} className="text-[#f1eece]/80 text-sm cursor-pointer">
-                            {source}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <Button
-                    onClick={applyFilters}
-                    className="w-full bg-gradient-to-r from-[#7d0d1b] to-[#a90519] hover:from-[#a90519] hover:to-[#ff102a] text-[#f1eece] border-none"
-                  >
-                    Apply Filters
-                  </Button>
+            <Card className="backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece]/20 shadow-lg rounded-2xl overflow-hidden mt-6">
+              <div className="p-6 text-center space-y-6">
+                <div>
+                  <h4 className="text-xs uppercase text-[#f1eece]/40 tracking-wide">System Time</h4>
+                  <h1 className="text-4xl font-semibold text-[#f1eece] tracking-wider" id="system-clock">
+                    00:00:00
+                  </h1>
+                  <p className="text-[#f1eece]/60 text-sm tracking-wide mt-1" id="system-date">
+                    Apr 10, 2025
+                  </p>
                 </div>
               </div>
             </Card>
@@ -401,357 +476,510 @@ export default function InternshipsPage() {
 
           {/* Main Content */}
           <div className="flex-1">
+            {/* Internship Sources Card */}
             <Card className="backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece]/20 shadow-lg rounded-2xl overflow-hidden mb-6">
               <div className="p-6">
-                <h2 className="text-2xl font-bold text-[#f1eece] mb-6">Available Internships</h2>
+                <h2 className="text-2xl font-bold text-[#f1eece] mb-6">Internship Sources</h2>
 
-                {/* Search and Filter Bar */}
-                <div className="flex flex-col md:flex-row gap-4 mb-6">
-                  <div className="relative flex-1">
-                    <Search
-                      className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#f1eece]/50"
-                      size={18}
-                    />
-                    <Input
-                      placeholder="Search internships..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
-                    />
-                  </div>
-                  <div className="flex gap-2">
-                    <Select defaultValue="newest">
-                      <SelectTrigger className="w-[180px] bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece]">
-                        <SelectValue placeholder="Sort by" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-[#131318] border-[#f1eece]/30 text-[#f1eece]">
-                        <SelectItem value="newest">Newest First</SelectItem>
-                        <SelectItem value="oldest">Oldest First</SelectItem>
-                        <SelectItem value="stipend-high">Highest Stipend</SelectItem>
-                        <SelectItem value="stipend-low">Lowest Stipend</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Button
-                      variant="outline"
-                      className="md:hidden border-[#f1eece]/30 text-[#f1eece]"
-                      onClick={() => setShowFilters(!showFilters)}
+                <Tabs defaultValue="linkedin" value={activeInternshipTab} onValueChange={setActiveInternshipTab}>
+                  <TabsList className="grid grid-cols-3 mb-6 bg-[rgba(30,30,35,0.5)]">
+                    <TabsTrigger
+                      value="linkedin"
+                      className="data-[state=active]:bg-[#f1eece] data-[state=active]:text-[#131318] text-[#f1eece]/80"
                     >
-                      <Filter size={18} />
-                    </Button>
-                    <Button
-                      onClick={applyFilters}
-                      className="bg-gradient-to-r from-[#7d0d1b] to-[#a90519] hover:from-[#a90519] hover:to-[#ff102a] text-[#f1eece] border-none"
+                      LinkedIn
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="internshala"
+                      className="data-[state=active]:bg-[#f1eece] data-[state=active]:text-[#131318] text-[#f1eece]/80"
                     >
-                      Search
-                    </Button>
-                  </div>
-                </div>
+                      Internshala
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="unstop"
+                      className="data-[state=active]:bg-[#f1eece] data-[state=active]:text-[#131318] text-[#f1eece]/80"
+                    >
+                      Unstop
+                    </TabsTrigger>
+                  </TabsList>
 
-                {/* Mobile Filters */}
-                {showFilters && (
-                  <Card className="backdrop-blur-sm bg-[rgba(25,25,30,0.95)] border border-[#f1eece]/20 shadow-lg rounded-xl overflow-hidden mb-6 md:hidden">
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-semibold text-[#f1eece]">Filters</h3>
-                        <Button
-                          variant="link"
-                          onClick={resetFilters}
-                          className="text-[#f1eece]/70 hover:text-[#f1eece] p-0 h-auto"
-                        >
-                          Reset
-                        </Button>
-                      </div>
-
-                      <Tabs defaultValue="location" className="w-full">
-                        <TabsList className="grid grid-cols-4 mb-4 bg-[rgba(30,30,35,0.5)]">
-                          <TabsTrigger
-                            value="location"
-                            className="data-[state=active]:bg-[#f1eece] data-[state=active]:text-[#131318] text-[#f1eece]/80"
-                          >
-                            Location
-                          </TabsTrigger>
-                          <TabsTrigger
-                            value="skills"
-                            className="data-[state=active]:bg-[#f1eece] data-[state=active]:text-[#131318] text-[#f1eece]/80"
-                          >
-                            Skills
-                          </TabsTrigger>
-                          <TabsTrigger
-                            value="stipend"
-                            className="data-[state=active]:bg-[#f1eece] data-[state=active]:text-[#131318] text-[#f1eece]/80"
-                          >
-                            Stipend
-                          </TabsTrigger>
-                          <TabsTrigger
-                            value="source"
-                            className="data-[state=active]:bg-[#f1eece] data-[state=active]:text-[#131318] text-[#f1eece]/80"
-                          >
-                            Source
-                          </TabsTrigger>
-                        </TabsList>
-
-                        <TabsContent value="location">
-                          <div className="grid grid-cols-2 gap-2">
-                            {allLocations.map((location) => (
-                              <div key={location} className="flex items-center space-x-2">
-                                <Checkbox
-                                  id={`mobile-location-${location}`}
-                                  checked={locationFilter.includes(location)}
-                                  onCheckedChange={(checked) => {
-                                    if (checked) {
-                                      setLocationFilter([...locationFilter, location])
-                                    } else {
-                                      setLocationFilter(locationFilter.filter((l) => l !== location))
-                                    }
-                                  }}
-                                  className="border-[#f1eece]/30 data-[state=checked]:bg-[#f1eece] data-[state=checked]:text-[#131318]"
-                                />
-                                <Label
-                                  htmlFor={`mobile-location-${location}`}
-                                  className="text-[#f1eece]/80 text-sm cursor-pointer"
-                                >
-                                  {location}
-                                </Label>
-                              </div>
-                            ))}
-                          </div>
-                        </TabsContent>
-
-                        <TabsContent value="skills">
-                          <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
-                            {allSkills.map((skill) => (
-                              <div key={skill} className="flex items-center space-x-2">
-                                <Checkbox
-                                  id={`mobile-skill-${skill}`}
-                                  checked={skillsFilter.includes(skill)}
-                                  onCheckedChange={(checked) => {
-                                    if (checked) {
-                                      setSkillsFilter([...skillsFilter, skill])
-                                    } else {
-                                      setSkillsFilter(skillsFilter.filter((s) => s !== skill))
-                                    }
-                                  }}
-                                  className="border-[#f1eece]/30 data-[state=checked]:bg-[#f1eece] data-[state=checked]:text-[#131318]"
-                                />
-                                <Label
-                                  htmlFor={`mobile-skill-${skill}`}
-                                  className="text-[#f1eece]/80 text-sm cursor-pointer"
-                                >
-                                  {skill}
-                                </Label>
-                              </div>
-                            ))}
-                          </div>
-                        </TabsContent>
-
-                        <TabsContent value="stipend">
-                          <div className="px-2">
-                            <Slider
-                              defaultValue={[0, 30000]}
-                              max={30000}
-                              step={1000}
-                              value={stipendRange}
-                              onValueChange={setStipendRange}
-                              className="[&_[role=slider]]:bg-[#f1eece]"
-                            />
-                            <div className="flex justify-between mt-2 text-[#f1eece]/70 text-sm">
-                              <span>₹{stipendRange[0].toLocaleString()}</span>
-                              <span>₹{stipendRange[1].toLocaleString()}</span>
-                            </div>
-                          </div>
-                        </TabsContent>
-
-                        <TabsContent value="source">
-                          <div className="grid grid-cols-2 gap-2">
-                            {allSources.map((source) => (
-                              <div key={source} className="flex items-center space-x-2">
-                                <Checkbox
-                                  id={`mobile-source-${source}`}
-                                  checked={sourceFilter.includes(source)}
-                                  onCheckedChange={(checked) => {
-                                    if (checked) {
-                                      setSourceFilter([...sourceFilter, source])
-                                    } else {
-                                      setSourceFilter(sourceFilter.filter((s) => s !== source))
-                                    }
-                                  }}
-                                  className="border-[#f1eece]/30 data-[state=checked]:bg-[#f1eece] data-[state=checked]:text-[#131318]"
-                                />
-                                <Label
-                                  htmlFor={`mobile-source-${source}`}
-                                  className="text-[#f1eece]/80 text-sm cursor-pointer"
-                                >
-                                  {source}
-                                </Label>
-                              </div>
-                            ))}
-                          </div>
-                        </TabsContent>
-                      </Tabs>
-
+                  {/* LinkedIn Tab */}
+                  <TabsContent value="linkedin">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-lg font-semibold text-[#f1eece]">LinkedIn Internships</h3>
                       <Button
-                        onClick={() => {
-                          applyFilters()
-                          setShowFilters(false)
-                        }}
-                        className="w-full mt-4 bg-gradient-to-r from-[#7d0d1b] to-[#a90519] hover:from-[#a90519] hover:to-[#ff102a] text-[#f1eece] border-none"
+                        onClick={handleScrapeLinkedIn}
+                        disabled={isLinkedInLoading}
+                        className="bg-gradient-to-r from-[#7d0d1b] to-[#a90519] hover:from-[#a90519] hover:to-[#ff102a] text-[#f1eece] border-none"
                       >
-                        Apply Filters
+                        {isLinkedInLoading ? (
+                          <>
+                            <div className="animate-spin h-4 w-4 mr-2 border-2 border-[#f1eece] border-t-transparent rounded-full"></div>
+                            Scraping...
+                          </>
+                        ) : (
+                          <>
+                            <RefreshCw size={16} className="mr-2" />
+                            Scrape Now
+                          </>
+                        )}
                       </Button>
                     </div>
-                  </Card>
-                )}
 
-                {/* Active Filters */}
-                {(locationFilter.length > 0 ||
-                  skillsFilter.length > 0 ||
-                  sourceFilter.length > 0 ||
-                  stipendRange[0] > 0 ||
-                  stipendRange[1] < 30000) && (
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {locationFilter.map((location) => (
-                      <Badge
-                        key={location}
-                        className="bg-[rgba(30,30,35,0.7)] text-[#f1eece] hover:bg-[rgba(30,30,35,0.9)] border border-[#f1eece]/20"
-                        onClick={() => setLocationFilter(locationFilter.filter((l) => l !== location))}
-                      >
-                        {location} ×
-                      </Badge>
-                    ))}
-                    {skillsFilter.map((skill) => (
-                      <Badge
-                        key={skill}
-                        className="bg-[rgba(30,30,35,0.7)] text-[#f1eece] hover:bg-[rgba(30,30,35,0.9)] border border-[#f1eece]/20"
-                        onClick={() => setSkillsFilter(skillsFilter.filter((s) => s !== skill))}
-                      >
-                        {skill} ×
-                      </Badge>
-                    ))}
-                    {sourceFilter.map((source) => (
-                      <Badge
-                        key={source}
-                        className="bg-[rgba(30,30,35,0.7)] text-[#f1eece] hover:bg-[rgba(30,30,35,0.9)] border border-[#f1eece]/20"
-                        onClick={() => setSourceFilter(sourceFilter.filter((s) => s !== source))}
-                      >
-                        {source} ×
-                      </Badge>
-                    ))}
-                    {(stipendRange[0] > 0 || stipendRange[1] < 30000) && (
-                      <Badge
-                        className="bg-[rgba(30,30,35,0.7)] text-[#f1eece] hover:bg-[rgba(30,30,35,0.9)] border border-[#f1eece]/20"
-                        onClick={() => setStipendRange([0, 30000])}
-                      >
-                        ₹{stipendRange[0].toLocaleString()} - ₹{stipendRange[1].toLocaleString()} ×
-                      </Badge>
-                    )}
-                    <Button
-                      variant="link"
-                      onClick={resetFilters}
-                      className="text-[#f1eece]/70 hover:text-[#f1eece] p-0 h-auto"
-                    >
-                      Clear All
-                    </Button>
-                  </div>
-                )}
+                    {isLinkedInLoading ? (
+                      <div className="flex justify-center items-center py-12">
+                        <div className="animate-spin h-6 w-6 border-2 border-[#a90519] border-t-transparent rounded-full"></div>
+                        <span className="ml-3 text-[#f1eece]/70">Scraping LinkedIn internships...</span>
+                      </div>
+                    ) : linkedInInternships.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {linkedInInternships.map((internship) => (
+                          <motion.div
+                            key={internship.id}
+                            className="bg-[rgba(19,19,24,0.85)] text-[#f1eece] border border-[#f1eece]/20 rounded-xl p-4 shadow transition hover:scale-[1.01]"
+                            whileHover={{ scale: 1.01 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="flex flex-col h-full">
+                              <h4 className="text-lg font-semibold text-[#f1eece]">{internship.title}</h4>
+                              <div className="flex items-center text-[#f1eece]/70 mt-1">
+                                <Building size={16} className="mr-1" />
+                                {internship.company}
+                              </div>
 
-                {/* Internship Cards */}
-                <div className="space-y-4">
-                  {filteredInternships.length > 0 ? (
-                    filteredInternships.map((internship) => (
-                      <motion.div
-                        key={internship.id}
-                        className="bg-[rgba(19,19,24,0.85)] text-[#f1eece] border border-[#f1eece]/20 rounded-xl p-4 shadow transition hover:border-[#f1eece]/40"
-                        whileHover={{ scale: 1.01 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <div className="flex flex-col md:flex-row justify-between gap-4">
-                          <div className="flex-1">
-                            <div className="flex items-start justify-between">
-                              <div>
-                                <h3 className="text-xl font-semibold text-[#f1eece]">{internship.title}</h3>
-                                <div className="flex items-center text-[#f1eece]/70 mt-1">
-                                  <Building size={16} className="mr-1" />
-                                  {internship.company}
+                              <div className="grid grid-cols-1 gap-2 mt-3">
+                                <div className="flex items-center text-[#f1eece]/70 text-sm">
+                                  <MapPin size={14} className="mr-1" />
+                                  {internship.location}
+                                </div>
+                                <div className="flex items-center text-[#f1eece]/70 text-sm">
+                                  <Clock size={14} className="mr-1" />
+                                  {internship.duration}
+                                </div>
+                                <div className="flex items-center text-[#f1eece]/70 text-sm">
+                                  <DollarSign size={14} className="mr-1" />
+                                  {internship.stipend}
                                 </div>
                               </div>
-                              <Badge className="bg-[rgba(30,30,35,0.7)] text-[#f1eece] border border-[#f1eece]/20">
-                                {internship.source}
-                              </Badge>
-                            </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
-                              <div className="flex items-center text-[#f1eece]/70 text-sm">
-                                <MapPin size={14} className="mr-1" />
-                                {internship.location}
-                              </div>
-                              <div className="flex items-center text-[#f1eece]/70 text-sm">
-                                <Clock size={14} className="mr-1" />
-                                {internship.duration}
-                              </div>
-                              <div className="flex items-center text-[#f1eece]/70 text-sm">
-                                <DollarSign size={14} className="mr-1" />
-                                {internship.stipend}
-                              </div>
-                            </div>
-
-                            <p className="text-[#f1eece]/80 mt-3 text-sm">{internship.description}</p>
-
-                            <div className="flex flex-wrap gap-2 mt-3">
-                              {internship.skills.map((skill) => (
-                                <Badge
-                                  key={skill}
-                                  className="bg-[#f1eece]/10 text-[#f1eece]/90 border border-[#f1eece]/20"
-                                >
-                                  {skill}
+                              <div className="mt-auto pt-3">
+                                <Badge className="bg-[#f1eece]/10 text-[#f1eece]/90 border border-[#f1eece]/20">
+                                  {internship.category}
                                 </Badge>
-                              ))}
-                            </div>
-
-                            <div className="flex items-center justify-between mt-4">
-                              <div className="flex items-center text-[#f1eece]/60 text-xs">
-                                <Calendar size={12} className="mr-1" />
-                                Posted: {new Date(internship.postedDate).toLocaleDateString()}
-                                <span className="mx-2">•</span>
-                                <Calendar size={12} className="mr-1" />
-                                Deadline: {new Date(internship.deadline).toLocaleDateString()}
                               </div>
                             </div>
-                          </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-12 text-[#f1eece]/50">
+                        <p>No LinkedIn internships found. Click "Scrape Now" to fetch the latest listings.</p>
+                      </div>
+                    )}
+                  </TabsContent>
 
-                          <div className="flex flex-row md:flex-col justify-between md:justify-center gap-2 md:min-w-[150px]">
-                            <Button
-                              onClick={() => handleApply(internship.id)}
-                              className="bg-gradient-to-r from-[#7d0d1b] to-[#a90519] hover:from-[#a90519] hover:to-[#ff102a] text-[#f1eece] border-none"
-                            >
-                              <Sparkles size={16} className="mr-2" />
-                              Apply via AI
-                            </Button>
-                            <Button
-                              variant="outline"
-                              className="border-[#f1eece]/30 text-[#f1eece] hover:bg-[#f1eece]/10"
-                            >
-                              <ExternalLink size={16} className="mr-2" />
-                              View Details
-                            </Button>
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))
-                  ) : (
-                    <div className="text-center py-12 text-[#f1eece]/50">
-                      <p className="text-lg">No internships found matching your filters.</p>
+                  {/* Internshala Tab */}
+                  <TabsContent value="internshala">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-lg font-semibold text-[#f1eece]">Internshala Internships</h3>
                       <Button
-                        variant="link"
-                        onClick={resetFilters}
-                        className="text-[#f1eece]/70 hover:text-[#f1eece] mt-2"
+                        onClick={handleScrapeInternshala}
+                        disabled={isInternshalaLoading}
+                        className="bg-gradient-to-r from-[#7d0d1b] to-[#a90519] hover:from-[#a90519] hover:to-[#ff102a] text-[#f1eece] border-none"
                       >
-                        Reset Filters
+                        {isInternshalaLoading ? (
+                          <>
+                            <div className="animate-spin h-4 w-4 mr-2 border-2 border-[#f1eece] border-t-transparent rounded-full"></div>
+                            Scraping...
+                          </>
+                        ) : (
+                          <>
+                            <RefreshCw size={16} className="mr-2" />
+                            Scrape Now
+                          </>
+                        )}
                       </Button>
                     </div>
-                  )}
-                </div>
+
+                    {isInternshalaLoading ? (
+                      <div className="flex justify-center items-center py-12">
+                        <div className="animate-spin h-6 w-6 border-2 border-[#a90519] border-t-transparent rounded-full"></div>
+                        <span className="ml-3 text-[#f1eece]/70">Scraping Internshala internships...</span>
+                      </div>
+                    ) : internshalaInternships.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {internshalaInternships.map((internship) => (
+                          <motion.div
+                            key={internship.id}
+                            className="bg-[rgba(19,19,24,0.85)] text-[#f1eece] border border-[#f1eece]/20 rounded-xl p-4 shadow transition hover:scale-[1.01]"
+                            whileHover={{ scale: 1.01 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="flex flex-col h-full">
+                              <h4 className="text-lg font-semibold text-[#f1eece]">{internship.title}</h4>
+                              <div className="flex items-center text-[#f1eece]/70 mt-1">
+                                <Building size={16} className="mr-1" />
+                                {internship.company}
+                              </div>
+
+                              <div className="flex items-center justify-between mt-3">
+                                <div className="text-[#f1eece]/70 text-sm">
+                                  <span className="font-medium">Applicants:</span> {internship.applicants}
+                                </div>
+                                <div className="text-[#f1eece]/70 text-sm">
+                                  <span className="font-medium">Days Left:</span> {internship.days_left}
+                                </div>
+                              </div>
+
+                              <div className="flex flex-wrap gap-2 mt-3">
+                                {internship.skills.map((skill, index) => (
+                                  <Badge
+                                    key={index}
+                                    className="bg-[#f1eece]/10 text-[#f1eece]/90 border border-[#f1eece]/20"
+                                  >
+                                    {skill}
+                                  </Badge>
+                                ))}
+                              </div>
+
+                              <div className="mt-auto pt-3 flex justify-between items-center">
+                                <Badge className="bg-[#f1eece]/10 text-[#f1eece]/90 border border-[#f1eece]/20">
+                                  {internship.category}
+                                </Badge>
+                                <div className="text-[#f1eece]/50 text-xs">
+                                  Scraped: {new Date(internship.scraped_at).toLocaleDateString()}
+                                </div>
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-12 text-[#f1eece]/50">
+                        <p>No Internshala internships found. Click "Scrape Now" to fetch the latest listings.</p>
+                      </div>
+                    )}
+                  </TabsContent>
+
+                  {/* Unstop Tab */}
+                  <TabsContent value="unstop">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-lg font-semibold text-[#f1eece]">Unstop Internships</h3>
+                      <Button
+                        onClick={handleScrapeUnstop}
+                        disabled={isUnstopLoading}
+                        className="bg-gradient-to-r from-[#7d0d1b] to-[#a90519] hover:from-[#a90519] hover:to-[#ff102a] text-[#f1eece] border-none"
+                      >
+                        {isUnstopLoading ? (
+                          <>
+                            <div className="animate-spin h-4 w-4 mr-2 border-2 border-[#f1eece] border-t-transparent rounded-full"></div>
+                            Scraping...
+                          </>
+                        ) : (
+                          <>
+                            <RefreshCw size={16} className="mr-2" />
+                            Scrape Now
+                          </>
+                        )}
+                      </Button>
+                    </div>
+
+                    {isUnstopLoading ? (
+                      <div className="flex justify-center items-center py-12">
+                        <div className="animate-spin h-6 w-6 border-2 border-[#a90519] border-t-transparent rounded-full"></div>
+                        <span className="ml-3 text-[#f1eece]/70">Scraping Unstop internships...</span>
+                      </div>
+                    ) : unstopInternships.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {unstopInternships.map((internship) => (
+                          <motion.div
+                            key={internship.id}
+                            className="bg-[rgba(19,19,24,0.85)] text-[#f1eece] border border-[#f1eece]/20 rounded-xl p-4 shadow transition hover:scale-[1.01]"
+                            whileHover={{ scale: 1.01 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="flex flex-col h-full">
+                              <h4 className="text-lg font-semibold text-[#f1eece]">{internship.title}</h4>
+                              <div className="flex items-center text-[#f1eece]/70 mt-1">
+                                <Building size={16} className="mr-1" />
+                                {internship.company}
+                              </div>
+
+                              <div className="grid grid-cols-1 gap-2 mt-3">
+                                <div className="flex items-center text-[#f1eece]/70 text-sm">
+                                  <MapPin size={14} className="mr-1" />
+                                  {internship.location}
+                                </div>
+                                <div className="flex items-center text-[#f1eece]/70 text-sm">
+                                  <Clock size={14} className="mr-1" />
+                                  {internship.duration}
+                                </div>
+                                <div className="flex items-center text-[#f1eece]/70 text-sm">
+                                  <DollarSign size={14} className="mr-1" />
+                                  {internship.stipend}
+                                </div>
+                              </div>
+
+                              <div className="mt-auto pt-3">
+                                <Badge className="bg-[#f1eece]/10 text-[#f1eece]/90 border border-[#f1eece]/20">
+                                  {internship.category}
+                                </Badge>
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-12 text-[#f1eece]/50">
+                        <p>No Unstop internships found. Click "Scrape Now" to fetch the latest listings.</p>
+                      </div>
+                    )}
+                  </TabsContent>
+                </Tabs>
               </div>
             </Card>
+
+            {/* Application Preferences Section */}
+            <Collapsible
+              open={preferencesOpen}
+              onOpenChange={setPreferencesOpen}
+              className="backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece]/20 shadow-lg rounded-2xl overflow-hidden mb-6"
+            >
+              <div className="p-6">
+                <CollapsibleTrigger asChild>
+                  <div className="flex justify-between items-center cursor-pointer">
+                    <h2 className="text-2xl font-bold text-[#f1eece] flex items-center">
+                      <Filter size={20} className="mr-2" />
+                      Application Preferences
+                    </h2>
+                    <Button variant="ghost" className="p-0 h-auto text-[#f1eece]">
+                      {preferencesOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                    </Button>
+                  </div>
+                </CollapsibleTrigger>
+                <CollapsibleContent className="mt-6 space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="category" className="text-[#f1eece]">
+                        Category
+                      </Label>
+                      <Select value={category} onValueChange={setCategory}>
+                        <SelectTrigger className="bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece]">
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-[#131318] border-[#f1eece]/30 text-[#f1eece]">
+                          <SelectItem value="tech">Tech</SelectItem>
+                          <SelectItem value="media">Media</SelectItem>
+                          <SelectItem value="finance">Finance</SelectItem>
+                          <SelectItem value="marketing">Marketing</SelectItem>
+                          <SelectItem value="design">Design</SelectItem>
+                          <SelectItem value="data">Data</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="userType" className="text-[#f1eece]">
+                        User Type
+                      </Label>
+                      <Select value={userType} onValueChange={setUserType}>
+                        <SelectTrigger className="bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece]">
+                          <SelectValue placeholder="Select user type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-[#131318] border-[#f1eece]/30 text-[#f1eece]">
+                          <SelectItem value="fresher">Fresher</SelectItem>
+                          <SelectItem value="experienced">Experienced</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="passingYear" className="text-[#f1eece]">
+                        Passing Year
+                      </Label>
+                      <Select value={passingYear} onValueChange={setPassingYear}>
+                        <SelectTrigger className="bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece]">
+                          <SelectValue placeholder="Select passing year" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-[#131318] border-[#f1eece]/30 text-[#f1eece]">
+                          <SelectItem value="2024">2024</SelectItem>
+                          <SelectItem value="2025">2025</SelectItem>
+                          <SelectItem value="2026">2026</SelectItem>
+                          <SelectItem value="2027">2027</SelectItem>
+                          <SelectItem value="2028">2028</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="quickApply" className="text-[#f1eece]">
+                        Quick Apply
+                      </Label>
+                      <div className="flex items-center space-x-2 pt-2">
+                        <Switch
+                          id="quickApply"
+                          checked={quickApply}
+                          onCheckedChange={setQuickApply}
+                          className="data-[state=checked]:bg-[#a90519]"
+                        />
+                        <Label htmlFor="quickApply" className="text-[#f1eece]/70">
+                          {quickApply ? "Enabled" : "Disabled"}
+                        </Label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-4">
+                    <Button
+                      onClick={handleSavePreferences}
+                      className="bg-gradient-to-r from-[#7d0d1b] to-[#a90519] hover:from-[#a90519] hover:to-[#ff102a] text-[#f1eece] border-none"
+                    >
+                      <Save size={16} className="mr-2" />
+                      Save Preferences
+                    </Button>
+                  </div>
+                </CollapsibleContent>
+              </div>
+            </Collapsible>
+
+            {/* Platform Credentials Section */}
+            <Collapsible
+              open={credentialsOpen}
+              onOpenChange={setCredentialsOpen}
+              className="backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece]/20 shadow-lg rounded-2xl overflow-hidden"
+            >
+              <div className="p-6">
+                <CollapsibleTrigger asChild>
+                  <div className="flex justify-between items-center cursor-pointer">
+                    <h2 className="text-2xl font-bold text-[#f1eece] flex items-center">
+                      <Lock size={20} className="mr-2" />
+                      Platform Credentials
+                    </h2>
+                    <Button variant="ghost" className="p-0 h-auto text-[#f1eece]">
+                      {credentialsOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                    </Button>
+                  </div>
+                </CollapsibleTrigger>
+                <CollapsibleContent className="mt-6 space-y-6">
+                  {/* LinkedIn Credentials
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-[#f1eece]">LinkedIn</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="linkedin-email" className="text-[#f1eece]">
+                          LinkedIn Email
+                        </Label>
+                        <Input
+                          id="linkedin-email"
+                          type="email"
+                          placeholder="your.email@example.com"
+                          className="bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
+                          value={credentials.linkedin.email}
+                          onChange={(e) => handleCredentialChange("linkedin", "email", e.target.value)}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="linkedin-password" className="text-[#f1eece]">
+                          LinkedIn Password
+                        </Label>
+                        <Input
+                          id="linkedin-password"
+                          type="password"
+                          placeholder="••••••••"
+                          className="bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
+                          value={credentials.linkedin.password}
+                          onChange={(e) => handleCredentialChange("linkedin", "password", e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div> */}
+
+                  {/* Unstop Credentials */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-[#f1eece]">Unstop</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="unstop-email" className="text-[#f1eece]">
+                          Unstop Email
+                        </Label>
+                        <Input
+                          id="unstop-email"
+                          type="email"
+                          placeholder="your.email@example.com"
+                          className="bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
+                          value={credentials.unstop.email}
+                          onChange={(e) => handleCredentialChange("unstop", "email", e.target.value)}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="unstop-password" className="text-[#f1eece]">
+                          Unstop Password
+                        </Label>
+                        <Input
+                          id="unstop-password"
+                          type="password"
+                          placeholder="••••••••"
+                          className="bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
+                          value={credentials.unstop.password}
+                          onChange={(e) => handleCredentialChange("unstop", "password", e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Internshala Credentials */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-[#f1eece]">Internshala</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="internshala-email" className="text-[#f1eece]">
+                          Internshala Email
+                        </Label>
+                        <Input
+                          id="internshala-email"
+                          type="email"
+                          placeholder="your.email@example.com"
+                          className="bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
+                          value={credentials.internshala.email}
+                          onChange={(e) => handleCredentialChange("internshala", "email", e.target.value)}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="internshala-password" className="text-[#f1eece]">
+                          Internshala Password
+                        </Label>
+                        <Input
+                          id="internshala-password"
+                          type="password"
+                          placeholder="••••••••"
+                          className="bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
+                          value={credentials.internshala.password}
+                          onChange={(e) => handleCredentialChange("internshala", "password", e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-[rgba(30,30,35,0.5)] p-4 rounded-lg text-[#f1eece]/70 text-sm flex items-start space-x-2">
+                    <Shield className="h-5 w-5 text-[#a90519] mt-0.5 flex-shrink-0" />
+                    <p>
+                      These credentials are securely stored and used only to apply on your behalf. Your data is
+                      encrypted and never shared with third parties.
+                    </p>
+                  </div>
+
+                  <div className="pt-4">
+                    <Button
+                      onClick={handleSaveCredentials}
+                      className="bg-gradient-to-r from-[#7d0d1b] to-[#a90519] hover:from-[#a90519] hover:to-[#ff102a] text-[#f1eece] border-none"
+                    >
+                      <Save size={16} className="mr-2" />
+                      Save Credentials
+                    </Button>
+                  </div>
+                </CollapsibleContent>
+              </div>
+            </Collapsible>
           </div>
         </div>
       </div>

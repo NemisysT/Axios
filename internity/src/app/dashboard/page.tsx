@@ -2,47 +2,34 @@
 
 import type React from "react"
 
-import { useState,useEffect } from "react"
+import { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { User, Briefcase, Settings, Bell, LogOut, Sparkles, Lock, ExternalLink } from "lucide-react"
+import { User, Briefcase, Settings, LogOut, Sparkles, ExternalLink, Building, Calendar } from "lucide-react"
 import Link from "next/link"
-import { useAuth } from "@/app/context/context";
-import { useRouter } from "next/navigation"
+import { motion } from "framer-motion"
 
 export default function Dashboard() {
   const [agentActive, setAgentActive] = useState(false)
   const [credentialsOpen, setCredentialsOpen] = useState(false)
-  const [user, setuser] = useState<{ profileImage?: string; name?: string; email?: string }>({})
-  const {logoutUser} = useAuth()
-  const router = useRouter()
+  const [activeInternshipTab, setActiveInternshipTab] = useState("linkedin")
+
+  // Loading states for each platform
+  const [isLinkedInLoading, setIsLinkedInLoading] = useState(false)
+  const [isInternshalaLoading, setIsInternshalaLoading] = useState(false)
+  const [isUnstopLoading, setIsUnstopLoading] = useState(false)
+
+  // Internship data for each platform
+  const [linkedInInternships, setLinkedInInternships] = useState<LinkedInInternship[]>([])
+  const [internshalaInternships, setInternshalaInternships] = useState<InternshalaInternship[]>([])
+  const [unstopInternships, setUnstopInternships] = useState<UnstopInternship[]>([])
 
   // Mock user data - would come from authentication in a real app
-  useEffect(() => {
-   fetchuser()
-  }, [])
-  
-  const fetchuser = async () => {
-    const response = await fetch(' http://127.0.0.1:5000/user/details', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      }
-    })
-    const userData = await response.json()
-    console.log(userData)
-    setuser(userData)
-  }
-
-  const handleLogout = () => {
-    logoutUser()
-    router.push('/')
+  const user = {
+    name: "Alex Johnson",
+    email: "alex.johnson@example.com",
+    profileImage: "/placeholder.svg?height=100&width=100",
   }
 
   // Mock internship applications - would come from database in a real app
@@ -72,6 +59,169 @@ export default function Dashboard() {
       source: "LinkedIn",
     },
   ]
+
+  // Mock LinkedIn internships
+  const mockLinkedInInternships: LinkedInInternship[] = [
+    {
+      id: "li1",
+      title: "Web Development",
+      company: "Foodcow",
+      location: "Chennai",
+      duration: "3 Months",
+      stipend: "₹ 5,000 - 10,000 /month",
+      category: "web-development-internship",
+    },
+    {
+      id: "li2",
+      title: "Frontend Developer",
+      company: "TechSolutions",
+      location: "Remote",
+      duration: "6 Months",
+      stipend: "₹ 15,000 /month",
+      category: "frontend-development-internship",
+    },
+    {
+      id: "li3",
+      title: "Full Stack Developer",
+      company: "WebWizards",
+      location: "Bangalore",
+      duration: "4 Months",
+      stipend: "₹ 20,000 - 25,000 /month",
+      category: "full-stack-development-internship",
+    },
+  ]
+
+  // Mock Internshala internships
+  const mockInternshalaInternships: InternshalaInternship[] = [
+    {
+      id: "in1",
+      title: "WordPress Developer",
+      company: "Godwin Vox Dei",
+      applicants: "N/A",
+      days_left: "10",
+      skills: ["Fresher"],
+      category: "full-stack-development",
+      scraped_at: "2025-04-10T16:02:37.458Z",
+      url: null,
+    },
+    {
+      id: "in2",
+      title: "React Developer",
+      company: "CodeCraft",
+      applicants: "50+",
+      days_left: "5",
+      skills: ["React", "JavaScript", "CSS"],
+      category: "frontend-development",
+      scraped_at: "2025-04-10T16:02:37.458Z",
+      url: "https://example.com/job1",
+    },
+    {
+      id: "in3",
+      title: "UI/UX Designer",
+      company: "DesignHub",
+      applicants: "25+",
+      days_left: "15",
+      skills: ["Figma", "Adobe XD", "UI Design"],
+      category: "design",
+      scraped_at: "2025-04-10T16:02:37.458Z",
+      url: "https://example.com/job2",
+    },
+  ]
+
+  // Mock Unstop internships
+  const mockUnstopInternships: UnstopInternship[] = [
+    {
+      id: "un1",
+      title: "Machine Learning Engineer",
+      company: "AI Solutions",
+      location: "Hyderabad",
+      duration: "6 Months",
+      stipend: "₹ 25,000 /month",
+      category: "machine-learning-internship",
+    },
+    {
+      id: "un2",
+      title: "Data Analyst",
+      company: "DataInsights",
+      location: "Remote",
+      duration: "3 Months",
+      stipend: "₹ 12,000 /month",
+      category: "data-analysis-internship",
+    },
+    {
+      id: "un3",
+      title: "Backend Developer",
+      company: "ServerStack",
+      location: "Delhi",
+      duration: "4 Months",
+      stipend: "₹ 18,000 /month",
+      category: "backend-development-internship",
+    },
+  ]
+
+  useEffect(() => {
+    const clock = document.getElementById("system-clock")
+    const date = document.getElementById("system-date")
+
+    if (!clock || !date) return
+
+    function updateTime() {
+      const now = new Date()
+
+      if (clock) {
+        clock.textContent = now.toLocaleTimeString("en-US", { hour12: false })
+      }
+      if (date) {
+        date.textContent = now.toLocaleDateString("en-US", {
+          month: "short",
+          day: "2-digit",
+          year: "numeric",
+        })
+      }
+    }
+
+    const intervalId = setInterval(updateTime, 1000)
+    updateTime()
+
+    return () => clearInterval(intervalId) // Cleanup interval on component unmount
+  }, [])
+
+  // Load initial data
+  useEffect(() => {
+    // In a real app, this would fetch data from the database
+    // For now, we'll use the mock data
+    setLinkedInInternships(mockLinkedInInternships)
+    setInternshalaInternships(mockInternshalaInternships)
+    setUnstopInternships(mockUnstopInternships)
+
+    // MongoDB integration would look like this (commented out as requested)
+    /*
+    const fetchInternships = async () => {
+      try {
+        // Connect to MongoDB
+        // const client = await connectToMongoDB();
+        // const db = client.db("resume_platform");
+        
+        // Fetch internships for each platform
+        // const linkedInData = await db.collection("internships").find({ source: "linkedin" }).toArray();
+        // const internshalaData = await db.collection("internships").find({ source: "internshala" }).toArray();
+        // const unstopData = await db.collection("internships").find({ source: "unstop" }).toArray();
+        
+        // Update state with fetched data
+        // setLinkedInInternships(linkedInData);
+        // setInternshalaInternships(internshalaData);
+        // setUnstopInternships(unstopData);
+        
+        // Close MongoDB connection
+        // await client.close();
+      } catch (error) {
+        console.error("Error fetching internships:", error);
+      }
+    };
+    
+    fetchInternships();
+    */
+  }, [])
 
   const handleAgentToggle = (checked: boolean) => {
     setAgentActive(checked)
@@ -145,6 +295,94 @@ export default function Dashboard() {
     }
   }
 
+  // Handle scraping for each platform
+  const handleScrapeLinkedIn = async () => {
+    setIsLinkedInLoading(true)
+
+    // In a real app, this would call the API to scrape LinkedIn
+    // For now, we'll simulate a delay and then update with mock data
+    setTimeout(() => {
+      // MongoDB integration would look like this (commented out as requested)
+      /*
+      fetch('/api/scrape/linkedin', {
+        method: 'POST',
+      })
+        .then(response => response.json())
+        .then(data => {
+          setLinkedInInternships(data);
+        })
+        .catch(error => {
+          console.error('Error scraping LinkedIn:', error);
+        })
+        .finally(() => {
+          setIsLinkedInLoading(false);
+        });
+      */
+
+      // For demo purposes, just update with the mock data after a delay
+      setLinkedInInternships([...mockLinkedInInternships])
+      setIsLinkedInLoading(false)
+    }, 2000)
+  }
+
+  const handleScrapeInternshala = async () => {
+    setIsInternshalaLoading(true)
+
+    // In a real app, this would call the API to scrape Internshala
+    // For now, we'll simulate a delay and then update with mock data
+    setTimeout(() => {
+      // MongoDB integration would look like this (commented out as requested)
+      /*
+      fetch('/api/scrape/internshala', {
+        method: 'POST',
+      })
+        .then(response => response.json())
+        .then(data => {
+          setInternshalaInternships(data);
+        })
+        .catch(error => {
+          console.error('Error scraping Internshala:', error);
+        })
+        .finally(() => {
+          setIsInternshalaLoading(false);
+        });
+      */
+
+      // For demo purposes, just update with the mock data after a delay
+      setInternshalaInternships([...mockInternshalaInternships])
+      setIsInternshalaLoading(false)
+    }, 2000)
+  }
+
+  const handleScrapeUnstop = async () => {
+    setIsUnstopLoading(true)
+
+    // In a real app, this would call the API to scrape Unstop
+    // For now, we'll simulate a delay and then update with mock data
+    setTimeout(() => {
+      // MongoDB integration would look like this (commented out as requested)
+      /*
+      fetch('/api/scrape/unstop', {
+        method: 'POST',
+      })
+        .then(response => response.json())
+        .then(data => {
+          setUnstopInternships(data);
+        })
+        .catch(error => {
+          console.error('Error scraping Unstop:', error);
+        })
+        .finally(() => {
+          setIsUnstopLoading(false);
+        });
+      */
+
+      // For demo purposes, just update with the mock data after a delay
+      setUnstopInternships([...mockUnstopInternships])
+      setIsUnstopLoading(false)
+    }, 2000)
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-[rgba(8,8,8,0.7)] to-[rgba(10,10,10,0.7)] text-[#f1eece]">
       <div className="container mx-auto px-4 py-8">
@@ -187,11 +425,11 @@ export default function Dashboard() {
                     <Settings size={18} />
                     <span>Resume Builder</span>
                   </Link>
-                  <button className="w-full flex items-center gap-3 p-3 rounded-lg text-[#f1eece]/70 hover:bg-[rgba(30,30,35,0.5)] transition-colors">
+                  {/* <button className="w-full flex items-center gap-3 p-3 rounded-lg text-[#f1eece]/70 hover:bg-[rgba(30,30,35,0.5)] transition-colors">
                     <Bell size={18} />
                     <span>Notifications</span>
-                  </button>
-                  <button className="w-full flex items-center gap-3 p-3 rounded-lg text-[#f1eece]/70 hover:bg-[rgba(30,30,35,0.5)] transition-colors" onClick={() => {handleLogout()}}>
+                  </button> */}
+                  <button className="w-full flex items-center gap-3 p-3 rounded-lg text-[#f1eece]/70 hover:bg-[rgba(30,30,35,0.5)] transition-colors">
                     <LogOut size={18} />
                     <span>Logout</span>
                   </button>
@@ -199,109 +437,18 @@ export default function Dashboard() {
               </div>
             </Card>
 
-            {/* Credentials Card */}
             <Card className="backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece]/20 shadow-lg rounded-2xl overflow-hidden mt-6">
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-[#f1eece] flex items-center">
-                    <Lock size={18} className="mr-2" />
-                    Platform Credentials
-                  </h3>
+              <div className="p-6 text-center space-y-6">
+                <div>
+                  <h4 className="text-xs uppercase text-[#f1eece]/40 tracking-wide">System Time</h4>
+                  <h1 className="text-4xl font-semibold text-[#f1eece] tracking-wider" id="system-clock">
+                    00:00:00
+                  </h1>
+                  <p className="text-[#f1eece]/60 text-sm tracking-wide mt-1" id="system-date">
+                    Apr 10, 2025
+                  </p>
                 </div>
-                <p className="text-[#f1eece]/70 text-sm mb-4">
-                  Connect your accounts to let our AI agent apply to internships on your behalf.
-                </p>
-                <Dialog open={credentialsOpen} onOpenChange={setCredentialsOpen}>
-                  <DialogTrigger asChild>
-                    <Button className="w-full bg-gradient-to-r from-[#7d0d1b] to-[#a90519] hover:from-[#a90519] hover:to-[#ff102a] text-[#f1eece] border-none">
-                      Manage Credentials
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="backdrop-blur-sm bg-[rgba(19,19,24,0.95)] border border-[#f1eece]/20 text-[#f1eece]">
-                    <DialogHeader>
-                      <DialogTitle className="text-[#f1eece]">Platform Credentials</DialogTitle>
-                    </DialogHeader>
-                    <form onSubmit={handleSaveCredentials} className="space-y-6 py-4">
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor="linkedin-email" className="text-[#f1eece]">
-                              LinkedIn Email
-                            </Label>
-                          </div>
-                          <Input
-                            id="linkedin-email"
-                            name="linkedin-email"
-                            type="email"
-                            placeholder="your.email@example.com"
-                            className="bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor="linkedin-password" className="text-[#f1eece]">
-                              LinkedIn Password
-                            </Label>
-                          </div>
-                          <Input
-                            id="linkedin-password"
-                            name="linkedin-password"
-                            type="password"
-                            placeholder="••••••••"
-                            className="bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor="unstop-email" className="text-[#f1eece]">
-                              Unstop Email
-                            </Label>
-                          </div>
-                          <Input
-                            id="unstop-email"
-                            name="unstop-email"
-                            type="email"
-                            placeholder="your.email@example.com"
-                            className="bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor="unstop-password" className="text-[#f1eece]">
-                              Unstop Password
-                            </Label>
-                          </div>
-                          <Input
-                            id="unstop-password"
-                            name="unstop-password"
-                            type="password"
-                            placeholder="••••••••"
-                            className="bg-[rgba(30,30,35,0.5)] border-[#f1eece]/30 text-[#f1eece] placeholder:text-[#f1eece]/50"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="bg-[rgba(30,30,35,0.5)] p-3 rounded-lg text-[#f1eece]/70 text-sm">
-                        <p>
-                          <strong>Security Note:</strong> We use these credentials only to let our AI apply on your
-                          behalf. Your credentials are encrypted and never shared with third parties.
-                        </p>
-                      </div>
-
-                      <div className="flex justify-end">
-                        <Button
-                          type="submit"
-                          className="bg-gradient-to-r from-[#7d0d1b] to-[#a90519] hover:from-[#a90519] hover:to-[#ff102a] text-[#f1eece] border-none"
-                        >
-                          Save Credentials
-                        </Button>
-                      </div>
-                    </form>
-                  </DialogContent>
-                </Dialog>
+                
               </div>
             </Card>
           </div>
@@ -378,125 +525,49 @@ export default function Dashboard() {
               </div>
             </Card>
 
-            {/* Dashboard Stats */}
+            {/* Past Applications Section */}
             <Card className="backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece]/20 shadow-lg rounded-2xl overflow-hidden">
               <div className="p-6">
-                <h2 className="text-2xl font-bold text-[#f1eece] mb-6">Dashboard Overview</h2>
+                <h2 className="text-2xl font-bold text-[#f1eece] mb-6">Past Applications</h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                  <div className="bg-[rgba(30,30,35,0.5)] border border-[#f1eece]/10 rounded-lg p-4">
-                    <h3 className="text-[#f1eece]/70 text-sm mb-1">Total Applications</h3>
-                    <p className="text-2xl font-bold text-[#f1eece]">12</p>
-                  </div>
-                  <div className="bg-[rgba(30,30,35,0.5)] border border-[#f1eece]/10 rounded-lg p-4">
-                    <h3 className="text-[#f1eece]/70 text-sm mb-1">Interviews</h3>
-                    <p className="text-2xl font-bold text-[#f1eece]">3</p>
-                  </div>
-                  <div className="bg-[rgba(30,30,35,0.5)] border border-[#f1eece]/10 rounded-lg p-4">
-                    <h3 className="text-[#f1eece]/70 text-sm mb-1">Success Rate</h3>
-                    <p className="text-2xl font-bold text-[#f1eece]">25%</p>
-                  </div>
-                </div>
-
-                <Tabs defaultValue="all" className="w-full">
-                  <TabsList className="grid grid-cols-3 mb-6 bg-[rgba(30,30,35,0.5)]">
-                    <TabsTrigger
-                      value="all"
-                      className="data-[state=active]:bg-[#f1eece] data-[state=active]:text-[#131318] text-[#f1eece]/80"
-                    >
-                      All Applications
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="linkedin"
-                      className="data-[state=active]:bg-[#f1eece] data-[state=active]:text-[#131318] text-[#f1eece]/80"
-                    >
-                      LinkedIn
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="unstop"
-                      className="data-[state=active]:bg-[#f1eece] data-[state=active]:text-[#131318] text-[#f1eece]/80"
-                    >
-                      Unstop
-                    </TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="all">
-                    <div className="space-y-3">
-                      {applications.map((app) => (
-                        <div
-                          key={app.id}
-                          className="p-4 border border-[#f1eece]/10 rounded-lg bg-[rgba(30,30,35,0.5)] hover:bg-[rgba(30,30,35,0.7)] transition-colors"
-                        >
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <h4 className="font-medium text-[#f1eece]">{app.position}</h4>
-                              <p className="text-[#f1eece]/70 text-sm">{app.company}</p>
-                              <div className="flex items-center gap-2 mt-2">
-                                <Badge className={`${getStatusColor(app.status)}`}>{app.status}</Badge>
-                                <span className="text-xs text-[#f1eece]/50">via {app.source}</span>
+                {/* Past Applications Cards */}
+                <div className="space-y-4">
+                  {applications.length > 0 ? (
+                    applications.map((app) => (
+                      <motion.div
+                        key={app.id}
+                        className="bg-[rgba(19,19,24,0.85)] text-[#f1eece] border border-[#f1eece]/20 rounded-xl p-4 shadow transition hover:scale-[1.01]"
+                        whileHover={{ scale: 1.01 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <div className="flex flex-col md:flex-row justify-between gap-4">
+                          <div>
+                            <h3 className="text-xl font-semibold text-[#f1eece]">{app.position}</h3>
+                            <div className="flex items-center text-[#f1eece]/70 mt-1">
+                              <Building size={16} className="mr-1" />
+                              {app.company}
+                            </div>
+                            <div className="flex items-center gap-3 mt-3">
+                              <Badge className={`${getStatusColor(app.status)}`}>{app.status}</Badge>
+                              <div className="flex items-center text-[#f1eece]/70 text-sm">
+                                <span className="text-[#f1eece]/50 mr-1">via</span>
+                                {app.source}
                               </div>
                             </div>
-                            <span className="text-xs text-[#f1eece]/50">{new Date(app.date).toLocaleDateString()}</span>
+                          </div>
+                          <div className="flex items-center text-[#f1eece]/60 text-sm">
+                            <Calendar size={14} className="mr-1" />
+                            Applied: {new Date(app.date).toLocaleDateString()}
                           </div>
                         </div>
-                      ))}
+                      </motion.div>
+                    ))
+                  ) : (
+                    <div className="text-center py-12 text-[#f1eece]/50">
+                      <p>No applications yet. Activate the AI agent to start applying.</p>
                     </div>
-                  </TabsContent>
-
-                  <TabsContent value="linkedin">
-                    <div className="space-y-3">
-                      {applications
-                        .filter((app) => app.source === "LinkedIn")
-                        .map((app) => (
-                          <div
-                            key={app.id}
-                            className="p-4 border border-[#f1eece]/10 rounded-lg bg-[rgba(30,30,35,0.5)] hover:bg-[rgba(30,30,35,0.7)] transition-colors"
-                          >
-                            <div className="flex justify-between items-start">
-                              <div>
-                                <h4 className="font-medium text-[#f1eece]">{app.position}</h4>
-                                <p className="text-[#f1eece]/70 text-sm">{app.company}</p>
-                                <div className="flex items-center gap-2 mt-2">
-                                  <Badge className={`${getStatusColor(app.status)}`}>{app.status}</Badge>
-                                  <span className="text-xs text-[#f1eece]/50">via {app.source}</span>
-                                </div>
-                              </div>
-                              <span className="text-xs text-[#f1eece]/50">
-                                {new Date(app.date).toLocaleDateString()}
-                              </span>
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="unstop">
-                    <div className="space-y-3">
-                      {applications
-                        .filter((app) => app.source === "Unstop")
-                        .map((app) => (
-                          <div
-                            key={app.id}
-                            className="p-4 border border-[#f1eece]/10 rounded-lg bg-[rgba(30,30,35,0.5)] hover:bg-[rgba(30,30,35,0.7)] transition-colors"
-                          >
-                            <div className="flex justify-between items-start">
-                              <div>
-                                <h4 className="font-medium text-[#f1eece]">{app.position}</h4>
-                                <p className="text-[#f1eece]/70 text-sm">{app.company}</p>
-                                <div className="flex items-center gap-2 mt-2">
-                                  <Badge className={`${getStatusColor(app.status)}`}>{app.status}</Badge>
-                                  <span className="text-xs text-[#f1eece]/50">via {app.source}</span>
-                                </div>
-                              </div>
-                              <span className="text-xs text-[#f1eece]/50">
-                                {new Date(app.date).toLocaleDateString()}
-                              </span>
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                  </TabsContent>
-                </Tabs>
+                  )}
+                </div>
               </div>
             </Card>
           </div>
@@ -504,4 +575,37 @@ export default function Dashboard() {
       </div>
     </div>
   )
+}
+
+// Type definitions for the internship data structures
+interface LinkedInInternship {
+  id: string
+  title: string
+  company: string
+  location: string
+  duration: string
+  stipend: string
+  category: string
+}
+
+interface InternshalaInternship {
+  id: string
+  title: string
+  company: string
+  applicants: string
+  days_left: string
+  skills: string[]
+  category: string
+  scraped_at: string
+  url: string | null
+}
+
+interface UnstopInternship {
+  id: string
+  title: string
+  company: string
+  location: string
+  duration: string
+  stipend: string
+  category: string
 }
