@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
+import Navbar from "@/components/layout/Navbar"
 
 export default function ResumeBuilderLanding() {
   const router = useRouter()
@@ -68,6 +69,7 @@ export default function ResumeBuilderLanding() {
             </CardContent>
           </Card>
         </motion.div>
+        <Navbar />
       </div>
     </div>
   )
