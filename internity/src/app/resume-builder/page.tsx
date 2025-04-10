@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
 import Navbar from "@/components/layout/Navbar"
+import { BackgroundLines } from "@/components/ui/background-lines";
 
 export default function ResumeBuilderLanding() {
   const router = useRouter()
@@ -19,6 +20,10 @@ export default function ResumeBuilderLanding() {
   }
 
   return (
+   
+    <BackgroundLines>
+      
+    
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-r from-[rgba(8,8,8,0.7)] to-[rgba(10,10,10,0.7)] text-[#f1eece]">
       <div className="w-full max-w-4xl text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold text-[#f1eece] mb-4">Start Your Resume 🚀</h1>
@@ -69,9 +74,11 @@ export default function ResumeBuilderLanding() {
             </CardContent>
           </Card>
         </motion.div>
-        <Navbar />
       </div>
+      <Navbar />
     </div>
+    </BackgroundLines>
+    
   )
 }
 
