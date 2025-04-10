@@ -6,7 +6,9 @@ import { Badge } from "@/components/ui/badge"
 import { RefreshCw, Building, MapPin, Clock, DollarSign } from "lucide-react"
 import { motion } from "framer-motion"
 import { LayoutWrapper } from "../components/layout-wrapper"
-import {CredentialsSection} from "../components/credentials-section"
+import { UnstopCredentials } from "../components/unstop-credentials"
+import { PreferencesSectionBase, type PreferencesData } from "../components/preferences-section-base"
+
 // Type definition for Unstop internship data
 interface UnstopInternship {
   id: string
@@ -69,6 +71,20 @@ export default function UnstopInternshipsPage() {
       setInternships([...mockInternships])
       setIsLoading(false)
     }, 2000)
+  }
+
+  // Handle saving Unstop preferences
+  const handleSavePreferences = (preferences: PreferencesData) => {
+    console.log("Saving Unstop preferences:", preferences)
+
+    // In a real app, this would save the preferences to the backend
+    // fetch('/api/preferences/unstop', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(preferences)
+    // })
+
+    alert("Unstop preferences saved successfully!")
   }
 
   return (
@@ -144,7 +160,16 @@ export default function UnstopInternshipsPage() {
           <p>No Unstop internships found. Click "Scrape Now" to fetch the latest listings.</p>
         </div>
       )}
-      <CredentialsSection/>
+
+      {/* Unstop-specific preferences section */}
+      <div className="mt-6">
+        <PreferencesSectionBase onSave={handleSavePreferences} title="Unstop Application Preferences" />
+      </div>
+
+      {/* Unstop-specific credentials section */}
+      <div className="mt-6">
+        <UnstopCredentials />
+      </div>
     </LayoutWrapper>
   )
 }

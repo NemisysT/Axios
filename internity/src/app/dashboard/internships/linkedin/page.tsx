@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge"
 import { RefreshCw, Building, MapPin, Clock, DollarSign } from "lucide-react"
 import { motion } from "framer-motion"
 import { LayoutWrapper } from "../components/layout-wrapper"
-import { CredentialsSection } from "../components/credentials-section"
+import { LinkedInCredentials } from "../components/linkedin-credentials"
+import { PreferencesSectionBase, type PreferencesData } from "../components/preferences-section-base"
 
 // Type definition for LinkedIn internship data
 interface LinkedInInternship {
@@ -70,6 +71,20 @@ export default function LinkedInInternshipsPage() {
       setInternships([...mockInternships])
       setIsLoading(false)
     }, 2000)
+  }
+
+  // Handle saving LinkedIn preferences
+  const handleSavePreferences = (preferences: PreferencesData) => {
+    console.log("Saving LinkedIn preferences:", preferences)
+
+    // In a real app, this would save the preferences to the backend
+    // fetch('/api/preferences/linkedin', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(preferences)
+    // })
+
+    alert("LinkedIn preferences saved successfully!")
   }
 
   return (
@@ -145,7 +160,16 @@ export default function LinkedInInternshipsPage() {
           <p>No LinkedIn internships found. Click "Scrape Now" to fetch the latest listings.</p>
         </div>
       )}
-      <CredentialsSection />
+
+      {/* LinkedIn-specific preferences section */}
+      <div className="mt-6">
+        <PreferencesSectionBase onSave={handleSavePreferences} title="LinkedIn Application Preferences" />
+      </div>
+
+      {/* LinkedIn-specific credentials section */}
+      <div className="mt-6">
+        <LinkedInCredentials />
+      </div>
     </LayoutWrapper>
   )
 }

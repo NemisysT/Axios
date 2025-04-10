@@ -7,6 +7,7 @@ import { RefreshCw, Building, MapPin, Clock, DollarSign } from "lucide-react"
 import { motion } from "framer-motion"
 import { LayoutWrapper } from "./components/layout-wrapper"
 import { useRouter } from "next/navigation"
+import { PreferencesSectionBase, type PreferencesData } from "./components/preferences-section-base"
 
 // Type definitions for the internship data structures
 interface LinkedInInternship {
@@ -110,12 +111,26 @@ export default function InternshipsPage() {
     router.push(`/dashboard/internships/${platform}`)
   }
 
+  // Handle saving general preferences
+  const handleSavePreferences = (preferences: PreferencesData) => {
+    console.log("Saving general preferences:", preferences)
+
+    // In a real app, this would save the preferences to the backend
+    // fetch('/api/preferences', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(preferences)
+    // })
+
+    alert("General preferences saved successfully!")
+  }
+
   // Render internship card based on its type
   const renderInternshipCard = (internship: Internship) => {
     return (
       <motion.div
         key={internship.id}
-        className="bg-[rgba(19,19,24,0.85)] text-[#f1eece] border border-[#f1eece]/20 rounded-xl p-4 shadow transition hover:scale-[1.01]"
+        className="bg-[rgba(19,19,24,0.85)] text-[#f1eece] border border-[#f1eece]/20 rounded-xl p-4 shadow transition hover:scale-[1.01] cursor-pointer"
         whileHover={{ scale: 1.01 }}
         transition={{ duration: 0.2 }}
         onClick={() => navigateToPlatform(internship.source)}
@@ -224,6 +239,11 @@ export default function InternshipsPage() {
           <p>No internships found. Click "Scrape All Platforms" to fetch the latest listings.</p>
         </div>
       )}
+
+      {/* General preferences section */}
+      <div className="mt-6">
+        <PreferencesSectionBase onSave={handleSavePreferences} title="General Application Preferences" />
+      </div>
     </LayoutWrapper>
   )
 }

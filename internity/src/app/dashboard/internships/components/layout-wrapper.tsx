@@ -4,8 +4,6 @@ import type { ReactNode } from "react"
 import { Sidebar } from "./sidebar"
 import { Card } from "@/components/ui/card"
 import { InternshipNavigation } from "./internship-navigation"
-import { PreferencesSection } from "./preferences-section"
-import { CredentialsSection } from "./credentials-section"
 
 interface LayoutWrapperProps {
   children: ReactNode
@@ -39,12 +37,6 @@ export function LayoutWrapper({ children, title }: LayoutWrapperProps) {
                 {children}
               </div>
             </Card>
-
-            {/* Application Preferences Section */}
-            <PreferencesSection />
-
-            {/* Platform Credentials Section */}
-            <CredentialsSection />
           </div>
         </div>
       </div>

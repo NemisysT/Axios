@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge"
 import { RefreshCw, Building } from "lucide-react"
 import { motion } from "framer-motion"
 import { LayoutWrapper } from "../components/layout-wrapper"
-import { CredentialsSection } from "../components/credentials-section"
+import { InternshalaCredentials } from "../components/internshala-credentials"
+import { PreferencesSectionBase, type PreferencesData } from "../components/preferences-section-base"
 
 // Type definition for Internshala internship data
 interface InternshalaInternship {
@@ -78,6 +79,20 @@ export default function InternshalaInternshipsPage() {
       setInternships([...mockInternships])
       setIsLoading(false)
     }, 2000)
+  }
+
+  // Handle saving Internshala preferences
+  const handleSavePreferences = (preferences: PreferencesData) => {
+    console.log("Saving Internshala preferences:", preferences)
+
+    // In a real app, this would save the preferences to the backend
+    // fetch('/api/preferences/internshala', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(preferences)
+    // })
+
+    alert("Internshala preferences saved successfully!")
   }
 
   return (
@@ -158,7 +173,16 @@ export default function InternshalaInternshipsPage() {
           <p>No Internshala internships found. Click "Scrape Now" to fetch the latest listings.</p>
         </div>
       )}
-      <CredentialsSection />
+
+      {/* Internshala-specific preferences section */}
+      <div className="mt-6">
+        <PreferencesSectionBase onSave={handleSavePreferences} title="Internshala Application Preferences" />
+      </div>
+
+      {/* Internshala-specific credentials section */}
+      <div className="mt-6">
+        <InternshalaCredentials />
+      </div>
     </LayoutWrapper>
   )
 }
