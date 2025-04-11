@@ -3,21 +3,22 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { RefreshCw, Building } from "lucide-react"
+import { RefreshCw, Building , DollarSign ,Link ,ArrowBigUp} from "lucide-react"
 import { motion } from "framer-motion"
 import { LayoutWrapper } from "../components/layout-wrapper"
 import { InternshalaCredentials } from "../components/internshala-credentials"
 import { PreferencesSectionBase, type PreferencesData } from "../components/preferences-section-base"
 import { toast } from "sonner"
+import { validateHeaderName } from "http"
 
 // Type definition for Internshala internship data
 interface InternshalaInternship {
   id: string
   title: string
   company: string
-  applicants: string
+  stipend: string
   days_left: string
-  skills: string[]
+  apply_link: string
   category: string
   scraped_at: string
   url: string | null
@@ -26,12 +27,12 @@ interface InternshalaInternship {
 export default function InternshalaInternshipsPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [internships, setInternships] = useState<InternshalaInternship[]>([])
-const [preference, setPreferences] = useState<PreferencesData>()
+  const [preference, setPreferences] = useState<PreferencesData>()
 
   const startInternshalaScraper = async () => {
     setIsLoading(true)
     try {
-      const response = await fetch(" http://127.0.0.1:5000/api/internships/scrape", {
+      const response = await fetch(" http://127.0.0.1:5000/api/internshala/scrape", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,11 +50,11 @@ const [preference, setPreferences] = useState<PreferencesData>()
 
   const fetchInternshalaInternships = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:5000/api/internships/list", {
+      const res = await fetch("http://127.0.0.1:5000/api/internshala/list", {
         method: "GET",
       })
       const data = await res.json()
-      console.log(data)
+      console.log(data.data)
       setInternships(data.data || [])
     } catch (error) {
       console.error("Error fetching internships:", error)
@@ -126,30 +127,42 @@ const [preference, setPreferences] = useState<PreferencesData>()
                   {internship.company}
                 </div>
 
-                <div className="flex items-center justify-between mt-3">
-                  <div className="text-[#f1eece]/70 text-sm">
-                    <span className="font-medium">Applicants:</span> {internship.applicants}
-                  </div>
-                  <div className="text-[#f1eece]/70 text-sm">
-                    <span className="font-medium">Days Left:</span> {internship.days_left}
-                  </div>
+                <div className="flex items-center text-[#f1eece]/70 mt-1">
+                  <DollarSign size={16} className="mr-1" />
+                  {internship.stipend}
                 </div>
 
-                <div className="flex flex-wrap gap-2 mt-3">
+                <div className="flex items-center text-[#f1eece]/70 mt-1">
+                  <ArrowBigUp size={16} className="mr-1" />
+                  {internship.title}
+                </div>
+
+                {/* <div className="flex flex-wrap gap-2 mt-3">
                   {internship.skills.map((skill, index) => (
                     <Badge key={index} className="bg-[#f1eece]/10 text-[#f1eece]/90 border border-[#f1eece]/20">
                       {skill}
                     </Badge>
                   ))}
-                </div>
+                </div> */}
 
-                <div className="mt-auto pt-3 flex justify-between items-center">
-                  <Badge className="bg-[#f1eece]/10 text-[#f1eece]/90 border border-[#f1eece]/20">
-                    {internship.category}
-                  </Badge>
-                  <div className="text-[#f1eece]/50 text-xs">
-                    Scraped: {new Date(internship.scraped_at).toLocaleDateString()}
+<div className="flex justify-between items-center text-[#f1eece]/70 text-sm mt-1">
+                  <div className="mt-auto pt-3">
+                    <a
+                      href={internship.apply_link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Badge className="bg-[#f1eece]/10 text-[#f1eece]/90 border border-[#f1eece]/20 cursor-pointer hover:bg-[#f1eece]/20 transition">
+                        {internship.category}
+                      </Badge>
+                    </a>
                   </div>
+                  <div className="flex pt-3 items-center text-green-400 text-sm">  
+                      <Link size={14} className="mr-1" />
+                      <a href={internship.apply_link} target="_blank" rel="noopener noreferrer">
+                      Apply Now
+                    </a>
+                    </div>
                 </div>
               </div>
             </motion.div>
