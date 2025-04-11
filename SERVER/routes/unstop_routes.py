@@ -1,65 +1,51 @@
-from flask import Blueprint, request, jsonify
-from controllers.unstop_controller import InternshipController
+# from flask import Blueprint, request, jsonify
+# from controllers.unstop_controller import InternshipController
 
-# Create the blueprint for API routes
-internship_bp = Blueprint('internships', __name__, url_prefix='/api/internships')
-controller = InternshipController()
+# # Create Blueprint for internship routes
+# internship_bp = Blueprint('internships', __name__)
 
-@internship_bp.route('/list', methods=['GET'])
-def api_list_internships():
-    """API endpoint to get internships as JSON"""
-    # Get query parameters for filtering
-    category = request.args.get('category')
-    company = request.args.get('company')
-    title_search = request.args.get('title')
-    days_left = request.args.get('days_left')
-    
-    # Pagination parameters
-    page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 10, type=int)
-    
-    # Create filters if parameters are provided
-    filters = {}
-    if category:
-        filters['category'] = category
-    if company:
-        filters['company'] = company
-    if title_search:
-        filters['title'] = {"$regex": title_search, "$options": "i"}
-    if days_left:
-        filters['days_left'] = days_left
-    
-    # Get internships from controller with pagination
-    result = controller.get_all_internships(filters, page, per_page)
-    
-    # Return JSON response
-    return jsonify(result)
+# # Initialize controller
+# internship_controller = InternshipController()
 
-@internship_bp.route('/<internship_id>', methods=['GET'])
-def api_get_internship(internship_id):
-    """API endpoint to get a specific internship by ID"""
-    result = controller.get_internship_by_id(internship_id)
-    return jsonify(result)
-
-@internship_bp.route('/scrape', methods=['POST'])
-def api_scrape_internships():
-    """API endpoint to trigger internship scraping"""
-    data = request.json or {}
-    category = data.get('category', 'full-stack-development')
+# @internship_bp.route('/scrape', methods=['POST'])
+# def scrape_internships():
+#     """Endpoint to trigger scraping of internships based on dynamic parameters"""
+#     # Get parameters from request
+#     data = request.json
     
-    # Optional parameters for more specific scraping
-    filters = {
-        'category': category,
-        'usertype': data.get('usertype', 'fresher'),
-        'passing_year': data.get('passing_year', '2027'),
-        'quick_apply': data.get('quick_apply', True)
-    }
+#     if not data:
+#         return jsonify({
+#             'success': False,
+#             'message': 'Request body is required'
+#         }), 400
     
-    result = controller.trigger_scrape_internships(filters)
-    return jsonify(result)
+#     # Call controller to handle scraping with dynamic parameters
+#     result = internship_controller.scrape_and_save_dynamic(data)
+    
+#     # Return response
+#     status_code = 200 if result['success'] else 500
+#     return jsonify(result), status_code
 
-@internship_bp.route('/statistics', methods=['GET'])
-def api_internship_statistics():
-    """API endpoint to get statistics about internships"""
-    result = controller.get_internship_statistics()
-    return jsonify(result)
+# @internship_bp.route('/', methods=['GET'])
+# def get_internships():
+#     """Endpoint to get internships with pagination"""
+#     # Get query parameters
+#     limit = request.args.get('limit', default=20, type=int)
+#     skip = request.args.get('skip', default=0, type=int)
+    
+#     # Call controller to get internships
+#     result = internship_controller.get_internships(limit=limit, skip=skip)
+    
+#     # Return response
+#     status_code = 200 if result['success'] else 500
+#     return jsonify(result), status_code
+
+# @internship_bp.route('/<opp_id>', methods=['GET'])
+# def get_internship(opp_id):
+#     """Endpoint to get a single internship by ID"""
+#     # Call controller to get internship
+#     result = internship_controller.get_internship(opp_id)
+    
+#     # Return response
+#     status_code = 200 if result['success'] else 404 if result.get('message', '').endswith('not found') else 500
+#     return jsonify(result), status_code
