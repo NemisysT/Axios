@@ -4,6 +4,8 @@ import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { User, Briefcase, Settings, LogOut } from "lucide-react"
 import { useEffect } from "react"
+import { useAuth } from "@/app/context/context"
+import { useRouter } from "next/navigation"
 
 interface SidebarProps {
   user: {
@@ -14,15 +16,15 @@ interface SidebarProps {
 }
 
 export function Sidebar({ user }: SidebarProps) {
+  const { logoutUser } = useAuth()
+  const router = useRouter()
+
   useEffect(() => {
     const clock = document.getElementById("system-clock")
     const date = document.getElementById("system-date")
 
-    if (!clock || !date) return
-
     function updateTime() {
       const now = new Date()
-
       if (clock) {
         clock.textContent = now.toLocaleTimeString("en-US", { hour12: false })
       }
@@ -38,7 +40,7 @@ export function Sidebar({ user }: SidebarProps) {
     const intervalId = setInterval(updateTime, 1000)
     updateTime()
 
-    return () => clearInterval(intervalId) // Cleanup interval on component unmount
+    return () => clearInterval(intervalId)
   }, [])
 
   return (
@@ -79,7 +81,13 @@ export function Sidebar({ user }: SidebarProps) {
               <Settings size={18} />
               <span>Resume Builder</span>
             </Link>
-            <button className="w-full flex items-center gap-3 p-3 rounded-lg text-[#f1eece]/70 hover:bg-[rgba(30,30,35,0.5)] transition-colors">
+            <button
+              onClick={() => {
+                logoutUser()
+                router.push("/")
+              }}
+              className="w-full flex items-center gap-3 p-3 rounded-lg text-[#f1eece]/70 hover:bg-[rgba(30,30,35,0.5)] transition-colors"
+            >
               <LogOut size={18} />
               <span>Logout</span>
             </button>
