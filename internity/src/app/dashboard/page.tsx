@@ -4,11 +4,27 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { User, Briefcase, Settings, LogOut, Sparkles, ExternalLink, Building, Calendar } from "lucide-react"
+import {
+  User,
+  Briefcase,
+  Settings,
+  LogOut,
+  Sparkles,
+  ExternalLink,
+  MapPin,
+  Clock,
+  DollarSign,
+  Building,
+  RefreshCw,
+} from "lucide-react"
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { Toaster } from "sonner"
+import SmartScraperCredentialsForm from "./components/smart-scraper-credentials-form"
 
 export default function Dashboard() {
   const [agentActive, setAgentActive] = useState(false)
@@ -385,6 +401,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-[rgba(8,8,8,0.7)] to-[rgba(10,10,10,0.7)] text-[#f1eece]">
+      <Toaster position="top-right" />
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
           {/* Sidebar / Navigation */}
@@ -448,7 +465,16 @@ export default function Dashboard() {
                     Apr 10, 2025
                   </p>
                 </div>
-                
+                {/* <div className="grid grid-cols-2 gap-4 pt-2">
+      <div className="bg-[rgba(30,30,35,0.3)] rounded-lg p-3 text-[#f1eece]/70 text-xs">
+        <div className="uppercase text-[10px] text-[#f1eece]/50 mb-1 tracking-wide">Uptime</div>
+        <div id="uptime" className="font-mono text-[#f1eece] text-sm">00d 00:00:00</div>
+      </div>
+      <div className="bg-[rgba(30,30,35,0.3)] rounded-lg p-3 text-[#f1eece]/70 text-xs">
+        <div className="uppercase text-[10px] text-[#f1eece]/50 mb-1 tracking-wide">Time Zone</div>
+        <div id="timezone" className="font-mono text-[#f1eece] text-sm">UTC+00:00</div>
+      </div>
+    </div> */}
               </div>
             </Card>
           </div>
@@ -508,7 +534,7 @@ export default function Dashboard() {
                               <p className="text-[#f1eece]/70 text-sm">{app.company}</p>
                               <div className="flex items-center gap-2 mt-2">
                                 <Badge className={`${getStatusColor(app.status)}`}>{app.status}</Badge>
-                                <span className="text-xs text-[#f1eece]/50">via {app.source}</span>
+                                <span className="text-xs text-[#f1e  eece]/50">via {app.source}</span>
                               </div>
                             </div>
                             <span className="text-xs text-[#f1eece]/50">{new Date(app.date).toLocaleDateString()}</span>
@@ -525,49 +551,271 @@ export default function Dashboard() {
               </div>
             </Card>
 
-            {/* Past Applications Section */}
+            {/* Smart Scraper Credentials Form */}
+            <div className="mb-6">
+              <SmartScraperCredentialsForm />
+            </div>
+
+            {/* Internships Section */}
             <Card className="backdrop-blur-sm bg-[rgba(19,19,24,0.85)] border border-[#f1eece]/20 shadow-lg rounded-2xl overflow-hidden">
               <div className="p-6">
-                <h2 className="text-2xl font-bold text-[#f1eece] mb-6">Past Applications</h2>
+                <h2 className="text-2xl font-bold text-[#f1eece] mb-6">Internship Sources</h2>
 
-                {/* Past Applications Cards */}
-                <div className="space-y-4">
-                  {applications.length > 0 ? (
-                    applications.map((app) => (
-                      <motion.div
-                        key={app.id}
-                        className="bg-[rgba(19,19,24,0.85)] text-[#f1eece] border border-[#f1eece]/20 rounded-xl p-4 shadow transition hover:scale-[1.01]"
-                        whileHover={{ scale: 1.01 }}
-                        transition={{ duration: 0.2 }}
+                <Tabs defaultValue="linkedin" value={activeInternshipTab} onValueChange={setActiveInternshipTab}>
+                  <TabsList className="grid grid-cols-3 mb-6 bg-[rgba(30,30,35,0.5)]">
+                    <TabsTrigger
+                      value="linkedin"
+                      className="data-[state=active]:bg-[#f1eece] data-[state=active]:text-[#131318] text-[#f1eece]/80"
+                    >
+                      LinkedIn
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="internshala"
+                      className="data-[state=active]:bg-[#f1eece] data-[state=active]:text-[#131318] text-[#f1eece]/80"
+                    >
+                      Internshala
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="unstop"
+                      className="data-[state=active]:bg-[#f1eece] data-[state=active]:text-[#131318] text-[#f1eece]/80"
+                    >
+                      Unstop
+                    </TabsTrigger>
+                  </TabsList>
+
+                  {/* LinkedIn Tab */}
+                  <TabsContent value="linkedin">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-lg font-semibold text-[#f1eece]">LinkedIn Internships</h3>
+                      <Button
+                        onClick={handleScrapeLinkedIn}
+                        disabled={isLinkedInLoading}
+                        className="bg-gradient-to-r from-[#7d0d1b] to-[#a90519] hover:from-[#a90519] hover:to-[#ff102a] text-[#f1eece] border-none"
                       >
-                        <div className="flex flex-col md:flex-row justify-between gap-4">
-                          <div>
-                            <h3 className="text-xl font-semibold text-[#f1eece]">{app.position}</h3>
-                            <div className="flex items-center text-[#f1eece]/70 mt-1">
-                              <Building size={16} className="mr-1" />
-                              {app.company}
-                            </div>
-                            <div className="flex items-center gap-3 mt-3">
-                              <Badge className={`${getStatusColor(app.status)}`}>{app.status}</Badge>
-                              <div className="flex items-center text-[#f1eece]/70 text-sm">
-                                <span className="text-[#f1eece]/50 mr-1">via</span>
-                                {app.source}
+                        {isLinkedInLoading ? (
+                          <>
+                            <div className="animate-spin h-4 w-4 mr-2 border-2 border-[#f1eece] border-t-transparent rounded-full"></div>
+                            Scraping...
+                          </>
+                        ) : (
+                          <>
+                            <RefreshCw size={16} className="mr-2" />
+                            Scrape Now
+                          </>
+                        )}
+                      </Button>
+                    </div>
+
+                    {isLinkedInLoading ? (
+                      <div className="flex justify-center items-center py-12">
+                        <div className="animate-spin h-6 w-6 border-2 border-[#a90519] border-t-transparent rounded-full"></div>
+                        <span className="ml-3 text-[#f1eece]/70">Scraping LinkedIn internships...</span>
+                      </div>
+                    ) : linkedInInternships.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {linkedInInternships.map((internship) => (
+                          <motion.div
+                            key={internship.id}
+                            className="bg-[rgba(19,19,24,0.85)] text-[#f1eece] border border-[#f1eece]/20 rounded-xl p-4 shadow transition hover:scale  text-[#f1eece] border border-[#f1eece]/20 rounded-xl p-4 shadow transition hover:scale-[1.01]"
+                            whileHover={{ scale: 1.01 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="flex flex-col h-full">
+                              <h4 className="text-lg font-semibold text-[#f1eece]">{internship.title}</h4>
+                              <div className="flex items-center text-[#f1eece]/70 mt-1">
+                                <Building size={16} className="mr-1" />
+                                {internship.company}
+                              </div>
+
+                              <div className="grid grid-cols-1 gap-2 mt-3">
+                                <div className="flex items-center text-[#f1eece]/70 text-sm">
+                                  <MapPin size={14} className="mr-1" />
+                                  {internship.location}
+                                </div>
+                                <div className="flex items-center text-[#f1eece]/70 text-sm">
+                                  <Clock size={14} className="mr-1" />
+                                  {internship.duration}
+                                </div>
+                                <div className="flex items-center text-[#f1eece]/70 text-sm">
+                                  <DollarSign size={14} className="mr-1" />
+                                  {internship.stipend}
+                                </div>
+                              </div>
+
+                              <div className="mt-auto pt-3">
+                                <Badge className="bg-[#f1eece]/10 text-[#f1eece]/90 border border-[#f1eece]/20">
+                                  {internship.category}
+                                </Badge>
                               </div>
                             </div>
-                          </div>
-                          <div className="flex items-center text-[#f1eece]/60 text-sm">
-                            <Calendar size={14} className="mr-1" />
-                            Applied: {new Date(app.date).toLocaleDateString()}
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))
-                  ) : (
-                    <div className="text-center py-12 text-[#f1eece]/50">
-                      <p>No applications yet. Activate the AI agent to start applying.</p>
+                          </motion.div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-12 text-[#f1eece]/50">
+                        <p>No LinkedIn internships found. Click "Scrape Now" to fetch the latest listings.</p>
+                      </div>
+                    )}
+                  </TabsContent>
+
+                  {/* Internshala Tab */}
+                  <TabsContent value="internshala">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-lg font-semibold text-[#f1eece]">Internshala Internships</h3>
+                      <Button
+                        onClick={handleScrapeInternshala}
+                        disabled={isInternshalaLoading}
+                        className="bg-gradient-to-r from-[#7d0d1b] to-[#a90519] hover:from-[#a90519] hover:to-[#ff102a] text-[#f1eece] border-none"
+                      >
+                        {isInternshalaLoading ? (
+                          <>
+                            <div className="animate-spin h-4 w-4 mr-2 border-2 border-[#f1eece] border-t-transparent rounded-full"></div>
+                            Scraping...
+                          </>
+                        ) : (
+                          <>
+                            <RefreshCw size={16} className="mr-2" />
+                            Scrape Now
+                          </>
+                        )}
+                      </Button>
                     </div>
-                  )}
-                </div>
+
+                    {isInternshalaLoading ? (
+                      <div className="flex justify-center items-center py-12">
+                        <div className="animate-spin h-6 w-6 border-2 border-[#a90519] border-t-transparent rounded-full"></div>
+                        <span className="ml-3 text-[#f1eece]/70">Scraping Internshala internships...</span>
+                      </div>
+                    ) : internshalaInternships.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {internshalaInternships.map((internship) => (
+                          <motion.div
+                            key={internship.id}
+                            className="bg-[rgba(19,19,24,0.85)] text-[#f1eece] border border-[#f1eece]/20 rounded-xl p-4 shadow transition hover:scale-[1.01]"
+                            whileHover={{ scale: 1.01 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="flex flex-col h-full">
+                              <h4 className="text-lg font-semibold text-[#f1eece]">{internship.title}</h4>
+                              <div className="flex items-center text-[#f1eece]/70 mt-1">
+                                <Building size={16} className="mr-1" />
+                                {internship.company}
+                              </div>
+
+                              <div className="flex items-center justify-between mt-3">
+                                <div className="text-[#f1eece]/70 text-sm">
+                                  <span className="font-medium">Applicants:</span> {internship.applicants}
+                                </div>
+                                <div className="text-[#f1eece]/70 text-sm">
+                                  <span className="font-medium">Days Left:</span> {internship.days_left}
+                                </div>
+                              </div>
+
+                              <div className="flex flex-wrap gap-2 mt-3">
+                                {internship.skills.map((skill, index) => (
+                                  <Badge
+                                    key={index}
+                                    className="bg-[#f1eece]/10 text-[#f1eece]/90 border border-[#f1eece]/20"
+                                  >
+                                    {skill}
+                                  </Badge>
+                                ))}
+                              </div>
+
+                              <div className="mt-auto pt-3 flex justify-between items-center">
+                                <Badge className="bg-[#f1eece]/10 text-[#f1eece]/90 border border-[#f1eece]/20">
+                                  {internship.category}
+                                </Badge>
+                                <div className="text-[#f1eece]/50 text-xs">
+                                  Scraped: {new Date(internship.scraped_at).toLocaleDateString()}
+                                </div>
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-12 text-[#f1eece]/50">
+                        <p>No Internshala internships found. Click "Scrape Now" to fetch the latest listings.</p>
+                      </div>
+                    )}
+                  </TabsContent>
+
+                  {/* Unstop Tab */}
+                  <TabsContent value="unstop">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-lg font-semibold text-[#f1eece]">Unstop Internships</h3>
+                      <Button
+                        onClick={handleScrapeUnstop}
+                        disabled={isUnstopLoading}
+                        className="bg-gradient-to-r from-[#7d0d1b] to-[#a90519] hover:from-[#a90519] hover:to-[#ff102a] text-[#f1eece] border-none"
+                      >
+                        {isUnstopLoading ? (
+                          <>
+                            <div className="animate-spin h-4 w-4 mr-2 border-2 border-[#f1eece] border-t-transparent rounded-full"></div>
+                            Scraping...
+                          </>
+                        ) : (
+                          <>
+                            <RefreshCw size={16} className="mr-2" />
+                            Scrape Now
+                          </>
+                        )}
+                      </Button>
+                    </div>
+
+                    {isUnstopLoading ? (
+                      <div className="flex justify-center items-center py-12">
+                        <div className="animate-spin h-6 w-6 border-2 border-[#a90519] border-t-transparent rounded-full"></div>
+                        <span className="ml-3 text-[#f1eece]/70">Scraping Unstop internships...</span>
+                      </div>
+                    ) : unstopInternships.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {unstopInternships.map((internship) => (
+                          <motion.div
+                            key={internship.id}
+                            className="bg-[rgba(19,19,24,0.85)] text-[#f1eece] border border-[#f1eece]/20 rounded-xl p-4 shadow transition hover:scale-[1.01]"
+                            whileHover={{ scale: 1.01 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="flex flex-col h-full">
+                              <h4 className="text-lg font-semibold text-[#f1eece]">{internship.title}</h4>
+                              <div className="flex items-center text-[#f1eece]/70 mt-1">
+                                <Building size={16} className="mr-1" />
+                                {internship.company}
+                              </div>
+
+                              <div className="grid grid-cols-1 gap-2 mt-3">
+                                <div className="flex items-center text-[#f1eece]/70 text-sm">
+                                  <MapPin size={14} className="mr-1" />
+                                  {internship.location}
+                                </div>
+                                <div className="flex items-center text-[#f1eece]/70 text-sm">
+                                  <Clock size={14} className="mr-1" />
+                                  {internship.duration}
+                                </div>
+                                <div className="flex items-center text-[#f1eece]/70 text-sm">
+                                  <DollarSign size={14} className="mr-1" />
+                                  {internship.stipend}
+                                </div>
+                              </div>
+
+                              <div className="mt-auto pt-3">
+                                <Badge className="bg-[#f1eece]/10 text-[#f1eece]/90 border border-[#f1eece]/20">
+                                  {internship.category}
+                                </Badge>
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-12 text-[#f1eece]/50">
+                        <p>No Unstop internships found. Click "Scrape Now" to fetch the latest listings.</p>
+                      </div>
+                    )}
+                  </TabsContent>
+                </Tabs>
               </div>
             </Card>
           </div>

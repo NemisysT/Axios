@@ -4,7 +4,9 @@ class Config:
     """Base configuration"""
     MONGODB_URI = os.environ.get('MONGODB_URI', 'mongodb://localhost:27017/')
     DEBUG = False
-    TESTING = False
+    TESTING = False    
+    SECRET_KEY = os.environ.get("SECRET_KEY") or "dev-key-for-development"
+    GEMINI_API_KEY = 'AIzaSyD9tAeFXCHe1-sWsvakCvr35xDHBzXAFj4'
 
 class DevelopmentConfig(Config):
     """Development configuration"""
