@@ -7,7 +7,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Filter, ChevronUp, ChevronDown, Save } from "lucide-react"
-
+import { toast } from "sonner"
 export function PreferencesSection() {
   const [preferencesOpen, setPreferencesOpen] = useState(true)
   const [category, setCategory] = useState("")
@@ -31,7 +31,7 @@ export function PreferencesSection() {
   const handleSavePreferences = () => {
     // In a real app, this would save the preferences to the database
     console.log("Saving preferences:", { category, userType, passingYear, quickApply })
-    alert("Application preferences saved successfully!")
+    toast.success("Application preferences saved successfully!")
   }
 
   return (

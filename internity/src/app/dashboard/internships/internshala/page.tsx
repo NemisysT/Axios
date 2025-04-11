@@ -8,6 +8,7 @@ import { motion } from "framer-motion"
 import { LayoutWrapper } from "../components/layout-wrapper"
 import { InternshalaCredentials } from "../components/internshala-credentials"
 import { PreferencesSectionBase, type PreferencesData } from "../components/preferences-section-base"
+import { toast } from "sonner"
 
 // Type definition for Internshala internship data
 interface InternshalaInternship {
@@ -78,7 +79,7 @@ const [preference, setPreferences] = useState<PreferencesData>()
     //   body: JSON.stringify(preferences)
     // })
 
-    alert("internshala preferences saved successfully!")
+    toast.success("internshala preferences saved successfully!")
   }
 
   return (
