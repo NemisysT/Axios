@@ -115,7 +115,7 @@ def scrape_internships():
                 # Extract internship title
                 title = card.find_element(By.CSS_SELECTOR, "h2.double-wrap").text.strip()
                 
-                # Extract company name
+                # Extract company name0111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
                 try:
                     company = card.find_element(By.CSS_SELECTOR, "p").text.strip()
                 except:

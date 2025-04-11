@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/app/context/context";
-
+import { HoverBorderGradient } from "../ui/hover-border-gradient";
 const Navbar = () => {
   const pathname = usePathname();
   const { isLoggedIn, logoutUser } = useAuth();
@@ -79,29 +79,25 @@ const Navbar = () => {
             {isLoggedIn ? (
               <>
                 <Link href="/dashboard">
-                  <Button
-                    variant="outline"
-                    className="rounded-full border border-white/30 text-white hover:bg-white/10 px-5 text-sm"
+                  <HoverBorderGradient
+                    containerClassName="rounded-full"
+                    as="button"
+                    className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
                   >
                     Dashboard
-                  </Button>
+                  </HoverBorderGradient>
                 </Link>
-                <Button
-                  onClick={logoutUser}
-                  variant="outline"
-                  className="ml-2 rounded-full border border-red-400 text-white hover:bg-red-500/20 px-5 text-sm"
-                >
-                  Logout
-                </Button>
+
               </>
             ) : (
               <Link href="/signup">
-                <Button
-                  variant="outline"
-                  className="rounded-full border border-white/30 text-white hover:bg-white/10 px-5 text-sm"
+                <HoverBorderGradient
+                  containerClassName="rounded-full"
+                  as="button"
+                  className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
                 >
                   Login / Signup
-                </Button>
+                </HoverBorderGradient>
               </Link>
             )}
           </>
@@ -137,7 +133,7 @@ const Navbar = () => {
                       Dashboard
                     </Button>
                   </Link>
-                  
+
                 </>
               ) : (
                 <Link href="/signup" onClick={() => setMenuOpen(false)}>
