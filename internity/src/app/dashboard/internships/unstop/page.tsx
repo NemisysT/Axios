@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { RefreshCw, Building, MapPin, Clock, DollarSign } from "lucide-react"
+import { RefreshCw, Building, MapPin, Clock, Link } from "lucide-react"
 import { motion } from "framer-motion"
 import { LayoutWrapper } from "../components/layout-wrapper"
 import { UnstopCredentials } from "../components/unstop-credentials"
@@ -14,71 +14,62 @@ interface UnstopInternship {
   id: string
   title: string
   company: string
-  location: string
+  applications: string
   duration: string
-  stipend: string
-  category: string
+  link: string
+  days_left: string
 }
 
 export default function UnstopInternshipsPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [internships, setInternships] = useState<UnstopInternship[]>([])
+  const [preference, setPreferences] = useState<PreferencesData>()
 
-  // Mock Unstop internships
-  const mockInternships: UnstopInternship[] = [
-    {
-      id: "un1",
-      title: "Machine Learning Engineer",
-      company: "AI Solutions",
-      location: "Hyderabad",
-      duration: "6 Months",
-      stipend: "₹ 25,000 /month",
-      category: "machine-learning-internship",
-    },
-    {
-      id: "un2",
-      title: "Data Analyst",
-      company: "DataInsights",
-      location: "Remote",
-      duration: "3 Months",
-      stipend: "₹ 12,000 /month",
-      category: "data-analysis-internship",
-    },
-    {
-      id: "un3",
-      title: "Backend Developer",
-      company: "ServerStack",
-      location: "Delhi",
-      duration: "4 Months",
-      stipend: "₹ 18,000 /month",
-      category: "backend-development-internship",
-    },
-  ]
-
-  // Load initial data
-  useEffect(() => {
-    setInternships(mockInternships)
-  }, [])
-
-  // Handle scraping for Unstop
-  const handleScrape = async () => {
+  const startUnstopScraper = async () => {
     setIsLoading(true)
+    try {
+      const response = await fetch("http://127.0.0.1:5000/api/v1/scrape", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(preference),
+      })
 
-    // In a real app, this would call the API to scrape Unstop
-    // For now, we'll simulate a delay and then update with mock data
-    setTimeout(() => {
-      // For demo purposes, just update with the mock data after a delay
-      setInternships([...mockInternships])
-      setIsLoading(false)
-    }, 2000)
+      if (!response.ok) {
+        throw new Error("Scraping failed")
+      }
+    } catch (error) {
+      console.error("Error scraping LinkedIn internships:", error)
+    }
   }
 
-  // Handle saving Unstop preferences
-  const handleSavePreferences = (preferences: PreferencesData) => {
-    console.log("Saving Unstop preferences:", preferences)
+  const fetchUnstopInternships = async () => {
+    try {
+      const res = await fetch("http://127.0.0.1:5000/api/v1/internships", {
+        method: "GET",
+      })
+      const data = await res.json()
+      setInternships(data.internships || [])
+    } catch (error) {
+      console.error("Error fetching internships:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
+  // Handler that chains both functions together
+  const handleScrape = async () => {
+    await startUnstopScraper()
+    await fetchUnstopInternships()
+  }
+
+  // Handle saving LinkedIn preferences
+  const handleSavePreferences = (preferences: PreferencesData) => {
+    console.log("Saving LinkedIn preferences:", preferences)
+    setPreferences(preferences)
     // In a real app, this would save the preferences to the backend
-    // fetch('/api/preferences/unstop', {
+    // fetch('/api/preferences/linkedin', {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify(preferences)
@@ -86,7 +77,6 @@ export default function UnstopInternshipsPage() {
 
     alert("Unstop preferences saved successfully!")
   }
-
   return (
     <LayoutWrapper title="Unstop Internships">
       <div className="flex justify-between items-center mb-4">
@@ -134,23 +124,34 @@ export default function UnstopInternshipsPage() {
                 <div className="grid grid-cols-1 gap-2 mt-3">
                   <div className="flex items-center text-[#f1eece]/70 text-sm">
                     <MapPin size={14} className="mr-1" />
-                    {internship.location}
+                    {internship.applications}
                   </div>
-                  <div className="flex items-center text-[#f1eece]/70 text-sm">
+                  {/* <div className="flex items-center text-[#f1eece]/70 text-sm">
                     <Clock size={14} className="mr-1" />
                     {internship.duration}
-                  </div>
-                  <div className="flex items-center text-[#f1eece]/70 text-sm">
-                    <DollarSign size={14} className="mr-1" />
-                    {internship.stipend}
-                  </div>
+                  </div> */}
                 </div>
 
-                <div className="mt-auto pt-3">
-                  <Badge className="bg-[#f1eece]/10 text-[#f1eece]/90 border border-[#f1eece]/20">
-                    {internship.category}
-                  </Badge>
+                <div className="flex justify-between items-center text-[#f1eece]/70 text-sm mt-1">
+                  <div className="mt-auto pt-3">
+                    <a
+                      href={internship.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Badge className="bg-[#f1eece]/10 text-[#f1eece]/90 border border-[#f1eece]/20 cursor-pointer hover:bg-[#f1eece]/20 transition">
+                        {internship.days_left}
+                      </Badge>
+                    </a>
+                  </div>
+                  <div className="flex pt-3 items-center text-green-400 text-sm">  
+                      <Link size={14} className="mr-1" />
+                      <a href={internship.link} target="_blank" rel="noopener noreferrer">
+                      Apply Now
+                    </a>
+                    </div>
                 </div>
+
               </div>
             </motion.div>
           ))}

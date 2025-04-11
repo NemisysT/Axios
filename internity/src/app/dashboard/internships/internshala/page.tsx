@@ -25,74 +25,60 @@ interface InternshalaInternship {
 export default function InternshalaInternshipsPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [internships, setInternships] = useState<InternshalaInternship[]>([])
+const [preference, setPreferences] = useState<PreferencesData>()
 
-  // Mock Internshala internships
-  const mockInternships: InternshalaInternship[] = [
-    {
-      id: "in1",
-      title: "WordPress Developer",
-      company: "Godwin Vox Dei",
-      applicants: "N/A",
-      days_left: "10",
-      skills: ["Fresher"],
-      category: "full-stack-development",
-      scraped_at: "2025-04-10T16:02:37.458Z",
-      url: null,
-    },
-    {
-      id: "in2",
-      title: "React Developer",
-      company: "CodeCraft",
-      applicants: "50+",
-      days_left: "5",
-      skills: ["React", "JavaScript", "CSS"],
-      category: "frontend-development",
-      scraped_at: "2025-04-10T16:02:37.458Z",
-      url: "https://example.com/job1",
-    },
-    {
-      id: "in3",
-      title: "UI/UX Designer",
-      company: "DesignHub",
-      applicants: "25+",
-      days_left: "15",
-      skills: ["Figma", "Adobe XD", "UI Design"],
-      category: "design",
-      scraped_at: "2025-04-10T16:02:37.458Z",
-      url: "https://example.com/job2",
-    },
-  ]
-
-  // Load initial data
-  useEffect(() => {
-    setInternships(mockInternships)
-  }, [])
-
-  // Handle scraping for Internshala
-  const handleScrape = async () => {
+  const startInternshalaScraper = async () => {
     setIsLoading(true)
+    try {
+      const response = await fetch(" http://127.0.0.1:5000/api/internships/scrape", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(preference),
+      })
 
-    // In a real app, this would call the API to scrape Internshala
-    // For now, we'll simulate a delay and then update with mock data
-    setTimeout(() => {
-      // For demo purposes, just update with the mock data after a delay
-      setInternships([...mockInternships])
-      setIsLoading(false)
-    }, 2000)
+      if (!response.ok) {
+        throw new Error("Scraping failed")
+      }
+    } catch (error) {
+      console.error("Error scraping LinkedIn internships:", error)
+    }
   }
 
-  // Handle saving Internshala preferences
-  const handleSavePreferences = (preferences: PreferencesData) => {
-    console.log("Saving Internshala preferences:", preferences)
+  const fetchInternshalaInternships = async () => {
+    try {
+      const res = await fetch("http://127.0.0.1:5000/api/internships/list", {
+        method: "GET",
+      })
+      const data = await res.json()
+      console.log(data)
+      setInternships(data.data || [])
+    } catch (error) {
+      console.error("Error fetching internships:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
+  // Handler that chains both functions together
+  const handleScrape = async () => {
+    await startInternshalaScraper()
+    await fetchInternshalaInternships()
+  }
+
+  // Handle saving LinkedIn preferences
+  const handleSavePreferences = (preferences: PreferencesData) => {
+    console.log("Saving internshala preferences:", preferences)
+    setPreferences(preferences)
     // In a real app, this would save the preferences to the backend
-    // fetch('/api/preferences/internshala', {
+    // fetch('/api/preferences/linkedin', {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify(preferences)
     // })
 
-    alert("Internshala preferences saved successfully!")
+    alert("internshala preferences saved successfully!")
   }
 
   return (
