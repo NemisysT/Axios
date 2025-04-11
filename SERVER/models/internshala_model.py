@@ -29,6 +29,7 @@ class InternshalaInternshipModel:
                 'skills': 1,
                 'category': 1,
                 'apply_link': 1,
+                "stipend": 1,
             }
         )
         internships = []
