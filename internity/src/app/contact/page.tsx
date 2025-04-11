@@ -3,6 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import MainLayout from "@/components/layout/MainLayout"
+import { toast } from "sonner"
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -41,23 +42,23 @@ export default function ContactPage() {
   const handleSubmit = async (e: SubmitEvent): Promise<void> => {
     e.preventDefault()
 
-    // Example implementation:
     try {
-      const response= await fetch(' http://127.0.0.1:5000/user/contactus', {
+      const response = await fetch('http://127.0.0.1:5000/user/contactus', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      })
-      const data=await response.json()
-      if(response.ok){
+      });
+      const data = await response.json();
+      if (response.ok) {
         setFormData({ name: '', email: '', message: '', phone: '' });
-        console.log("Form submitted:", formData)
-        alert("Thanks for your message! This form is not yet connected to a backend.")
+        console.log("Form submitted:", formData);
+        toast.success("Thanks for your message! This form is not yet connected to a backend.");
       }
     } catch (error) {
       console.error('Error:', error);
+      toast.error("Something went wrong. Please try again later.");
     }
   }
 

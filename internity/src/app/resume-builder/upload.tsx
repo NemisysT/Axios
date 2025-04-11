@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
-
+import { toast } from "sonner"
 export default function UploadResume() {
   const [file, setFile] = useState<File | null>(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -38,7 +38,7 @@ export default function UploadResume() {
       ) {
         setFile(droppedFile)
       } else {
-        alert("Please upload a PDF or Word document")
+        toast.success("Please upload a PDF or Word document")
       }
     }
   }

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { FileUpload } from "@/components/ui/file-upload"
 import Navbar from "@/components/layout/Navbar"
+import { toast } from "sonner"
 
 export default function UploadResume() {
   const [file, setFile] = useState<File | null>(null)
@@ -24,7 +25,7 @@ export default function UploadResume() {
       if (validTypes.includes(uploaded.type)) {
         setFile(uploaded)
       } else {
-        alert("Please upload a valid PDF or Word document")
+        toast.success("Please upload a valid PDF or Word document")
       }
     }
   }
@@ -55,11 +56,11 @@ export default function UploadResume() {
         localStorage.setItem("atsScores", JSON.stringify(data.ats_scores))
         router.push("/resume-builder/gemini-result")
       } else {
-        alert("Error processing resume: " + (data.error || data.message))
+        toast.success("Error processing resume: " + (data.error || data.message))
       }
     } catch (err) {
       console.error("Upload error:", err)
-      alert("Something went wrong while uploading the resume.")
+      toast.success("Something went wrong while uploading the resume.")
     } finally {
       setLoading(false)
     }

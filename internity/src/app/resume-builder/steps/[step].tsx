@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import { toast } from "sonner"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -286,7 +286,7 @@ export default function ResumeBuilderStep({ params }: { params: { step: string }
 
   // Generate PDF (mock function)
   const generatePDF = () => {
-    alert("In a real application, this would generate a PDF of your resume.")
+    toast.success("In a real application, this would generate a PDF of your resume.")
     // This would typically call a PDF generation library or API
   }
 
