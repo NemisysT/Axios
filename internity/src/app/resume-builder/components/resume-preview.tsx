@@ -32,64 +32,6 @@ export default function ResumePreview({ formData }: ResumePreviewProps) {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 space-y-6">
-          {/* Experience Section */}
-          {experience.length > 0 && experience.some((exp) => exp.title || exp.company) && (
-            <section>
-              <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-3 flex items-center">
-                <Briefcase size={18} className="mr-2" />
-                Professional Experience
-              </h2>
-              <div className="space-y-4">
-                {experience.map((exp) =>
-                  exp.title || exp.company ? (
-                    <div key={exp.id} className="space-y-1">
-                      <div className="font-bold">{exp.title || "Job Title"}</div>
-                      <div className="flex justify-between">
-                        <div className="font-medium">{exp.company || "Company"}</div>
-                        <div className="text-gray-600 text-sm flex items-center">
-                          <Calendar size={12} className="mr-1" />
-                          {exp.startDate || "Start Date"} - {exp.endDate || "Present"}
-                        </div>
-                      </div>
-                      {exp.description && <p className="text-sm mt-1">{exp.description}</p>}
-                    </div>
-                  ) : null,
-                )}
-              </div>
-            </section>
-          )}
-
-          {/* Projects Section */}
-          {projects.length > 0 && projects.some((proj) => proj.title) && (
-            <section>
-              <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-3 flex items-center">
-                <Code size={18} className="mr-2" />
-                Projects
-              </h2>
-              <div className="space-y-4">
-                {projects.map((project) =>
-                  project.title ? (
-                    <div key={project.id} className="space-y-1">
-                      <div className="font-bold">{project.title}</div>
-                      {project.description && <p className="text-sm">{project.description}</p>}
-                      {project.technologies.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {project.technologies.map((tech) => (
-                            <span key={tech} className="px-2 py-0.5 bg-gray-100 text-gray-800 rounded-full text-xs">
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ) : null,
-                )}
-              </div>
-            </section>
-          )}
-        </div>
-
         <div className="space-y-6">
           {/* Education Section */}
           {education.length > 0 && education.some((edu) => edu.degree || edu.institution) && (
@@ -127,6 +69,64 @@ export default function ResumePreview({ formData }: ResumePreviewProps) {
                     {skill}
                   </span>
                 ))}
+              </div>
+            </section>
+          )}
+        </div>
+
+        <div className="md:col-span-2 space-y-6">
+          {/* Projects Section */}
+          {projects.length > 0 && projects.some((proj) => proj.title) && (
+            <section>
+              <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-3 flex items-center">
+                <Code size={18} className="mr-2" />
+                Projects
+              </h2>
+              <div className="space-y-4">
+                {projects.map((project) =>
+                  project.title ? (
+                    <div key={project.id} className="space-y-1">
+                      <div className="font-bold">{project.title}</div>
+                      {project.description && <p className="text-sm">{project.description}</p>}
+                      {project.technologies.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {project.technologies.map((tech) => (
+                            <span key={tech} className="px-2 py-0.5 bg-gray-100 text-gray-800 rounded-full text-xs">
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : null,
+                )}
+              </div>
+            </section>
+          )}
+
+          {/* Experience Section */}
+          {experience.length > 0 && experience.some((exp) => exp.title || exp.company) && (
+            <section>
+              <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-3 flex items-center">
+                <Briefcase size={18} className="mr-2" />
+                Professional Experience
+              </h2>
+              <div className="space-y-4">
+                {experience.map((exp) =>
+                  exp.title || exp.company ? (
+                    <div key={exp.id} className="space-y-1">
+                      <div className="font-bold">{exp.title || "Job Title"}</div>
+                      <div className="flex justify-between">
+                        <div className="font-medium">{exp.company || "Company"}</div>
+                        <div className="text-gray-600 text-sm flex items-center">
+                          <Calendar size={12} className="mr-1" />
+                          {exp.startDate || "Start Date"} - {exp.endDate || "Present"}
+                        </div>
+                      </div>
+                      {exp.description && <p className="text-sm mt-1">{exp.description}</p>}
+                    </div>
+                  ) : null,
+                )}
               </div>
             </section>
           )}

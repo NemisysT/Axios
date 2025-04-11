@@ -4,7 +4,7 @@ from bson import json_util
 from middlewares.auth_middleware import jwt_required
 import json
 
-internship_blueprint = Blueprint('internship', __name__)
+internship_blueprint = Blueprint('internship_routes', __name__)
 internship_controller = InternshipController()
 
 @internship_blueprint.route('/scrape', methods=['GET'])

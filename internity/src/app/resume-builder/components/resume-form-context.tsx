@@ -512,7 +512,7 @@ export function ResumeFormProvider({ children }: { children: ReactNode }) {
   }
 
   const generateResumeWithTemplate = () => {
-    const { basicInfo, education, experience, skills, projects } = formData;
+    const { basicInfo, education, experience, skills, projects } = formData
 
     return `
       <!DOCTYPE html>
@@ -520,71 +520,149 @@ export function ResumeFormProvider({ children }: { children: ReactNode }) {
         <head>
           <style>
             body {
-              font-family: Arial, sans-serif;
-              line-height: 1.6;
+              font-family: 'Times New Roman', Times, serif;
+              line-height: 1.2;
+              max-width: 800px;
+              margin: 0 auto;
               padding: 1rem;
-            }
-            h1, h2 {
               color: #333;
             }
+            .header {
+              text-align: center;
+              margin-bottom: 1rem;
+            }
+            .header h1 {
+              font-size: 24pt;
+              margin-bottom: 0.5rem;
+              text-transform: uppercase;
+            }
+            .contact-info {
+              font-size: 10pt;
+              margin-bottom: 1rem;
+            }
+            .section-title {
+              font-size: 12pt;
+              text-transform: uppercase;
+              border-bottom: 1px solid black;
+              margin-top: 1rem;
+              margin-bottom: 0.5rem;
+              font-weight: bold;
+            }
+            .entry {
+              margin-bottom: 0.75rem;
+              position: relative;
+            }
+            .entry-header {
+              display: flex;
+              justify-content: space-between;
+              font-weight: bold;
+            }
+            .entry-title {
+              font-weight: bold;
+              font-style: italic;
+            }
+            .entry-subtitle {
+              font-style: italic;
+            }
+            .entry-date {
+              text-align: right;
+            }
+            .entry-location {
+              text-align: right;
+            }
             ul {
+              margin-top: 0.25rem;
+              margin-bottom: 0.25rem;
               padding-left: 1.5rem;
             }
             li {
+              margin-bottom: 0.25rem;
+              font-size: 10pt;
+            }
+            .skills-section {
               margin-bottom: 0.5rem;
             }
-            a {
-              color: #007BFF;
-              text-decoration: none;
+            .skills-category {
+              font-weight: bold;
             }
-            a:hover {
-              text-decoration: underline;
+            a {
+              color: #000;
+              text-decoration: none;
             }
           </style>
         </head>
         <body>
-          <h1>${basicInfo.name}</h1>
-          <p>Email: <a href="mailto:${basicInfo.email}">${basicInfo.email}</a></p>
-          <p>Phone: ${basicInfo.phone}</p>
-          <hr />
+          <div class="header">
+            <h1>${basicInfo.name}</h1>
+            <div class="contact-info">
+              ${basicInfo.phone} | <a href="mailto:${basicInfo.email}">${basicInfo.email}</a>
+            </div>
+          </div>
 
-          <h2>Education</h2>
-          <ul>
-            ${education
-              .map(
-                (edu) =>
-                  `<li><strong>${edu.degree}</strong> at ${edu.institution} (${edu.year})</li>`
-              )
-              .join("")}
-          </ul>
+          <div class="section-title">Education</div>
+          ${education
+            .map(
+              (edu) => `
+              <div class="entry">
+                <div class="entry-header">
+                  <div class="entry-title">${edu.institution}</div>
+                  <div class="entry-location">${edu.year.includes("-") ? edu.year : `${edu.year}`}</div>
+                </div>
+                <div class="entry-subtitle">${edu.degree}</div>
+              </div>
+            `,
+            )
+            .join("")}
 
-          <h2>Experience</h2>
-          <ul>
-            ${experience
-              .map(
-                (exp) =>
-                  `<li><strong>${exp.title}</strong> at ${exp.company} (${exp.startDate} - ${exp.endDate})<br />${exp.description}</li>`
-              )
-              .join("")}
-          </ul>
+          <div class="section-title">Experience</div>
+          ${experience
+            .map(
+              (exp) => `
+              <div class="entry">
+                <div class="entry-header">
+                  <div class="entry-title">${exp.title}</div>
+                  <div class="entry-date">${exp.startDate} - ${exp.endDate}</div>
+                </div>
+                <div class="entry-header">
+                  <div class="entry-subtitle">${exp.company}</div>
+                  <div class="entry-location"></div>
+                </div>
+                <ul>
+                  ${exp.description
+                    .split("\n")
+                    .map((line) => `<li>${line}</li>`)
+                    .join("")}
+                </ul>
+              </div>
+            `,
+            )
+            .join("")}
 
-          <h2>Skills</h2>
-          <p>${skills.join(", ")}</p>
+          <div class="section-title">Projects</div>
+          ${projects
+            .map(
+              (proj) => `
+              <div class="entry">
+                <div class="entry-header">
+                  <div class="entry-title">${proj.title}</div>
+                  <div class="entry-date"></div>
+                </div>
+                <ul>
+                  <li>${proj.description}</li>
+                  ${proj.technologies.length > 0 ? `<li>Technologies: ${proj.technologies.join(", ")}</li>` : ""}
+                </ul>
+              </div>
+            `,
+            )
+            .join("")}
 
-          <h2>Projects</h2>
-          <ul>
-            ${projects
-              .map(
-                (proj) =>
-                  `<li><strong>${proj.title}</strong><br />${proj.description}<br /><em>Technologies:</em> ${proj.technologies.join(
-                    ", "
-                  )}</li>`
-              )
-              .join("")}
-          </ul>
+          <div class="section-title">Technical Skills</div>
+          <div class="skills-section">
+            <span class="skills-category">Skills:</span> ${skills.join(", ")}
+          </div>
         </body>
       </html>
-    `;
+    `
   }
 
   return (
@@ -632,3 +710,43 @@ export function useResumeForm() {
   }
   return context
 }
+
+
+export interface BasicInfo {
+  name: string
+  email: string
+  phone: string
+  profilePicture: File | null
+}
+
+export interface Education {
+  degree: string
+  institution: string
+  year: string
+  id: string
+}
+
+export interface Experience {
+  title: string
+  company: string
+  startDate: string
+  endDate: string
+  description: string
+  id: string
+}
+
+export interface Project {
+  id: string
+  title: string
+  description: string
+  technologies: string[]
+}
+
+export interface FormData {
+  basicInfo: BasicInfo
+  education: Education[]
+  experience: Experience[]
+  skills: string[]
+  projects: Project[]
+}
+
