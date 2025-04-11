@@ -15,6 +15,18 @@ export function PreferencesSection() {
   const [passingYear, setPassingYear] = useState("2026")
   const [quickApply, setQuickApply] = useState(true)
 
+  const categoryOptions = [
+  "backend-development",
+  "devops-cloud",
+  "frontend-development",
+  "Full-Stack-Development",
+  "machine-learning",
+  "data-science-machine-learning",
+  "ui-ux",
+  "blockchain"  // Newly added
+  ]
+  
+
   // Handle saving application preferences
   const handleSavePreferences = () => {
     // In a real app, this would save the preferences to the database
@@ -51,14 +63,14 @@ export function PreferencesSection() {
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#131318] border-[#f1eece]/30 text-[#f1eece]">
-                  <SelectItem value="tech">Tech</SelectItem>
-                  <SelectItem value="media">Media</SelectItem>
-                  <SelectItem value="finance">Finance</SelectItem>
-                  <SelectItem value="marketing">Marketing</SelectItem>
-                  <SelectItem value="design">Design</SelectItem>
-                  <SelectItem value="data">Data</SelectItem>
+                  {categoryOptions.map((cat) => (
+                    <SelectItem key={cat} value={cat.toLowerCase().replace(/\s+/g, "_")}>
+                      {cat}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
+
             </div>
 
             <div className="space-y-2">
