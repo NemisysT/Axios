@@ -12,10 +12,10 @@ import { Check, Key, Mail, Hash, Tag } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export default function SmartScraperCredentialsForm() {
-  const keywordsList = ["web-development", "uiux", "datasci", "marketing", "ai-ml"]
+  const keywordsList = ["web-development", "backend-development", "front-end-development", "machine-learning", "blockchain-development"]
 
   const [formData, setFormData] = useState({
-    keywords: "webdev",
+    keywords: "web-development",
     max_applications: 20,
     max_pages: 2,
     credentials: {
