@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Lock, ChevronUp, ChevronDown, Save, Shield } from "lucide-react"
-
+import { toast } from "sonner"
 export function UnstopCredentials() {
   const [credentialsOpen, setCredentialsOpen] = useState(false)
   const [credentials, setCredentials] = useState({
@@ -26,7 +26,7 @@ export function UnstopCredentials() {
   const handleSaveCredentials = () => {
     // In a real app, this would save the credentials to the database
     console.log("Saving Unstop credentials:", credentials)
-    alert("Unstop credentials saved successfully!")
+    toast.success("Unstop credentials saved successfully!")
   }
 
   return (

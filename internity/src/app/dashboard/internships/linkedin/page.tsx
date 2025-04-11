@@ -8,7 +8,7 @@ import { motion } from "framer-motion"
 import { LayoutWrapper } from "../components/layout-wrapper"
 import { LinkedInCredentials } from "../components/linkedin-credentials"
 import { PreferencesSectionBase, type PreferencesData } from "../components/preferences-section-base"
-
+import { toast } from "sonner"
 // Type definition for LinkedIn internship data
 interface LinkedInInternship {
   id: string
@@ -76,7 +76,7 @@ export default function LinkedInInternshipsPage() {
     //   body: JSON.stringify(preferences)
     // })
 
-    alert("LinkedIn preferences saved successfully!")
+    toast.success("LinkedIn preferences saved successfully!")
   }
 
   return (

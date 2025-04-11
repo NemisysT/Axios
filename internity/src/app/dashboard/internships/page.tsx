@@ -8,6 +8,7 @@ import { motion } from "framer-motion"
 import { LayoutWrapper } from "./components/layout-wrapper"
 import { useRouter } from "next/navigation"
 import { PreferencesSectionBase, type PreferencesData } from "./components/preferences-section-base"
+import { toast } from "sonner"
 
 // Type definitions for the internship data structures
 interface LinkedInInternship {
@@ -122,7 +123,7 @@ export default function InternshipsPage() {
     //   body: JSON.stringify(preferences)
     // })
 
-    alert("General preferences saved successfully!")
+    toast.success("General preferences saved successfully!")
   }
 
   // Render internship card based on its type
