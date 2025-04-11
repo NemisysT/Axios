@@ -8,7 +8,7 @@ import { motion } from "framer-motion"
 import { LayoutWrapper } from "../components/layout-wrapper"
 import { UnstopCredentials } from "../components/unstop-credentials"
 import { PreferencesSectionBase, type PreferencesData } from "../components/preferences-section-base"
-
+import { toast } from "sonner"
 // Type definition for Unstop internship data
 interface UnstopInternship {
   id: string
@@ -75,7 +75,7 @@ export default function UnstopInternshipsPage() {
     //   body: JSON.stringify(preferences)
     // })
 
-    alert("Unstop preferences saved successfully!")
+    toast.success("Unstop preferences saved successfully!")
   }
   return (
     <LayoutWrapper title="Unstop Internships">
