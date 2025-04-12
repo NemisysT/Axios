@@ -64,7 +64,7 @@ export default function BlogPage() {
                 key={index}
                 className="overflow-hidden transition-all duration-300 border rounded-xl bg-gradient-to-br from-gray-900 to-black border-gray-800 hover:border-purple-900/30 hover:-translate-y-1"
               >
-                <div className="h-48 bg-purple-900/20" aria-hidden="true"></div>
+                {/* <div className="h-48 bg-purple-900/20" aria-hidden="true"></div> */}
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4 text-sm text-gray-400">
                     <span>{post.category}</span>
