@@ -6,9 +6,32 @@ import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { Rocket, CheckCircle, AlertTriangle, Award, ArrowLeft, FileText } from "lucide-react"
 
+interface ResumeData {
+  name: string;
+  email: string;
+  phone: string;
+  experience: string[];
+  education: string[];
+  skills: string[];
+  // Add other fields as necessary
+}
+
+interface Feedback {
+  good: string
+  needsImprovement?: string
+}
+
+interface AtsScores {
+  totalScore: number
+  formattingScore: number
+  grammarScore: number
+  formattingFeedback: Feedback
+  grammarFeedback: Feedback
+}
+
 export default function GeminiResultPage() {
-  const [resumeData, setResumeData] = useState<any>(null)
-  const [atsScores, setAtsScores] = useState<any>(null)
+  const [resumeData, setResumeData] = useState<ResumeData | null>(null)
+  const [atsScores, setAtsScores] = useState<AtsScores | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -24,24 +47,11 @@ export default function GeminiResultPage() {
   const handleBack = () => {
     router.push("/resume-builder")
   }
-  interface Feedback {
-    good: string
-    needsImprovement?: string
-  }
-  
-  interface AtsScores {
-    totalScore: number
-    formattingScore: number
-    grammarScore: number
-    formattingFeedback: Feedback
-    grammarFeedback: Feedback
-  }
-  
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-black text-gray-100">
       <Card className="w-full max-w-4xl p-8 shadow-2xl rounded-2xl border border-purple-700/30 bg-zinc-900/90 backdrop-blur">
-        <div className="flex flex-col items-center justify-center gap-3 mb-10">
+      <div className="flex flex-col items-center justify-center gap-3 mb-10">
           <div className="flex items-center gap-3">
             <Rocket className="h-10 w-10 text-purple-500" />
             <h1 className="text-4xl font-bold text-center bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
@@ -187,14 +197,16 @@ export default function GeminiResultPage() {
         )}
 
         <div className="mt-10 flex justify-center">
-          <Button
-            onClick={handleBack}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 px-10 py-6 rounded-lg flex items-center gap-3 text-lg font-medium shadow-lg shadow-purple-900/30 transition-all hover:shadow-purple-900/50"
-          >
-            <ArrowLeft className="h-5 w-5" /> Back to Resume Builder
-          </Button>
+          <div className="mt-10 flex justify-center">
+            <Button
+              onClick={handleBack}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 px-10 py-6 rounded-lg flex items-center gap-3 text-lg font-medium shadow-lg shadow-purple-900/30 transition-all hover:shadow-purple-900/50"
+            >
+              <ArrowLeft className="h-5 w-5" /> Back to Resume Builder
+            </Button>
+          </div>
         </div>
-      </Card>
-    </div>
+        </Card>
+      </div>
   )
 }

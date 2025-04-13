@@ -10,7 +10,7 @@ import {
 } from "postprocessing";
 
 interface Distortion {
-  uniforms: Record<string, { value: any }>;
+  uniforms: Record<string, { value: THREE.Vector2 | THREE.Vector3 | THREE.Vector4 }>;
   getDistortion: string;
   getJS?: (progress: number, time: number) => THREE.Vector3;
 }
@@ -483,7 +483,7 @@ class CarLights {
     const geometry = new THREE.TubeGeometry(curve, 40, 1, 8, false);
 
     const instanced = new THREE.InstancedBufferGeometry().copy(
-      geometry as any,
+      geometry as unknown as THREE.InstancedBufferGeometry,
     ) as THREE.InstancedBufferGeometry;
     instanced.instanceCount = options.lightPairsPerRoadWay * 2;
 
@@ -658,7 +658,7 @@ class LightsSticks {
     const options = this.options;
     const geometry = new THREE.PlaneGeometry(1, 1);
     const instanced = new THREE.InstancedBufferGeometry().copy(
-      geometry as any,
+      geometry as unknown as THREE.InstancedBufferGeometry,
     ) as THREE.InstancedBufferGeometry;
     const totalSticks = options.totalSideLightSticks;
     instanced.instanceCount = totalSticks;
@@ -816,7 +816,7 @@ class Road {
       segments,
     );
 
-    let uniforms: Record<string, { value: any }> = {
+    let uniforms: Record<string, { value: THREE.Color | number | THREE.Vector2 | THREE.Vector3 }> = {
       uTravelLength: { value: options.length },
       uColor: {
         value: new THREE.Color(
@@ -993,7 +993,12 @@ class App {
   renderPass!: RenderPass;
   bloomPass!: EffectPass;
   clock: THREE.Clock;
-  assets: Record<string, any>;
+  assets: {
+    smaa?: {
+      search?: HTMLImageElement;
+      area?: HTMLImageElement;
+    };
+  };
   disposed: boolean;
   road: Road;
   leftCarLights: CarLights;
@@ -1127,17 +1132,20 @@ class App {
     return new Promise((resolve) => {
       const manager = new THREE.LoadingManager(resolve);
 
-      const searchImage = new Image();
+        // Removed erroneous assignment
       const areaImage = new Image();
-      assets.smaa = {};
+      if (!assets.smaa) {
+        assets.smaa = {};
+      }
 
+      const searchImage = new Image();
       searchImage.addEventListener("load", function () {
-        assets.smaa.search = this;
+        assets.smaa!.search = this;
         manager.itemEnd("smaa-search");
       });
 
       areaImage.addEventListener("load", function () {
-        assets.smaa.area = this;
+        assets.smaa!.area = this;
         manager.itemEnd("smaa-area");
       });
 

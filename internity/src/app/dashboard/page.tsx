@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
@@ -77,8 +77,8 @@ export default function Dashboard() {
     },
   ]
 
-  // Mock LinkedIn internships
-  const mockLinkedInInternships: LinkedInInternship[] = [
+  // Memoized mock data
+  const mockLinkedInInternships = useMemo(() => [
     {
       id: "li1",
       title: "Web Development",
@@ -106,10 +106,9 @@ export default function Dashboard() {
       stipend: "₹ 20,000 - 25,000 /month",
       category: "full-stack-development-internship",
     },
-  ]
+  ], [])
 
-  // Mock Internshala internships
-  const mockInternshalaInternships: InternshalaInternship[] = [
+  const mockInternshalaInternships = useMemo(() => [
     {
       id: "in1",
       title: "WordPress Developer",
@@ -143,10 +142,9 @@ export default function Dashboard() {
       scraped_at: "2025-04-10T16:02:37.458Z",
       url: "https://example.com/job2",
     },
-  ]
+  ], [])
 
-  // Mock Unstop internships
-  const mockUnstopInternships: UnstopInternship[] = [
+  const mockUnstopInternships = useMemo(() => [
     {
       id: "un1",
       title: "Machine Learning Engineer",
@@ -174,7 +172,7 @@ export default function Dashboard() {
       stipend: "₹ 18,000 /month",
       category: "backend-development-internship",
     },
-  ]
+  ], [])
 
   useEffect(() => {
     const clock = document.getElementById("system-clock")
