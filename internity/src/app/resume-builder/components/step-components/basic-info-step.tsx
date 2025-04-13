@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { User, Mail, Phone } from "lucide-react"
 import { useResumeForm } from "../../components/resume-form-context"
+import Image from "next/image"
 
 export default function BasicInfoStepContent() {
   const { formData, previewUrl, handleBasicInfoChange, handleFileChange } = useResumeForm()
@@ -20,7 +21,13 @@ export default function BasicInfoStepContent() {
         <div className="flex flex-col items-center mb-6">
           <div className="w-32 h-32 rounded-full bg-[rgba(30,30,35,0.5)] flex items-center justify-center overflow-hidden mb-4 border-4 border-[#131318] shadow-lg">
             {previewUrl ? (
-              <img src={previewUrl || "/placeholder.svg"} alt="Profile" className="w-full h-full object-cover" />
+              <Image
+              src={previewUrl || "/placeholder.svg"}
+              alt="Profile"
+              width={128}
+              height={128}
+              className="w-full h-full object-cover"
+            />
             ) : (
               <User size={48} className="text-[#f1eece]/40" />
             )}

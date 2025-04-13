@@ -24,6 +24,19 @@ export default function GeminiResultPage() {
   const handleBack = () => {
     router.push("/resume-builder")
   }
+  interface Feedback {
+    good: string
+    needsImprovement?: string
+  }
+  
+  interface AtsScores {
+    totalScore: number
+    formattingScore: number
+    grammarScore: number
+    formattingFeedback: Feedback
+    grammarFeedback: Feedback
+  }
+  
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-black text-gray-100">

@@ -26,9 +26,7 @@ export default function ContactPage() {
     phone: string
   }
 
-  interface InputChangeEvent extends React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> {}
-
-  const handleInputChange = (e: InputChangeEvent): void => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     const { name, value } = e.target
     setFormData((prevFormData: FormData) => ({
       ...prevFormData,
@@ -36,10 +34,7 @@ export default function ContactPage() {
     }))
   }
 
-  // Handle form submission
-  interface SubmitEvent extends React.FormEvent<HTMLFormElement> {}
-
-  const handleSubmit = async (e: SubmitEvent): Promise<void> => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault()
 
     try {

@@ -25,6 +25,7 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { Toaster } from "sonner"
 import SmartScraperCredentialsForm from "./components/smart-scraper-credentials-form"
+import Image from "next/image"
 
 export default function Dashboard() {
   const [agentActive, setAgentActive] = useState(false)
@@ -209,35 +210,7 @@ export default function Dashboard() {
     setLinkedInInternships(mockLinkedInInternships)
     setInternshalaInternships(mockInternshalaInternships)
     setUnstopInternships(mockUnstopInternships)
-
-    // MongoDB integration would look like this (commented out as requested)
-    /*
-    const fetchInternships = async () => {
-      try {
-        // Connect to MongoDB
-        // const client = await connectToMongoDB();
-        // const db = client.db("resume_platform");
-        
-        // Fetch internships for each platform
-        // const linkedInData = await db.collection("internships").find({ source: "linkedin" }).toArray();
-        // const internshalaData = await db.collection("internships").find({ source: "internshala" }).toArray();
-        // const unstopData = await db.collection("internships").find({ source: "unstop" }).toArray();
-        
-        // Update state with fetched data
-        // setLinkedInInternships(linkedInData);
-        // setInternshalaInternships(internshalaData);
-        // setUnstopInternships(unstopData);
-        
-        // Close MongoDB connection
-        // await client.close();
-      } catch (error) {
-        console.error("Error fetching internships:", error);
-      }
-    };
-    
-    fetchInternships();
-    */
-  }, [])
+  }, [mockLinkedInInternships, mockInternshalaInternships, mockUnstopInternships]) // Added missing dependencies
 
   const handleAgentToggle = (checked: boolean) => {
     setAgentActive(checked)
@@ -410,9 +383,11 @@ export default function Dashboard() {
               <div className="p-6">
                 <div className="flex flex-col items-center mb-6">
                   <div className="w-20 h-20 rounded-full bg-[rgba(30,30,35,0.5)] flex items-center justify-center overflow-hidden mb-4 border-2 border-[#f1eece]/30">
-                    <img
+                    <Image
                       src={user.profileImage || "/placeholder.svg"}
                       alt={user.name}
+                      width={80}
+                      height={80}
                       className="w-full h-full object-cover"
                     />
                   </div>

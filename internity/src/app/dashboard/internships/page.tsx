@@ -92,8 +92,44 @@ export default function InternshipsPage() {
 
   // Load initial data
   useEffect(() => {
+    const mockInternships: Internship[] = [
+      {
+        id: "li1",
+        title: "Web Development",
+        company: "Foodcow",
+        location: "Chennai",
+        duration: "3 Months",
+        stipend: "₹ 5,000 - 10,000 /month",
+        category: "web-development-internship",
+        source: "linkedin",
+      },
+      {
+        id: "in1",
+        title: "WordPress Developer",
+        company: "Godwin Vox Dei",
+        applicants: "N/A",
+        days_left: "10",
+        skills: ["Fresher"],
+        category: "full-stack-development",
+        scraped_at: "2025-04-10T16:02:37.458Z",
+        url: null,
+        source: "internshala",
+      },
+      {
+        id: "un1",
+        title: "Machine Learning Engineer",
+        company: "AI Solutions",
+        location: "Hyderabad",
+        duration: "6 Months",
+        stipend: "₹ 25,000 /month",
+        category: "machine-learning-internship",
+        source: "unstop",
+      },
+    ]
+  
     setInternships(mockInternships)
   }, [])
+  
 
   // Handle scraping for all platforms
   const handleScrapeAll = async () => {

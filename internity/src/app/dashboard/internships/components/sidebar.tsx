@@ -6,6 +6,7 @@ import { User, Briefcase, Settings, LogOut } from "lucide-react"
 import { useEffect } from "react"
 import { useAuth } from "@/app/context/context"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 
 interface SidebarProps {
   user: {
@@ -49,9 +50,11 @@ export function Sidebar({ user }: SidebarProps) {
         <div className="p-6">
           <div className="flex flex-col items-center mb-6">
             <div className="w-20 h-20 rounded-full bg-[rgba(30,30,35,0.5)] flex items-center justify-center overflow-hidden mb-4 border-2 border-[#f1eece]/30">
-              <img
+              <Image
                 src={user.profileImage || "/placeholder.svg"}
                 alt={user.name}
+                width={80}
+                height={80}
                 className="w-full h-full object-cover"
               />
             </div>

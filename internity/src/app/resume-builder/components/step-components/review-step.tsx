@@ -27,7 +27,7 @@ export default function ReviewStepContent() {
   // Fetch resume data when component mounts
   useEffect(() => {
     fetchResumeFromBackend()
-  }, [])
+  }, [fetchResumeFromBackend])
 
   const toggleEditMode = () => {
     setIsEditing(!isEditing)
