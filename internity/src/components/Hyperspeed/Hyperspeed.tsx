@@ -1223,14 +1223,18 @@ class App {
       this.options.distortion.getJS
     ) {
       const distortion = this.options.distortion.getJS(0.025, time);
-      this.camera.lookAt(
-        new THREE.Vector3(
-          this.camera.position.x + distortion.x,
-          this.camera.position.y + distortion.y,
-          this.camera.position.z + distortion.z,
-        ),
-      );
-      updateCamera = true;
+      if (distortion instanceof THREE.Vector3) {
+        this.camera.lookAt(
+          new THREE.Vector3(
+            this.camera.position.x + distortion.x,
+            this.camera.position.y + distortion.y,
+            this.camera.position.z + distortion.z,
+          ),
+        );
+        updateCamera = true;
+      } else {
+        console.warn("Invalid distortion value:", distortion);
+      }
     }
 
     if (updateCamera) {
