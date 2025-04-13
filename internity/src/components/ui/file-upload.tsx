@@ -33,7 +33,7 @@ export const FileUpload = ({
   const [files, setFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (newFiles: File[]) => {
+  const handleFileChange: (newFiles: File[]) => void = (newFiles) => {
     setFiles((prevFiles) => [...prevFiles, ...newFiles]);
     if (onChange) {
       onChange(newFiles); // Ensure the function is properly invoked
