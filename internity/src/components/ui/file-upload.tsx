@@ -42,7 +42,7 @@ export const FileUpload = ({
     fileInputRef.current?.click();
   };
 
-  const { getRootProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     multiple: false,
     noClick: true,
     onDrop: handleFileChange,
@@ -53,6 +53,7 @@ export const FileUpload = ({
 
   return (
     <div className="w-full" {...getRootProps()}>
+      <input {...getInputProps()} />
       <motion.div
         onClick={handleClick}
         whileHover="animate"

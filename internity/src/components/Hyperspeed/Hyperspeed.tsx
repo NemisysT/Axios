@@ -1004,7 +1004,7 @@ class App {
   leftCarLights: CarLights;
   rightCarLights: CarLights;
   leftSticks: LightsSticks;
-  fogUniforms: Record<string, { value: any }>;
+  fogUniforms: Record<string, { value: number }>;
   fovTarget: number;
   speedUpTarget: number;
   speedUp: number;
@@ -1051,7 +1051,7 @@ class App {
     this.scene.fog = fog;
 
     this.fogUniforms = {
-      fogColor: { value: fog.color },
+      fogColor: { value: fog.color.getHex() },
       fogNear: { value: fog.near },
       fogFar: { value: fog.far },
     };

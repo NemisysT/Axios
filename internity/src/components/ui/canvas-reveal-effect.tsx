@@ -210,14 +210,17 @@ const ShaderMaterial = ({
   });
 
   const getUniforms = useMemo(() => {
-    const preparedUniforms: Record<string, any> = {};
+    const preparedUniforms: Record<
+      string,
+      { value: number | number[] | number[][] | THREE.Vector2 | THREE.Vector3; type: string }
+    > = {};
 
     for (const uniformName in uniforms) {
       const uniform = uniforms[uniformName];
 
       switch (uniform.type) {
         case "uniform1f":
-          preparedUniforms[uniformName] = { value: uniform.value, type: "1f" };
+          preparedUniforms[uniformName] = { value: uniform.value as number, type: "1f" };
           break;
         case "uniform3f":
           preparedUniforms[uniformName] = {
@@ -226,12 +229,12 @@ const ShaderMaterial = ({
           };
           break;
         case "uniform1fv":
-          preparedUniforms[uniformName] = { value: uniform.value, type: "1fv" };
+          preparedUniforms[uniformName] = { value: uniform.value as number[], type: "1fv" };
           break;
         case "uniform3fv":
           preparedUniforms[uniformName] = {
             value: (uniform.value as number[][]).map((v) =>
-              new THREE.Vector3().fromArray(v)
+              new THREE.Vector3().fromArray(v).toArray()
             ),
             type: "3fv",
           };
@@ -251,9 +254,11 @@ const ShaderMaterial = ({
     preparedUniforms["u_time"] = { value: 0, type: "1f" };
     preparedUniforms["u_resolution"] = {
       value: new THREE.Vector2(size.width * 2, size.height * 2),
+      type: "2f",
     };
     return preparedUniforms;
-  }, [uniforms, size.width, size.height]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uniforms]);
 
   const material = useMemo(() => {
     const materialObject = new THREE.ShaderMaterial({

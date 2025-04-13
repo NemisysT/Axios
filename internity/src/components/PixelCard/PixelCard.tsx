@@ -107,11 +107,11 @@ class Pixel {
   }
 }
 
-function getEffectiveSpeed(value: any, reducedMotion: any) {
+function getEffectiveSpeed(value: string | number, reducedMotion: boolean) {
   const min = 0;
   const max = 100;
   const throttle = 0.001;
-  const parsed = parseInt(value, 10);
+  const parsed = parseInt(value.toString(), 10);
 
   if (parsed <= min || reducedMotion) {
     return min;
