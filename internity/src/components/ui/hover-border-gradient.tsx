@@ -16,12 +16,12 @@ export function HoverBorderGradient({
   ...props
 }: React.PropsWithChildren<
   {
-    as?: keyof JSX.IntrinsicElements | React.JSXElementConstructor<any>;
+    as?: keyof JSX.IntrinsicElements | React.ComponentType<any>;
     containerClassName?: string;
     className?: string;
     duration?: number;
     clockwise?: boolean;
-  } & React.ComponentPropsWithoutRef<React.ElementType<any>>
+  } & React.ComponentPropsWithoutRef<keyof JSX.IntrinsicElements | React.ComponentType<unknown>>
 >) {
   const [hovered, setHovered] = useState<boolean>(false);
   const [direction, setDirection] = useState<Direction>("TOP");
@@ -54,7 +54,8 @@ export function HoverBorderGradient({
       }, duration * 1000);
       return () => clearInterval(interval);
     }
-  }, [hovered]);
+  }, [hovered, duration, rotateDirection]);
+
   return (
     <Tag
       onMouseEnter={(event: React.MouseEvent<HTMLDivElement>) => {

@@ -186,8 +186,8 @@ export default function PixelCard({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pixelsRef = useRef<Pixel[]>([]);
-  const animationRef = useRef<any>(null);
-  const timePreviousRef = useRef(performance.now());
+  const animationRef = useRef<number | null>(null);
+  const timePreviousRef = useRef<number>(performance.now());
   const reducedMotion = useRef(
     window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   ).current;
@@ -256,19 +256,22 @@ export default function PixelCard({
     let allIdle = true;
     for (let i = 0; i < pixelsRef.current.length; i++) {
       const pixel = pixelsRef.current[i];
-      // @ts-ignore
+      // @ts-expect-error: Dynamic method invocation on Pixel instance
       pixel[fnName]();
       if (!pixel.isIdle) {
         allIdle = false;
       }
     }
-    if (allIdle) {
+    if (allIdle && animationRef.current !== null) {
       cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
     }
   };
 
   const handleAnimation = (name: keyof Pixel) => {
-    cancelAnimationFrame(animationRef.current);
+    if (animationRef.current !== null) {
+      cancelAnimationFrame(animationRef.current);
+    }
     animationRef.current = requestAnimationFrame(() => doAnimate(name));
   };
 
@@ -293,7 +296,10 @@ export default function PixelCard({
     }
     return () => {
       observer.disconnect();
-      cancelAnimationFrame(animationRef.current);
+      if (animationRef.current !== null) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finalGap, finalSpeed, finalColors, finalNoFocus]);
