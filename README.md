@@ -5,6 +5,13 @@
 This project simplifies the internship application process by leveraging AI-powered tools to optimize resumes, automate applications, and centralize internship opportunities from multiple platforms. It includes a web application and a Chrome extension to provide seamless functionality for users.
 
 ---
+## Watch a quick demo!!!
+
+
+
+https://github.com/user-attachments/assets/a43ea021-e4d5-44a7-a520-7a020c289730
+
+
 
 ## **Features**
 - **Resume Maker**: Generates tailored resumes based on user input.
